@@ -1,0 +1,19 @@
+name: Supabase Keepalive
+
+# Ver PROJECT_BLUEPRINT.md — CI-006: evita que o projeto Supabase gratuito
+# seja pausado por inatividade (pausa ocorre após 30 dias sem atividade).
+
+on:
+  schedule:
+    - cron: "0 6 * * 1" # todas as segundas-feiras às 06:00 UTC
+  workflow_dispatch: {}
+
+jobs:
+  keepalive:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pedido simples ao Supabase
+        run: |
+          curl -sf "${{ secrets.SUPABASE_URL }}/rest/v1/categories?select=id&limit=1" \
+            -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
+            -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}"
