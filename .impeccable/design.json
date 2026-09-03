@@ -1,0 +1,590 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-03T19:12:07+01:00",
+  "title": "Design System: Wishlist do Pedro",
+  "extensions": {
+    "colorMeta": {
+      "azul-vitrine": {
+        "role": "primary",
+        "displayName": "Azul de Vitrine",
+        "canonical": "hsl(217.2 91.2% 59.8%)",
+        "tonalRamp": [
+          "hsl(217.2 91.2% 15%)",
+          "hsl(217.2 91.2% 26%)",
+          "hsl(217.2 91.2% 37%)",
+          "hsl(217.2 91.2% 48%)",
+          "hsl(217.2 91.2% 60%)",
+          "hsl(217.2 91.2% 71%)",
+          "hsl(217.2 91.2% 82%)",
+          "hsl(217.2 91.2% 93%)"
+        ]
+      },
+      "azul-vitrine-dia": {
+        "role": "primary",
+        "displayName": "Azul de Vitrine (Dia)",
+        "canonical": "hsl(221.2 83.2% 53.3%)",
+        "tonalRamp": [
+          "hsl(221.2 83.2% 15%)",
+          "hsl(221.2 83.2% 26%)",
+          "hsl(221.2 83.2% 37%)",
+          "hsl(221.2 83.2% 48%)",
+          "hsl(221.2 83.2% 60%)",
+          "hsl(221.2 83.2% 71%)",
+          "hsl(221.2 83.2% 82%)",
+          "hsl(221.2 83.2% 93%)"
+        ]
+      },
+      "ardosia-meia-noite": {
+        "role": "neutral",
+        "displayName": "Ardósia de Meia-Noite",
+        "canonical": "hsl(224 71.4% 4.1%)",
+        "tonalRamp": [
+          "hsl(224 71.4% 4.1%)",
+          "hsl(224 60% 12%)",
+          "hsl(224 45% 22%)",
+          "hsl(224 35% 34%)",
+          "hsl(224 28% 48%)",
+          "hsl(224 25% 63%)",
+          "hsl(224 24% 78%)",
+          "hsl(224 24% 93%)"
+        ]
+      },
+      "superficie-meia-noite": {
+        "role": "neutral",
+        "displayName": "Superfície de Meia-Noite",
+        "canonical": "hsl(224 71.4% 6%)",
+        "tonalRamp": [
+          "hsl(224 71.4% 6%)",
+          "hsl(224 58% 14%)",
+          "hsl(224 44% 24%)",
+          "hsl(224 34% 36%)",
+          "hsl(224 28% 50%)",
+          "hsl(224 25% 65%)",
+          "hsl(224 24% 80%)",
+          "hsl(224 24% 94%)"
+        ]
+      },
+      "cinza-penumbra": {
+        "role": "neutral",
+        "displayName": "Cinza de Penumbra",
+        "canonical": "hsl(215 27.9% 16.9%)",
+        "tonalRamp": [
+          "hsl(215 27.9% 10%)",
+          "hsl(215 27.9% 17%)",
+          "hsl(215 27.9% 26%)",
+          "hsl(215 27.9% 37%)",
+          "hsl(215 27.9% 49%)",
+          "hsl(215 27.9% 64%)",
+          "hsl(215 27.9% 80%)",
+          "hsl(215 27.9% 94%)"
+        ]
+      },
+      "cinza-penumbra-texto": {
+        "role": "neutral",
+        "displayName": "Cinza de Penumbra (Texto)",
+        "canonical": "hsl(217.9 10.6% 64.9%)",
+        "tonalRamp": [
+          "hsl(217.9 10.6% 15%)",
+          "hsl(217.9 10.6% 26%)",
+          "hsl(217.9 10.6% 37%)",
+          "hsl(217.9 10.6% 48%)",
+          "hsl(217.9 10.6% 59%)",
+          "hsl(217.9 10.6% 71%)",
+          "hsl(217.9 10.6% 83%)",
+          "hsl(217.9 10.6% 95%)"
+        ]
+      },
+      "branco-vitrine": {
+        "role": "neutral",
+        "displayName": "Branco de Vitrine",
+        "canonical": "hsl(210 40% 98%)",
+        "tonalRamp": [
+          "hsl(210 40% 15%)",
+          "hsl(210 40% 26%)",
+          "hsl(210 40% 37%)",
+          "hsl(210 40% 48%)",
+          "hsl(210 40% 60%)",
+          "hsl(210 40% 73%)",
+          "hsl(210 40% 86%)",
+          "hsl(210 40% 98%)"
+        ]
+      },
+      "ambar-destaque": {
+        "role": "tertiary",
+        "displayName": "Âmbar de Destaque",
+        "canonical": "hsl(38 92% 50%)",
+        "tonalRamp": [
+          "hsl(38 92% 15%)",
+          "hsl(38 92% 26%)",
+          "hsl(38 92% 37%)",
+          "hsl(38 92% 48%)",
+          "hsl(38 92% 60%)",
+          "hsl(38 92% 71%)",
+          "hsl(38 92% 82%)",
+          "hsl(38 92% 93%)"
+        ]
+      },
+      "ambar-destaque-texto": {
+        "role": "tertiary",
+        "displayName": "Âmbar de Destaque (Texto)",
+        "canonical": "hsl(48 96% 77%)",
+        "tonalRamp": [
+          "hsl(48 96% 15%)",
+          "hsl(48 96% 26%)",
+          "hsl(48 96% 37%)",
+          "hsl(48 96% 48%)",
+          "hsl(48 96% 60%)",
+          "hsl(48 96% 71%)",
+          "hsl(48 96% 82%)",
+          "hsl(48 96% 93%)"
+        ]
+      },
+      "anel-foco": {
+        "role": "primary",
+        "displayName": "Anel de Foco",
+        "canonical": "hsl(224.3 76.3% 48%)",
+        "tonalRamp": [
+          "hsl(224.3 76.3% 15%)",
+          "hsl(224.3 76.3% 26%)",
+          "hsl(224.3 76.3% 37%)",
+          "hsl(224.3 76.3% 48%)",
+          "hsl(224.3 76.3% 60%)",
+          "hsl(224.3 76.3% 71%)",
+          "hsl(224.3 76.3% 82%)",
+          "hsl(224.3 76.3% 93%)"
+        ]
+      },
+      "vermelho-alerta": {
+        "role": "tertiary",
+        "displayName": "Vermelho de Alerta",
+        "canonical": "hsl(0 62.8% 30.6%)",
+        "tonalRamp": [
+          "hsl(0 62.8% 15%)",
+          "hsl(0 62.8% 24%)",
+          "hsl(0 62.8% 31%)",
+          "hsl(0 62.8% 42%)",
+          "hsl(0 62.8% 55%)",
+          "hsl(0 62.8% 68%)",
+          "hsl(0 62.8% 82%)",
+          "hsl(0 62.8% 94%)"
+        ]
+      },
+      "papel-vitrine": {
+        "role": "neutral",
+        "displayName": "Papel de Vitrine",
+        "canonical": "hsl(0 0% 100%)",
+        "tonalRamp": [
+          "hsl(0 0% 15%)",
+          "hsl(0 0% 27%)",
+          "hsl(0 0% 39%)",
+          "hsl(0 0% 51%)",
+          "hsl(0 0% 63%)",
+          "hsl(0 0% 76%)",
+          "hsl(0 0% 88%)",
+          "hsl(0 0% 100%)"
+        ]
+      },
+      "cinza-dia": {
+        "role": "neutral",
+        "displayName": "Cinza de Dia",
+        "canonical": "hsl(220 14.3% 95.9%)",
+        "tonalRamp": [
+          "hsl(220 14.3% 15%)",
+          "hsl(220 14.3% 26%)",
+          "hsl(220 14.3% 38%)",
+          "hsl(220 14.3% 50%)",
+          "hsl(220 14.3% 62%)",
+          "hsl(220 14.3% 74%)",
+          "hsl(220 14.3% 86%)",
+          "hsl(220 14.3% 96%)"
+        ]
+      },
+      "cinza-dia-borda": {
+        "role": "neutral",
+        "displayName": "Cinza de Dia (Borda)",
+        "canonical": "hsl(220 13% 91%)",
+        "tonalRamp": [
+          "hsl(220 13% 15%)",
+          "hsl(220 13% 26%)",
+          "hsl(220 13% 37%)",
+          "hsl(220 13% 49%)",
+          "hsl(220 13% 61%)",
+          "hsl(220 13% 73%)",
+          "hsl(220 13% 85%)",
+          "hsl(220 13% 95%)"
+        ]
+      },
+      "cinza-dia-texto": {
+        "role": "neutral",
+        "displayName": "Cinza de Dia (Texto)",
+        "canonical": "hsl(220 8.9% 46.1%)",
+        "tonalRamp": [
+          "hsl(220 8.9% 15%)",
+          "hsl(220 8.9% 25%)",
+          "hsl(220 8.9% 35%)",
+          "hsl(220 8.9% 46%)",
+          "hsl(220 8.9% 58%)",
+          "hsl(220 8.9% 70%)",
+          "hsl(220 8.9% 83%)",
+          "hsl(220 8.9% 95%)"
+        ]
+      },
+      "ambar-destaque-dia": {
+        "role": "tertiary",
+        "displayName": "Âmbar de Destaque (Dia)",
+        "canonical": "hsl(38 92% 45%)",
+        "tonalRamp": [
+          "hsl(38 92% 15%)",
+          "hsl(38 92% 26%)",
+          "hsl(38 92% 37%)",
+          "hsl(38 92% 48%)",
+          "hsl(38 92% 60%)",
+          "hsl(38 92% 71%)",
+          "hsl(38 92% 82%)",
+          "hsl(38 92% 93%)"
+        ]
+      },
+      "ambar-destaque-texto-dia": {
+        "role": "tertiary",
+        "displayName": "Âmbar de Destaque Texto (Dia)",
+        "canonical": "hsl(26 90% 30%)",
+        "tonalRamp": [
+          "hsl(26 90% 15%)",
+          "hsl(26 90% 26%)",
+          "hsl(26 90% 37%)",
+          "hsl(26 90% 48%)",
+          "hsl(26 90% 60%)",
+          "hsl(26 90% 71%)",
+          "hsl(26 90% 82%)",
+          "hsl(26 90% 93%)"
+        ]
+      },
+      "placa-produto": {
+        "role": "neutral",
+        "displayName": "Placa de Produto",
+        "canonical": "hsl(0 0% 100%)",
+        "tonalRamp": [
+          "hsl(0 0% 15%)",
+          "hsl(0 0% 27%)",
+          "hsl(0 0% 39%)",
+          "hsl(0 0% 51%)",
+          "hsl(0 0% 63%)",
+          "hsl(0 0% 76%)",
+          "hsl(0 0% 88%)",
+          "hsl(0 0% 100%)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Título único da homepage. Sobe de 2.25rem para 3rem em sm e 3.75rem em lg, com text-balance."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Títulos de página interior e nome do produto na página de detalhe. Sobe para 2.25rem em sm."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Títulos de cartão e nomes de produto na grelha."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Parágrafos introdutórios, limitados a max-w-2xl."
+      },
+      "body-sm": {
+        "displayName": "Body Small",
+        "purpose": "Descrições, metadados e rodapé. O tamanho mais usado da aplicação; sobe para 1.75rem de entrelinha nas notas pessoais."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Sobrescritos de secção e rótulos de campo, sempre em maiúsculas. A marca do header usa a variante mais larga, 0.32em."
+      },
+      "mono": {
+        "displayName": "Mono",
+        "purpose": "Geist Mono está carregada via next/font e exposta como --font-mono, mas não é usada em nenhum componente da V1."
+      }
+    },
+    "shadows": [
+      {
+        "name": "repouso",
+        "value": "0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)",
+        "purpose": "Sombra de assentamento em cartões e botões. Sobre a Ardósia de Meia-Noite é quase imperceptível — assenta o elemento, não o eleva."
+      },
+      {
+        "name": "halo-destaque",
+        "value": "0 20px 25px -5px hsl(217.2 91.2% 59.8% / 0.05), 0 8px 10px -6px hsl(217.2 91.2% 59.8% / 0.05)",
+        "purpose": "Aura azul a 5% exclusiva do cartão de destaques da homepage. É luz, não projeção."
+      },
+      {
+        "name": "ambiente-pagina",
+        "value": "radial-gradient(120% 80% at 50% -10%, hsl(var(--primary) / 0.14), transparent 62%)",
+        "purpose": "Uma única fonte de luz ambiente, fixa no body. Não é box-shadow: é a luz da montra, aplicada como background-image."
+      },
+      {
+        "name": "anel-foco",
+        "value": "outline: 2px solid hsl(224.3 76.3% 48%); outline-offset: 2px",
+        "purpose": "Estado :focus-visible global, definido em @layer base para qualquer elemento operável."
+      }
+    ],
+    "motion": [
+      {
+        "name": "cor-padrao",
+        "value": "150ms cubic-bezier(0.4, 0, 0.2, 1)",
+        "purpose": "Transições de cor em ligações, botões e títulos."
+      },
+      {
+        "name": "levantar-cartao",
+        "value": "300ms cubic-bezier(0.4, 0, 0.2, 1) / translateY(-0.25rem)",
+        "purpose": "Resposta de hover em cartões navegáveis. Substitui a sombra como sinal de elevação."
+      },
+      {
+        "name": "imagem-lenta",
+        "value": "500ms cubic-bezier(0.4, 0, 0.2, 1) / scale(1.05)",
+        "purpose": "Aproximação da imagem dentro de um cartão. Mais lenta que o contentor, o que cria profundidade sem paralaxe."
+      },
+      {
+        "name": "debounce-pesquisa",
+        "value": "250ms",
+        "purpose": "Atraso entre a escrita e a atualização da URL de pesquisa. Não é motion visual, mas é o ritmo percebido da pesquisa."
+      },
+      {
+        "name": "movimento-reduzido",
+        "value": "prefers-reduced-motion: reduce → 0.01ms",
+        "purpose": "Todas as transições e animações colapsam e o scroll suave é desligado quando o sistema pede movimento reduzido."
+      },
+      {
+        "name": "vitrine-bloom",
+        "value": "1200ms cubic-bezier(0.16, 1, 0.3, 1) both",
+        "purpose": "O único momento autoral do site: a luz ambiente acende-se uma vez à chegada, de opacity 0 e scale(0.92) translateY(-1.5rem) até ao repouso, com origem no topo."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "md",
+        "value": "768px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px"
+      },
+      {
+        "name": "xl",
+        "value": "1280px"
+      },
+      {
+        "name": "container",
+        "value": "1152px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Botão Primário",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Ação principal — abrir a loja, ver destaques. Pílula azul com texto invertido.",
+      "html": "<button class=\"ds-btn-primary\">Abrir Amazon<svg class=\"ds-icon\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M7 7h10v10\"/><path d=\"M7 17 17 7\"/></svg></button>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; white-space: nowrap; height: 2.5rem; padding: 0.5rem 1rem; border: none; border-radius: 9999px; background: hsl(var(--primary)); color: hsl(var(--primary-foreground)); font-family: var(--font-geist-sans), system-ui, sans-serif; font-size: 0.875rem; font-weight: 500; box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1); cursor: pointer; transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1); } .ds-btn-primary:hover { background: hsl(var(--primary) / 0.9); } .ds-btn-primary:focus-visible { outline: none; box-shadow: 0 0 0 2px hsl(var(--background)), 0 0 0 4px hsl(var(--ring)); } .ds-btn-primary .ds-icon { width: 1rem; height: 1rem; }"
+    },
+    {
+      "name": "Botão Outline",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "A variante mais usada do sistema: ações secundárias, navegação de retorno e o 'Ver detalhe' de cada cartão.",
+      "html": "<button class=\"ds-btn-outline\">Ver detalhe<svg class=\"ds-icon\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M5 12h14\"/><path d=\"m12 5 7 7-7 7\"/></svg></button>",
+      "css": ".ds-btn-outline { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; white-space: nowrap; height: 2.5rem; padding: 0.5rem 1rem; border: 1px solid hsl(var(--input)); border-radius: 9999px; background: hsl(var(--background)); color: hsl(var(--foreground)); font-family: var(--font-geist-sans), system-ui, sans-serif; font-size: 0.875rem; font-weight: 500; box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1); cursor: pointer; transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1), color 150ms cubic-bezier(0.4, 0, 0.2, 1); } .ds-btn-outline:hover { background: hsl(var(--accent)); color: hsl(var(--accent-foreground)); } .ds-btn-outline:focus-visible { outline: none; box-shadow: 0 0 0 2px hsl(var(--background)), 0 0 0 4px hsl(var(--ring)); } .ds-btn-outline .ds-icon { width: 1rem; height: 1rem; }"
+    },
+    {
+      "name": "Campo de Pesquisa",
+      "kind": "input",
+      "refersTo": "input-search",
+      "description": "Campo alto de 3rem com raio de 1rem e lupa fixa à esquerda. Rótulo sempre presente, em sr-only.",
+      "html": "<div class=\"ds-search\"><label class=\"ds-search-label\" for=\"ds-search-input\">Pesquisar produtos</label><svg class=\"ds-search-icon\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"11\" cy=\"11\" r=\"8\"/><path d=\"m21 21-4.3-4.3\"/></svg><input id=\"ds-search-input\" class=\"ds-search-input\" type=\"text\" placeholder=\"Pesquisar por produto, loja ou categoria\" autocomplete=\"off\"></div>",
+      "css": ".ds-search { position: relative; width: 100%; max-width: 32rem; } .ds-search-label { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; } .ds-search-icon { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); width: 1rem; height: 1rem; color: hsl(var(--muted-foreground)); pointer-events: none; } .ds-search-input { display: flex; height: 3rem; width: 100%; padding: 0.5rem 5rem 0.5rem 2.75rem; border: 1px solid hsl(var(--input)); border-radius: 1rem; background: hsl(var(--background)); color: hsl(var(--foreground)); font-family: var(--font-geist-sans), system-ui, sans-serif; font-size: 0.875rem; } .ds-search-input::placeholder { color: hsl(var(--muted-foreground)); } .ds-search-input:focus-visible { outline: none; box-shadow: 0 0 0 2px hsl(var(--background)), 0 0 0 4px hsl(var(--ring)); } .ds-search-input:disabled { cursor: not-allowed; opacity: 0.5; }"
+    },
+    {
+      "name": "Badge de Prioridade (Alta)",
+      "kind": "chip",
+      "refersTo": "badge-priority-high",
+      "description": "Prioridade alta é o único badge que recebe o acento azul. A informação está sempre no texto, nunca só na cor.",
+      "html": "<div class=\"ds-badge-row\"><span class=\"ds-badge-high\">Prioridade alta</span><span class=\"ds-badge-medium\">Prioridade média</span><span class=\"ds-badge-low\">Prioridade baixa</span></div>",
+      "css": ".ds-badge-row { display: flex; flex-wrap: wrap; gap: 0.5rem; } .ds-badge-high, .ds-badge-medium, .ds-badge-low { display: inline-flex; align-items: center; padding: 0.125rem 0.625rem; border: 1px solid transparent; border-radius: 9999px; font-family: var(--font-geist-sans), system-ui, sans-serif; font-size: 0.75rem; font-weight: 500; transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1); } .ds-badge-high { background: hsl(var(--primary)); color: hsl(var(--primary-foreground)); } .ds-badge-medium { background: hsl(var(--secondary)); color: hsl(var(--secondary-foreground)); } .ds-badge-low { background: hsl(var(--background)); border-color: hsl(var(--border)); color: hsl(var(--foreground)); }"
+    },
+    {
+      "name": "Marcador de Favorito",
+      "kind": "chip",
+      "refersTo": "chip-favorite",
+      "description": "O único uso de âmbar em todo o sistema, ligado aos tokens --favorite para sobreviver à troca de tema.",
+      "html": "<span class=\"ds-chip-favorite\"><svg class=\"ds-chip-star\" viewBox=\"0 0 24 24\" fill=\"currentColor\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z\"/></svg>Favorito</span>",
+      "css": ".ds-chip-favorite { display: inline-flex; align-items: center; gap: 0.25rem; padding: 0.125rem 0.625rem; border: 1px solid hsl(var(--favorite) / 0.4); border-radius: 9999px; background: hsl(var(--favorite) / 0.1); color: hsl(var(--favorite-foreground)); font-family: var(--font-geist-sans), system-ui, sans-serif; font-size: 0.75rem; font-weight: 500; } .ds-chip-star { width: 0.875rem; height: 0.875rem; }"
+    },
+    {
+      "name": "Cartão de Produto",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "O componente-assinatura. Seixo de 24px, enquadramento 4:3 sobre a Placa de Produto com a imagem em object-contain, e três sinais de hover coordenados: levantar, ampliar, acender o título. O snippet mostra o estado sem imagem.",
+      "html": "<article class=\"ds-card\"><div class=\"ds-card-media\"><span class=\"ds-card-media-label\">Setup</span></div><div class=\"ds-card-body\"><div class=\"ds-card-head\"><div class=\"ds-card-meta\"><span class=\"ds-badge-high\">Prioridade alta</span><h3 class=\"ds-card-title\">BenQ ScreenBar Pro</h3></div><svg class=\"ds-card-arrow\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M5 12h14\"/><path d=\"m12 5 7 7-7 7\"/></svg></div><p class=\"ds-card-note\">Ilumina a secretária sem refletir no ecrã. Boa opção para complementar o setup atual.</p><div class=\"ds-card-foot\"><span>Setup</span><span>129,99 €</span></div></div></article>",
+      "css": ".ds-card { overflow: hidden; border: 1px solid hsl(var(--border) / 0.7); border-radius: 1.5rem; background: hsl(var(--card) / 0.8); color: hsl(var(--card-foreground)); box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1); transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; max-width: 22rem; } .ds-card:hover { transform: translateY(-0.25rem); } .ds-card-media { position: relative; aspect-ratio: 4 / 3; display: flex; align-items: flex-end; padding: 1.25rem; overflow: hidden; background: radial-gradient(circle at top left, hsl(217.2 91.2% 59.8% / 0.26), transparent 42%), linear-gradient(135deg, hsl(222 47% 11% / 0.95), hsl(215 25% 27% / 0.8)); transition: transform 500ms cubic-bezier(0.4, 0, 0.2, 1); } .ds-card:hover .ds-card-media { transform: scale(1.05); } .ds-card-media-label { font-family: var(--font-geist-sans), system-ui, sans-serif; font-size: 0.875rem; font-weight: 500; color: hsl(0 0% 100% / 0.8); } .ds-card-body { display: flex; flex-direction: column; gap: 1rem; padding: 1.25rem; } .ds-card-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 0.75rem; } .ds-card-meta { display: flex; flex-direction: column; gap: 0.5rem; } .ds-card-title { margin: 0; font-family: var(--font-geist-sans), system-ui, sans-serif; font-size: 1.125rem; font-weight: 600; line-height: 1.25; letter-spacing: -0.025em; color: hsl(var(--foreground)); transition: color 150ms cubic-bezier(0.4, 0, 0.2, 1); } .ds-card:hover .ds-card-title { color: hsl(var(--primary)); } .ds-card-arrow { flex-shrink: 0; width: 1rem; height: 1rem; margin-top: 0.25rem; color: hsl(var(--muted-foreground)); transition: transform 150ms cubic-bezier(0.4, 0, 0.2, 1); } .ds-card:hover .ds-card-arrow { transform: translateX(0.25rem); } .ds-card-note { margin: 0; font-family: var(--font-geist-sans), system-ui, sans-serif; font-size: 0.875rem; line-height: 1.25rem; color: hsl(var(--muted-foreground)); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; } .ds-card-foot { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; padding-top: 1rem; border-top: 1px solid hsl(var(--border) / 0.7); font-family: var(--font-geist-sans), system-ui, sans-serif; font-size: 0.875rem; color: hsl(var(--muted-foreground)); }"
+    },
+    {
+      "name": "Mosaico de Categoria",
+      "kind": "custom",
+      "refersTo": "monogram-tile",
+      "description": "O único sítio onde o azul aparece como superfície: um quadrado de 3rem preenchido a 10% com o ícone da categoria. Só é mostrado quando a categoria tem produtos.",
+      "html": "<article class=\"ds-tile\"><div class=\"ds-tile-head\"><span class=\"ds-tile-icon\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"6\" y1=\"12\" x2=\"10\" y2=\"12\"/><line x1=\"8\" y1=\"10\" x2=\"8\" y2=\"14\"/><line x1=\"15\" y1=\"13\" x2=\"15.01\" y2=\"13\"/><line x1=\"18\" y1=\"11\" x2=\"18.01\" y2=\"11\"/><rect x=\"2\" y=\"6\" width=\"20\" height=\"12\" rx=\"2\"/></svg></span><svg class=\"ds-tile-arrow\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M5 12h14\"/><path d=\"m12 5 7 7-7 7\"/></svg></div><h3 class=\"ds-tile-title\">Gaming</h3><p class=\"ds-tile-desc\">Componentes, jogos e acessórios para jogar.</p><p class=\"ds-tile-count\">2 produtos</p></article>",
+      "css": ".ds-tile { display: flex; flex-direction: column; gap: 0.5rem; padding: 1.5rem; border: 1px solid hsl(var(--border) / 0.7); border-radius: 1.5rem; background: hsl(var(--card) / 0.8); box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1); transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; max-width: 20rem; } .ds-tile:hover { transform: translateY(-0.25rem); } .ds-tile-head { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; margin-bottom: 0.5rem; } .ds-tile-icon { display: flex; align-items: center; justify-content: center; width: 3rem; height: 3rem; border-radius: 1rem; background: hsl(var(--primary) / 0.1); color: hsl(var(--primary)); } .ds-tile-icon svg { width: 1.25rem; height: 1.25rem; } .ds-tile-arrow { width: 1rem; height: 1rem; color: hsl(var(--muted-foreground)); transition: transform 150ms cubic-bezier(0.4, 0, 0.2, 1); } .ds-tile:hover .ds-tile-arrow { transform: translateX(0.25rem); } .ds-tile-title { margin: 0; font-family: var(--font-geist-sans), system-ui, sans-serif; font-size: 1.125rem; font-weight: 600; line-height: 1; letter-spacing: -0.025em; color: hsl(var(--card-foreground)); } .ds-tile-desc { margin: 0; font-family: var(--font-geist-sans), system-ui, sans-serif; font-size: 0.875rem; line-height: 1.25rem; color: hsl(var(--muted-foreground)); } .ds-tile-count { margin: 0; font-family: var(--font-geist-sans), system-ui, sans-serif; font-size: 0.875rem; font-weight: 500; color: hsl(var(--foreground)); } .ds-tile-count { font-variant-numeric: tabular-nums; }"
+    },
+    {
+      "name": "Cabeçalho do Site",
+      "kind": "nav",
+      "refersTo": null,
+      "description": "Barra fixa com blur forte e fundo a 80%. A marca é um monograma em seixo de 16px seguido de duas linhas de tipografia contrastante.",
+      "html": "<header class=\"ds-header\"><a class=\"ds-brand\" href=\"#\"><span class=\"ds-brand-mark\">WP</span><span class=\"ds-brand-text\"><span class=\"ds-brand-eyebrow\">Wishlist</span><span class=\"ds-brand-name\">do Pedro</span></span></a><button class=\"ds-icon-btn\" type=\"button\" aria-label=\"Ativar modo claro\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"12\" r=\"4\"/><path d=\"M12 3v1\"/><path d=\"M12 20v1\"/><path d=\"M3 12h1\"/><path d=\"M20 12h1\"/><path d=\"m18.36 5.64-.7.7\"/><path d=\"m6.34 17.66-.7.7\"/><path d=\"m5.64 5.64.7.7\"/><path d=\"m17.66 17.66.7.7\"/></svg></button></header>",
+      "css": ".ds-header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem 1.5rem; border-bottom: 1px solid hsl(var(--border) / 0.7); background: hsl(var(--background) / 0.8); backdrop-filter: blur(24px); } .ds-brand { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; } .ds-brand-mark { display: flex; align-items: center; justify-content: center; width: 2.75rem; height: 2.75rem; border: 1px solid hsl(var(--border) / 0.7); border-radius: 1rem; background: hsl(var(--card)); color: hsl(var(--foreground)); font-family: var(--font-geist-sans), system-ui, sans-serif; font-size: 0.875rem; font-weight: 600; letter-spacing: 0.2em; box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1); transition: transform 150ms cubic-bezier(0.4, 0, 0.2, 1); } .ds-brand:hover .ds-brand-mark { transform: translateY(-0.125rem); } .ds-brand-text { display: flex; flex-direction: column; font-family: var(--font-geist-sans), system-ui, sans-serif; } .ds-brand-eyebrow { font-size: 0.875rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.32em; color: hsl(var(--muted-foreground)); } .ds-brand-name { font-size: 1rem; font-weight: 600; color: hsl(var(--foreground)); } .ds-icon-btn { display: inline-flex; align-items: center; justify-content: center; width: 2.5rem; height: 2.5rem; border: 1px solid hsl(var(--input)); border-radius: 9999px; background: hsl(var(--background)); color: hsl(var(--foreground)); cursor: pointer; transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1); } .ds-icon-btn svg { width: 1rem; height: 1rem; } .ds-icon-btn:hover { background: hsl(var(--accent)); } .ds-icon-btn:focus-visible { outline: none; box-shadow: 0 0 0 2px hsl(var(--background)), 0 0 0 4px hsl(var(--ring)); }"
+    },
+    {
+      "name": "Estado Vazio",
+      "kind": "custom",
+      "refersTo": "card",
+      "description": "O único componente com borda tracejada. Sem ilustração e sem apelo à ação — a ausência é tratada com a mesma calma que a presença.",
+      "html": "<div class=\"ds-empty\"><h3 class=\"ds-empty-title\">Sem produtos</h3><p class=\"ds-empty-desc\">Ainda não há produtos para apresentar nesta vista.</p></div>",
+      "css": ".ds-empty { display: flex; flex-direction: column; gap: 0.5rem; padding: 1.5rem; border: 1px dashed hsl(var(--border) / 0.7); border-radius: 1.5rem; background: hsl(var(--card) / 0.6); max-width: 28rem; } .ds-empty-title { margin: 0; font-family: var(--font-geist-sans), system-ui, sans-serif; font-size: 1.125rem; font-weight: 600; line-height: 1; letter-spacing: -0.025em; color: hsl(var(--card-foreground)); } .ds-empty-desc { margin: 0; font-family: var(--font-geist-sans), system-ui, sans-serif; font-size: 0.875rem; line-height: 1.25rem; color: hsl(var(--muted-foreground)); }"
+    },
+    {
+      "name": "Galeria de Produto",
+      "kind": "custom",
+      "refersTo": null,
+      "description": "Carrossel de scroll-snap da página de produto: enquadramento 4:3 sobre a Placa de Produto com object-contain, controlos-pílula que desaparecem nos extremos, contador tabular e faixa de miniaturas. O snippet mostra o estado sem imagem.",
+      "html": "<div class=\"ds-gallery\"><div class=\"ds-gallery-frame\"><span class=\"ds-gallery-label\">Setup</span><button class=\"ds-gallery-nav ds-gallery-nav-next\" aria-label=\"Imagem seguinte\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"m9 18 6-6-6-6\"/></svg></button><span class=\"ds-gallery-count\">1 / 3</span></div><div class=\"ds-gallery-thumbs\"><button class=\"ds-gallery-thumb is-active\" aria-label=\"Ver imagem 1\" aria-current=\"true\"></button><button class=\"ds-gallery-thumb\" aria-label=\"Ver imagem 2\"></button><button class=\"ds-gallery-thumb\" aria-label=\"Ver imagem 3\"></button></div></div>",
+      "css": ".ds-gallery { overflow: hidden; border: 1px solid hsl(var(--border) / 0.7); border-radius: 1.5rem; background: hsl(var(--card) / 0.8); max-width: 26rem; } .ds-gallery-frame { position: relative; display: flex; align-items: flex-end; aspect-ratio: 4 / 3; padding: 1.5rem; background: radial-gradient(circle at top left, hsl(var(--primary) / 0.24), transparent 45%), hsl(var(--secondary)); } .ds-gallery-label { font-family: var(--font-geist-sans), system-ui, sans-serif; font-size: 0.875rem; font-weight: 500; color: hsl(var(--foreground) / 0.8); } .ds-gallery-nav { position: absolute; top: 50%; transform: translateY(-50%); display: flex; align-items: center; justify-content: center; width: 2.5rem; height: 2.5rem; border: 1px solid hsl(var(--border) / 0.7); border-radius: 9999px; background: hsl(var(--background) / 0.7); color: hsl(var(--foreground)); backdrop-filter: blur(8px); cursor: pointer; transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1); } .ds-gallery-nav svg { width: 1rem; height: 1rem; } .ds-gallery-nav-next { right: 0.75rem; } .ds-gallery-nav:hover { background: hsl(var(--background)); } .ds-gallery-nav:focus-visible { outline: 2px solid hsl(var(--ring)); outline-offset: 2px; } .ds-gallery-count { position: absolute; right: 0.75rem; bottom: 0.75rem; padding: 0.125rem 0.625rem; border: 1px solid hsl(var(--border) / 0.7); border-radius: 9999px; background: hsl(var(--background) / 0.7); color: hsl(var(--foreground)); font-family: var(--font-geist-sans), system-ui, sans-serif; font-size: 0.75rem; font-weight: 500; font-variant-numeric: tabular-nums; backdrop-filter: blur(8px); } .ds-gallery-thumbs { display: flex; gap: 0.75rem; padding: 1rem; border-top: 1px solid hsl(var(--border) / 0.7); } .ds-gallery-thumb { width: 4rem; height: 4rem; flex-shrink: 0; border: 1px solid hsl(var(--border) / 0.7); border-radius: 1rem; background: hsl(var(--muted)); opacity: 0.6; cursor: pointer; transition: opacity 150ms cubic-bezier(0.4, 0, 0.2, 1); } .ds-gallery-thumb:hover { opacity: 1; } .ds-gallery-thumb.is-active { border-color: hsl(var(--primary)); opacity: 1; }"
+    },
+    {
+      "name": "Filtro (select nativo)",
+      "kind": "custom",
+      "refersTo": null,
+      "description": "Controlo da barra de filtros de /pesquisa. Pílula com select nativo por dentro: no telemóvel abre o picker do sistema e poupa 29 kB de JavaScript face a um menu de biblioteca. Ativo ganha borda e fundo de acento.",
+      "html": "<div class=\"ds-filter-row\"><div class=\"ds-filter is-active\"><label class=\"ds-filter-label\" for=\"ds-filter-store\">Loja</label><select class=\"ds-filter-select\" id=\"ds-filter-store\"><option>Amazon</option></select><svg class=\"ds-filter-chevron\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"m6 9 6 6 6-6\"/></svg></div><div class=\"ds-filter\"><label class=\"ds-filter-label\" for=\"ds-filter-budget\">Orçamento</label><select class=\"ds-filter-select\" id=\"ds-filter-budget\"><option>Orçamento</option></select><svg class=\"ds-filter-chevron\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"m6 9 6 6 6-6\"/></svg></div><button class=\"ds-filter-clear\" type=\"button\">Limpar filtros</button></div>",
+      "css": ".ds-filter-row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; font-family: var(--font-geist-sans), system-ui, sans-serif; } .ds-filter { position: relative; display: inline-flex; align-items: center; border: 1px solid hsl(var(--input)); border-radius: 9999px; background: hsl(var(--background)); color: hsl(var(--muted-foreground)); font-size: 0.875rem; transition: color 150ms cubic-bezier(0.4, 0, 0.2, 1); } .ds-filter:hover { color: hsl(var(--foreground)); } .ds-filter.is-active { border-color: hsl(var(--primary) / 0.4); background: hsl(var(--primary) / 0.1); color: hsl(var(--foreground)); } .ds-filter-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; } .ds-filter-select { height: 2.25rem; padding: 0 2.25rem 0 1rem; border: none; border-radius: 9999px; background: transparent; color: inherit; font: inherit; font-weight: 500; appearance: none; cursor: pointer; } .ds-filter-select:focus-visible { outline: 2px solid hsl(var(--ring)); outline-offset: 2px; } .ds-filter-chevron { position: absolute; right: 0.75rem; width: 0.875rem; height: 0.875rem; opacity: 0.7; pointer-events: none; } .ds-filter-clear { height: 2.25rem; margin-left: 0.25rem; padding: 0 0.75rem; border: none; border-radius: 9999px; background: transparent; color: hsl(var(--muted-foreground)); font: inherit; font-size: 0.875rem; font-weight: 500; text-underline-offset: 0.25em; cursor: pointer; } .ds-filter-clear:hover { color: hsl(var(--foreground)); text-decoration: underline; }"
+    },
+    {
+      "name": "Pílula de Orçamento",
+      "kind": "custom",
+      "refersTo": null,
+      "description": "A porta de entrada do hero da homepage: faixas de preço com a contagem real, ligando à pesquisa filtrada. Só aparecem as faixas que têm produtos.",
+      "html": "<nav class=\"ds-budget\" aria-label=\"Ideias por orçamento\"><a class=\"ds-budget-pill\" href=\"#\">50 € – 150 €<span class=\"ds-budget-count\">1</span></a><a class=\"ds-budget-pill\" href=\"#\">Mais de 300 €<span class=\"ds-budget-count\">2</span></a></nav>",
+      "css": ".ds-budget { display: flex; flex-wrap: wrap; gap: 0.5rem; font-family: var(--font-geist-sans), system-ui, sans-serif; } .ds-budget-pill { display: inline-flex; align-items: center; gap: 0.5rem; height: 2.5rem; padding: 0 1rem; border: 1px solid hsl(var(--input)); border-radius: 9999px; background: hsl(var(--background)); color: hsl(var(--foreground)); font-size: 0.875rem; font-weight: 500; text-decoration: none; transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1), border-color 150ms cubic-bezier(0.4, 0, 0.2, 1); } .ds-budget-pill:hover { border-color: hsl(var(--primary) / 0.4); background: hsl(var(--primary) / 0.1); } .ds-budget-count { font-size: 0.75rem; font-variant-numeric: tabular-nums; color: hsl(var(--muted-foreground)); transition: color 150ms cubic-bezier(0.4, 0, 0.2, 1); } .ds-budget-pill:hover .ds-budget-count { color: hsl(var(--primary)); } .ds-budget-pill:focus-visible { outline: 2px solid hsl(var(--ring)); outline-offset: 2px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "Vitrine à Meia-Noite",
+    "overview": "Uma montra vista de noite. O fundo é uma ardósia quase preta com um leve toque de azul, e cada objeto — um produto, uma categoria, um preço — aparece como peça iluminada sobre essa escuridão. A luz é escassa e intencional: existe uma única fonte azul e ela nunca se espalha. O que dá forma ao espaço não é a sombra, é o tom: superfícies ligeiramente mais claras do que o fundo, separadas por fios de borda quase invisíveis e por vidro desfocado.\n\nA atmosfera é calma, precisa e confiante. Nada pisca, nada compete, nada tenta vender. O sistema comporta-se como uma vitrine de loja fechada: a apresentação tem qualidade de retalho premium, mas não há mecânica de compra em lado nenhum. Quando um elemento responde ao toque, a resposta é física e contida — o cartão sobe quatro pixels, a imagem aproxima-se cinco por cento, o título acende-se a azul. Movimento em vez de peso.\n\nAs formas são todas arredondadas e nunca há uma aresta viva: os controlos são pílulas completas, os contentores são seixos de 24px. É essa suavidade constante, mais do que a paleta, que impede a interface de parecer um painel de administração. Rejeitado explicitamente (UI-003 do blueprint): Bootstrap, Material UI e a estética \"dashboard gaming\".",
+    "keyCharacteristics": [
+      "Dark mode é o modo primário; o light mode é uma tradução, não a origem.",
+      "Uma única cor de acento — o Azul de Vitrine — mais um âmbar reservado a um só uso.",
+      "Profundidade por camada tonal, borda-fio e blur; praticamente sem sombra.",
+      "Geometria totalmente arredondada: pílulas para controlos, seixos de 24px para contentores.",
+      "Etiquetas em maiúsculas de 12px com espaçamento largo (0.22em–0.28em) como assinatura tipográfica.",
+      "Coluna única de 1152px, respiração vertical de 80–96px entre secções."
+    ],
+    "rules": [
+      {
+        "name": "The Single Light Rule",
+        "body": "(A Regra da Única Luz) O Azul de Vitrine ocupa menos de 10% da área de qualquer ecrã. Numa grelha de produtos isso significa: um badge azul só nos itens de prioridade alta, e mais nada até o utilizador interagir. A raridade é o efeito.",
+        "section": "colors"
+      },
+      {
+        "name": "The Reserved Amber Rule",
+        "body": "(A Regra do Âmbar Reservado) O âmbar significa \"favorito\" e nada mais. Se um novo estado precisar de destaque, resolve-se com tom, borda ou tipografia — nunca pedindo emprestado ao âmbar.",
+        "section": "colors"
+      },
+      {
+        "name": "The Two Themes Rule",
+        "body": "(A Regra dos Dois Temas) Nenhuma cor entra na interface como classe literal da paleta do Tailwind (text-amber-200, bg-slate-900). Toda a cor passa por um token do tema, porque um valor fixo só pode estar certo num dos dois modos. A única constante intencional é a Placa de Produto, que acompanha o material fotográfico e não o tema.",
+        "section": "colors"
+      },
+      {
+        "name": "The Whole Product Rule",
+        "body": "(A Regra do Produto Inteiro) Fotografia de produto nunca é cortada. O enquadramento é 4:3, a imagem entra em object-contain com folga, e o fundo é a Placa de Produto. As fotos de retalho chegam em rácios imprevisíveis — uma delas é retrato 0.83 — e object-cover chegava a comer 38% da altura.",
+        "section": "colors"
+      },
+      {
+        "name": "The 70% Hairline Rule",
+        "body": "(A Regra do Fio a 70%) Toda a borda estrutural é hsl(215 27.9% 16.9% / 0.7). A borda a 100% está reservada a elementos que precisam mesmo de se afirmar como caixa fechada.",
+        "section": "colors"
+      },
+      {
+        "name": "The Spaced Label Rule",
+        "body": "(A Regra da Etiqueta Espaçada) Rótulos de campo dentro de cartões — \"Preço\", \"Loja\", \"Notas\" — são 12px, maiúsculas, peso 500, cinza secundário, com pelo menos 0.22em de espaçamento. O tratamento pertence a rótulos de campo e nunca a sobrescritos por cima de um título: o título carrega o seu próprio peso.",
+        "section": "typography"
+      },
+      {
+        "name": "The Two Weights Rule",
+        "body": "(A Regra do Peso Único) O sistema usa apenas dois pesos: 400 para texto corrido e 600 para tudo o que é título. Não há 500 em títulos nem 700 em lado nenhum.",
+        "section": "typography"
+      },
+      {
+        "name": "The Tabular Figures Rule",
+        "body": "(A Regra dos Algarismos Tabulares) Preços e contagens usam font-variant-numeric: tabular-nums, para que os valores alinhem coluna a coluna quando a grelha os empilha.",
+        "section": "typography"
+      },
+      {
+        "name": "The Single Column Rule",
+        "body": "(A Regra da Coluna Única) Tudo vive dentro de 1152px centrados. Uma vista nova que precise de mais largura está a pedir para ser dividida, não para sair da coluna.",
+        "section": "layout"
+      },
+      {
+        "name": "The Flat-At-Rest Rule",
+        "body": "(A Regra do Plano em Repouso) As superfícies são planas quando ninguém lhes toca. A resposta a hover e foco é movimento e cor — nunca uma sombra que cresce.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Slow Image Rule",
+        "body": "(A Regra da Imagem Lenta) Dentro de um contentor animado, o conteúdo visual move-se mais devagar do que o contentor (500ms contra 300ms).",
+        "section": "elevation"
+      },
+      {
+        "name": "The Pill and Pebble Rule",
+        "body": "(A Regra da Pílula e do Seixo) Se o utilizador clica nisso, é uma pílula. Se isso contém coisas, é um seixo de 24px. Um elemento embutido dentro de um seixo usa 16px. Não há terceira opção.",
+        "section": "shapes"
+      }
+    ],
+    "dos": [
+      "Do manter o Azul de Vitrine abaixo de 10% da área de qualquer ecrã (The Single Light Rule).",
+      "Do usar hsl(215 27.9% 16.9% / 0.7) como borda estrutural em qualquer superfície nova.",
+      "Do criar profundidade com translucidez e backdrop-blur sobre a Ardósia de Meia-Noite, em camadas de 60% / 80% / 90%.",
+      "Do responder a hover com um levantamento de 4px em 300ms, mudança de cor do título e deslocação da seta — em conjunto, não isoladamente.",
+      "Do definir qualquer rótulo de contexto em 12px maiúsculas com 0.22em–0.28em de espaçamento e cor secundária.",
+      "Do manter todo o conteúdo dentro da coluna de 1152px com px-4 sm:px-6 lg:px-8.",
+      "Do enquadrar todas as imagens de produto em 4:3 com object-contain sobre a Placa de Produto, para que nada seja cortado.",
+      "Do duplicar qualquer informação transmitida por cor em texto legível (a prioridade diz \"Prioridade alta\", não confia no azul).",
+      "Do tratar o estado vazio com o cartão de borda tracejada, sem ilustração, com uma ação opcional quando existe um caminho de recuperação óbvio.",
+      "Do dar focus-visible visível a tudo o que é operável, com o anel de 2px e 2px de afastamento.",
+      "Do tornar cada cartão navegável um único link que envolve o cartão inteiro.",
+      "Do usar tabular-nums em preços e contagens.",
+      "Do tematizar as superfícies do browser — seleção, cursor, barra de scroll, afastamento do sublinhado — a partir da paleta.",
+      "Do preferir o controlo nativo (select, input) quando ele resolve o problema: no telemóvel ganha em velocidade, acessibilidade e peso.",
+      "Do refletir qualquer filtro ou ordenação na URL, para que a vista seja partilhável."
+    ],
+    "donts": [
+      "Don't introduzir sombras duras ou sombras que crescem em hover — a profundidade é tonal (DESIGN-003 do blueprint).",
+      "Don't acrescentar um segundo tom de acento. O âmbar está reservado ao marcador de favorito e o vermelho ao erro.",
+      "Don't usar cantos retos. Controlos são pílulas, contentores são seixos de 24px, embutidos são 16px.",
+      "Don't usar mais do que dois pesos tipográficos (400 e 600).",
+      "Don't sobrepor texto às imagens de produto; a informação vive sempre abaixo da imagem.",
+      "Don't assumir que framer-motion está em uso — hoje toda a animação é CSS. Introduzi-lo é uma decisão nova, não uma continuação.",
+      "Don't desenhar em light mode primeiro. O dark mode é a origem e o light mode é a tradução (UI-004 do blueprint).",
+      "Don't recorrer a padrões de Bootstrap, Material UI ou \"dashboard gaming\" (UI-003 do blueprint).",
+      "Don't colocar um sobrescrito ou etiqueta por cima de um título de secção — o título carrega o seu próprio peso.",
+      "Don't aninhar cartões. Uma grelha de produtos nunca vive dentro de outro cartão.",
+      "Don't repetir a mesma ligação dentro de um cartão (imagem, título e botão a apontar ao mesmo destino).",
+      "Don't usar classes literais da paleta do Tailwind para cor (text-amber-200, bg-slate-900) — um valor fixo só pode estar certo num dos dois temas.",
+      "Don't cortar fotografia de produto com object-cover — os rácios de origem variam de 0.83 a 1.34 e o corte come o produto.",
+      "Don't mostrar uma categoria sem produtos na grelha da homepage."
+    ]
+  }
+}

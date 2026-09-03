@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <rect width="64" height="64" rx="16" fill="#030712" />
+  <rect x="0.5" y="0.5" width="63" height="63" rx="15.5" fill="none" stroke="#1f2937" />
+  <text
+    x="32"
+    y="41"
+    text-anchor="middle"
+    font-family="system-ui, -apple-system, 'Segoe UI', sans-serif"
+    font-size="23"
+    font-weight="600"
+    letter-spacing="2"
+    fill="#3b82f6"
+  >WP</text>
+</svg>

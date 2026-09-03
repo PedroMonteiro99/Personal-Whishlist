@@ -3,14 +3,17 @@ import { ProductCard } from "@/components/ProductCard";
 
 import type { CatalogProduct } from "@/lib/catalog";
 
-export function ProductGrid({ products }: { products: CatalogProduct[] }) {
+export function ProductGrid({
+  products,
+  emptyTitle = "Sem produtos",
+  emptyDescription = "Ainda não há produtos para apresentar nesta vista.",
+}: {
+  products: CatalogProduct[];
+  emptyTitle?: string;
+  emptyDescription?: string;
+}) {
   if (products.length === 0) {
-    return (
-      <EmptyState
-        title="Sem produtos"
-        description="Ainda não há produtos para apresentar nesta vista."
-      />
-    );
+    return <EmptyState title={emptyTitle} description={emptyDescription} />;
   }
 
   return (

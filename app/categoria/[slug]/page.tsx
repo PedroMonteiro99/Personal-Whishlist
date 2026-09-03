@@ -27,7 +27,7 @@ export async function generateMetadata({
   }
 
   return {
-    title: `${category.name} | Wishlist Premium`,
+    title: category.name,
     description:
       category.description ?? `Produtos da categoria ${category.name}.`,
   };

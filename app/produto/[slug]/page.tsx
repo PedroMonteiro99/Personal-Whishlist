@@ -26,10 +26,12 @@ export async function generateMetadata({
   }
 
   return {
-    title: product.name
-      ? `${product.name} | Wishlist Premium`
-      : "Wishlist Premium",
-    description: product.body.slice(0, 160),
+    title: product.name,
+    description:
+      product.seo?.description ??
+      (product.body
+        ? product.body.slice(0, 160)
+        : `${product.name} na wishlist, disponível em ${product.storeName}.`),
   };
 }
 

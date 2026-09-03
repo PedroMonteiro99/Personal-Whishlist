@@ -10,6 +10,7 @@ export function StoreLink({ href, label }: { href: string; label: string }) {
       <Link href={href} target="_blank" rel="noreferrer">
         {label}
         <ArrowUpRight className="size-4" />
+        <span className="sr-only">(abre num separador novo)</span>
       </Link>
     </Button>
   );

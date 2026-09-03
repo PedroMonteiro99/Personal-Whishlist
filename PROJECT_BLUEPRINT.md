@@ -232,9 +232,15 @@ diretamente de dentro de um componente de UI.
 **ROUTE-002** — Slugs de categoria e de produto são definidos no frontmatter MDX (`slug`) e devem
 ser únicos dentro do seu tipo (regra validada no script de sincronização — ver `SYNC-002`).
 
-**ROUTE-003** — Filtros e pesquisa usam `searchParams` (ex: `/categoria/setup?prioridade=alta`),
-nunca estado ad-hoc que se perde ao recarregar a página — a URL deve refletir sempre o estado
-visível.
+**ROUTE-003** — Filtros, ordenação e pesquisa usam `searchParams` (ex:
+`/pesquisa?loja=amazon&preco=mais-300`), nunca estado ad-hoc que se perde ao recarregar a página —
+a URL deve refletir sempre o estado visível.
+
+**ROUTE-006** — A filtragem vive numa **superfície única**, `/pesquisa`, que acumula os papéis de
+pesquisa, "ver tudo" e filtrar/ordenar. As páginas de categoria mantêm-se estáticas
+(`generateStaticParams`, ver `PERF-003`) e ligam para `/pesquisa?categoria=<slug>` em vez de
+lerem `searchParams` — ler `searchParams` numa rota tornaria-a dinâmica e anularia a geração
+estática. Evita também duplicar a UI de filtros em duas rotas.
 
 **ROUTE-004** — Rotas de fases futuras (fora da V1, não implementar ainda): `/dashboard`
 (privado), `/dashboard/reservas`, `/colecoes/[slug]`. Ver secção 29 — Future Ideas.
