@@ -14,11 +14,16 @@ export function SearchBar({ query }: { query: string }) {
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
   const [value, setValue] = useState(query);
+  const [syncedQuery, setSyncedQuery] = useState(query);
   const debouncedValue = useDebounce(value, 250);
 
-  useEffect(() => {
+  // A URL é a fonte de verdade: quando muda por fora (botão de voltar, "Limpar
+  // filtros"), o campo acompanha. Ajustar durante o render, em vez de num
+  // efeito, evita o render em cascata que um `setState` em efeito provoca.
+  if (query !== syncedQuery) {
+    setSyncedQuery(query);
     setValue(query);
-  }, [query]);
+  }
 
   const commit = useCallback(
     (nextQuery: string) => {

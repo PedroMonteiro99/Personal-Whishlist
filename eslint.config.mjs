@@ -1,16 +1,18 @@
-import { FlatCompat } from "@eslint/eslintrc";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
+import { defineConfig, globalIgnores } from "eslint/config";
+import nextVitals from "eslint-config-next/core-web-vitals";
 
-const compat = new FlatCompat({
-  baseDirectory: path.dirname(fileURLToPath(import.meta.url)),
-});
-
-const eslintConfig = [
-  {
-    ignores: ["node_modules/**", ".next/**", "dist/**"],
-  },
-  ...compat.extends("next/core-web-vitals"),
-];
+const eslintConfig = defineConfig([
+  ...nextVitals,
+  globalIgnores([
+    // Ignores por defeito do eslint-config-next, repostos ao substituí-los.
+    ".next/**",
+    "out/**",
+    "build/**",
+    "next-env.d.ts",
+    // Específicos deste projeto.
+    "dist/**",
+    ".github/skills/**",
+  ]),
+]);
 
 export default eslintConfig;

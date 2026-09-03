@@ -8,12 +8,35 @@ on:
     - cron: "0 6 * * 1" # todas as segundas-feiras às 06:00 UTC
   workflow_dispatch: {}
 
+# Não faz checkout nem toca no repositório.
+permissions: {}
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
 jobs:
   keepalive:
     runs-on: ubuntu-latest
     steps:
       - name: Pedido simples ao Supabase
+        # Os secrets passam por env em vez de irem interpolados no `run`
+        # (docs.github.com/actions — Secure use: intermediate environment variable).
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
         run: |
-          curl -sf "${{ secrets.SUPABASE_URL }}/rest/v1/categories?select=id&limit=1" \
-            -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
-            -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}"
+          set -euo pipefail
+
+          if [ -z "${SUPABASE_URL}" ] || [ -z "${SUPABASE_ANON_KEY}" ]; then
+            echo "::error::Faltam os secrets SUPABASE_URL e/ou SUPABASE_ANON_KEY."
+            exit 1
+          fi
+
+          # -sS mantém o output silencioso mas mostra o erro quando falha.
+          curl -fsS "${SUPABASE_URL}/rest/v1/categories?select=id&limit=1" \
+            -H "apikey: ${SUPABASE_ANON_KEY}" \
+            -H "Authorization: Bearer ${SUPABASE_ANON_KEY}" \
+            -o /dev/null
+
+          echo "Supabase respondeu — projeto mantido ativo."

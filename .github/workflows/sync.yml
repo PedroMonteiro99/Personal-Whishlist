@@ -5,6 +5,15 @@ on:
     branches: [main]
     paths:
       - "content/**"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+# Sincronizações não se cancelam a meio: escrevem na base de dados.
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
 
 jobs:
   sync:

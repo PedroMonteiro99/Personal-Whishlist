@@ -12,6 +12,18 @@
   "dependencyDashboardTitle": "📦 Dependency Dashboard",
   "packageRules": [
     {
+      "description": "ESLint fixo em v9: o eslint-config-next 16 declara eslint >=9, mas os plugins que traz (eslint-plugin-react, -import, -jsx-a11y) só suportam até v9 e o v10 removeu context.getFilename(). Rever quando esses plugins publicarem suporte a v10.",
+      "matchPackageNames": ["eslint"],
+      "allowedVersions": "<10",
+      "addLabels": ["blocked-upstream"]
+    },
+    {
+      "description": "TypeScript fixo em v6: o typescript-eslint rejeita TS >=7 (typescript-eslint#10940). Rever quando publicarem suporte a TS 7.1.",
+      "matchPackageNames": ["typescript"],
+      "allowedVersions": "<7",
+      "addLabels": ["blocked-upstream"]
+    },
+    {
       "description": "Group TypeScript type definitions",
       "matchPackageNames": ["@types/**"],
       "groupName": "TypeScript definitions",

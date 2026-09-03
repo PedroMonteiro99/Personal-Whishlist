@@ -1,8 +1,17 @@
 name: Validate
 
+# Ver PROJECT_BLUEPRINT.md — CI-001. É o portão dos pull requests: cobre o que
+# o `ci` faz em `main` e acrescenta a validação do frontmatter MDX (SYNC-002).
 on:
   pull_request:
     branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   validate:
@@ -28,3 +37,6 @@ jobs:
 
       - name: Validar frontmatter MDX
         run: pnpm tsx scripts/sync-content.ts --dry-run
+
+      - name: Build
+        run: pnpm build

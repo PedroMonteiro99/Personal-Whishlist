@@ -1,6 +1,12 @@
 "use client";
 
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useMemo,
+  useSyncExternalStore,
+} from "react";
 
 type Theme = "dark" | "light";
 
@@ -15,31 +21,80 @@ const THEME_STORAGE_KEY = "wishlist-premium-theme";
 
 const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
 
-export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>("dark");
+/**
+ * O tema vive no `localStorage` e na classe do `<html>`, aplicada antes do
+ * primeiro paint pelo script em `app/layout.tsx`. É estado externo ao React,
+ * por isso é lido com `useSyncExternalStore` em vez de ser copiado para
+ * `useState` dentro de um efeito: evita o render em cascata e mantém as abas
+ * abertas sincronizadas entre si.
+ */
+const listeners = new Set<() => void>();
 
-  useEffect(() => {
-    const storedTheme = window.localStorage.getItem(THEME_STORAGE_KEY);
-    const initialTheme: Theme = storedTheme === "light" ? "light" : "dark";
+function readTheme(): Theme {
+  try {
+    return window.localStorage.getItem(THEME_STORAGE_KEY) === "light"
+      ? "light"
+      : "dark";
+  } catch {
+    // Modo privado ou storage bloqueado: assume-se o modo primário.
+    return "dark";
+  }
+}
 
-    setThemeState(initialTheme);
-    document.documentElement.classList.toggle("dark", initialTheme === "dark");
-  }, []);
+function subscribe(onStoreChange: () => void) {
+  const handleStorage = (event: StorageEvent) => {
+    if (event.key !== null && event.key !== THEME_STORAGE_KEY) {
+      return;
+    }
 
-  useEffect(() => {
+    // Outra aba mudou o tema: acompanhar a classe do `<html>`.
+    document.documentElement.classList.toggle("dark", readTheme() === "dark");
+    onStoreChange();
+  };
+
+  listeners.add(onStoreChange);
+  window.addEventListener("storage", handleStorage);
+
+  return () => {
+    listeners.delete(onStoreChange);
+    window.removeEventListener("storage", handleStorage);
+  };
+}
+
+// No servidor não existe `localStorage`; o dark mode é o modo primário (UI-004).
+function getServerSnapshot(): Theme {
+  return "dark";
+}
+
+function applyTheme(theme: Theme) {
+  try {
     window.localStorage.setItem(THEME_STORAGE_KEY, theme);
-    document.documentElement.classList.toggle("dark", theme === "dark");
-  }, [theme]);
+  } catch {
+    // Sem storage o tema não persiste, mas a classe abaixo ainda o aplica.
+  }
+
+  document.documentElement.classList.toggle("dark", theme === "dark");
+
+  for (const listener of listeners) {
+    listener();
+  }
+}
+
+export function ThemeProvider({ children }: { children: React.ReactNode }) {
+  const theme = useSyncExternalStore(subscribe, readTheme, getServerSnapshot);
+
+  const setTheme = useCallback((next: Theme) => {
+    applyTheme(next);
+  }, []);
 
   const value = useMemo<ThemeContextValue>(
     () => ({
       theme,
       resolvedTheme: theme,
-      setTheme: setThemeState,
-      toggleTheme: () =>
-        setThemeState((current) => (current === "dark" ? "light" : "dark")),
+      setTheme,
+      toggleTheme: () => setTheme(theme === "dark" ? "light" : "dark"),
     }),
-    [theme],
+    [setTheme, theme],
   );
 
   return (
