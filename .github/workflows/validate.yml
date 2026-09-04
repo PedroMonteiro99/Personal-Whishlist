@@ -36,7 +36,10 @@ jobs:
         run: pnpm typecheck
 
       - name: Validar frontmatter MDX
-        run: pnpm tsx scripts/sync-content.ts --dry-run
+        run: pnpm tsx scripts/validate-content.ts
+
+      - name: Testes
+        run: pnpm test:run
 
       - name: Build
         run: pnpm build

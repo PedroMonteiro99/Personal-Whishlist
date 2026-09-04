@@ -597,6 +597,48 @@ uma com a contagem real em `tabular-nums`, ligando a `/pesquisa?preco=…`. Só 
 que têm produtos. Em hover ganham borda e fundo de acento. Respondem à primeira pergunta de quem
 oferece um presente antes de ela ser feita.
 
+### Cartão de partilha (Open Graph)
+
+A superfície mais vista do produto: é o que aparece quando alguém cola o link numa conversa. 1200×630,
+sempre escuro — não tem tema, porque não é lido dentro da aplicação.
+
+Estrutura fixa nos três cartões: a luz da montra como camada de fundo (radial azul vindo de cima,
+que desvanece até transparente antes de tocar em qualquer aresta), o conteúdo em cima à esquerda, e a
+marca — etiqueta + nome — ancorada em baixo. A tipografia é a Geist, a mesma da aplicação.
+
+- **Homepage:** o título real da página, o subtítulo, a marca.
+- **Produto:** nome (58–68px conforme o comprimento), preço em Azul de Vitrine, e uma linha de
+  contexto com lojas e categoria. À direita, a fotografia inteira sobre a Placa de Produto — o
+  mesmo enquadramento branco dos cartões da aplicação. Sem fotografia, o painel desaparece e o
+  texto ocupa a largura toda.
+- **Categoria:** nome, descrição, contagem de produtos.
+
+**Sem eyebrow.** A categoria vive na linha de contexto por baixo do preço, nunca como etiqueta por
+cima do título.
+
+### Oferecer (reservas)
+
+A funcionalidade que evita presentes repetidos. Aparece na página de produto, entre os detalhes e
+o "Onde comprar" — decidir que se vai oferecer vem antes de decidir onde comprar.
+
+- **Livre:** seixo com "Vais oferecer este?", uma linha a explicar que o dono não vê, campo para o
+  primeiro nome e o botão "Vou oferecer" com ícone de presente.
+- **Tratado por outro:** o mesmo seixo, mais silencioso (`bg-card/60`), com o nome em destaque e
+  um convite a escolher outro. Sem ação — não há nada a fazer aqui.
+- **Tratado por mim:** borda e fundo de Azul de Vitrine a 5%, marca de confirmação, e o botão de
+  desfazer em texto humano ("Afinal já não vou").
+- **A carregar:** uma linha discreta com spinner. Nunca um salto de layout.
+- **Serviço em baixo ou por configurar:** desaparece por completo, incluindo o interruptor de dono.
+
+**Marcador na grelha.** Os cartões ganham uma pílula "Já tratado" (ou "Vais oferecer") em vidro
+sobre a borda, para não se abrir um produto que já está resolvido. Só aparece depois de os dados
+chegarem — nunca faz piscar a grelha.
+
+**O interruptor do dono.** Vive no rodapé, em texto simples. Não é uma barreira de segurança: é a
+aplicação a proteger o Pedro de si próprio, e ele é a única pessoa interessada em não ver. Quando
+está ativo, permanece visível a dizer que está ativo — caso contrário a ausência de reservas
+pareceria uma avaria.
+
 ## Do's and Don'ts
 
 ### Do:
@@ -647,6 +689,8 @@ oferece um presente antes de ela ser feita.
   — um valor fixo só pode estar certo num dos dois temas.
 - **Do** anunciar o preço mais baixo como "desde X €" sempre que as lojas pedirem valores
   diferentes, para não prometer um preço que só existe num sítio.
+- **Do** tratar funcionalidades que dependem de serviços externos como extras: se o serviço falhar,
+  a interface esconde-as em silêncio em vez de mostrar um erro ao visitante.
 - **Don't** cortar fotografia de produto com `object-cover` — os rácios de origem variam de 0.83 a
   1.34 e o corte come o produto.
 - **Don't** mostrar uma categoria sem produtos na grelha da homepage.

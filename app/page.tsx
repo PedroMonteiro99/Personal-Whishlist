@@ -1,9 +1,11 @@
 import Link from "next/link";
 
+import { JsonLd } from "@/components/JsonLd";
 import { ProductGrid } from "@/components/ProductGrid";
 import { countByPriceBucket } from "@/features/filters/lib/product-filters";
 import { CategoryGrid } from "@/features/wishlist/components/CategoryGrid";
 import { getHomeData } from "@/features/wishlist/lib/get-home-data";
+import { websiteJsonLd } from "@/lib/structured-data";
 
 export default async function HomePage() {
   const { categories, products, featuredProducts } = await getHomeData();
@@ -14,6 +16,7 @@ export default async function HomePage() {
 
   return (
     <>
+      <JsonLd data={websiteJsonLd()} />
       <section className="mx-auto w-full max-w-6xl px-4 pb-16 pt-14 sm:px-6 lg:px-8 lg:pb-20 lg:pt-20">
         <h1 className="max-w-3xl text-4xl font-semibold tracking-tight text-balance sm:text-5xl lg:text-6xl">
           Ideias de presentes, num só sítio.
@@ -65,6 +68,7 @@ export default async function HomePage() {
         </div>
         <ProductGrid
           products={highlighted}
+          priorityCount={3}
           emptyTitle="Ainda sem destaques"
           emptyDescription="Assim que houver favoritos ou prioridades altas, aparecem aqui."
         />

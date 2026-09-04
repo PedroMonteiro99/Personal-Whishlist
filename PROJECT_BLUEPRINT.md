@@ -123,7 +123,7 @@ partilhável através de um único link.
 | Estilos | Tailwind CSS v4 |
 | Componentes | shadcn/ui |
 | Animações | Framer Motion (Motion) |
-| Backend / DB | Supabase |
+| Backend / DB | Supabase (apenas estado futuro — ver `REPO-005`) |
 | Conteúdo | MDX |
 | Deployment | Vercel |
 | CI/CD | GitHub Actions |
@@ -135,14 +135,27 @@ partilhável através de um único link.
 ## 6. Repository Philosophy
 
 **REPO-001** — O repositório Git é sempre a única fonte de verdade.
-**REPO-002** — Nunca editar diretamente a base de dados (Supabase Studio é apenas para leitura/debug).
-**REPO-003** — Todo o conteúdo (produtos, categorias, lojas) vive em ficheiros MDX versionados.
+**REPO-002** — Todo o conteúdo (produtos, categorias, lojas) vive em ficheiros MDX versionados.
+**REPO-003** — Nunca editar conteúdo diretamente numa base de dados.
+**REPO-004** — **O catálogo é servido a partir dos MDX, não de uma base de dados.** Como toda a
+alteração de conteúdo é um commit (`REPO-001`), e um commit já dispara um rebuild, uma cópia do
+catálogo em base de dados não resolveria nenhum problema: só acrescentaria latência, uma dependência
+de terceiros e uma cópia a divergir em silêncio. O site são ficheiros estáticos e não pode ficar
+indisponível por causa de dados.
 
-Fluxo de dados:
+Fluxo de conteúdo:
 
 ```
-MDX → GitHub → GitHub Actions → Supabase → Aplicação
+MDX → GitHub → build (Next.js) → site estático
 ```
+
+**REPO-005** — O projeto Supabase mantém-se para **estado**, não para conteúdo: dados gerados por
+visitantes (reservas — `DB-004`), que por definição não pertencem ao Git. O catálogo continua
+estático; só o estado é lido no browser, depois de a página carregar.
+
+**REPO-006** — As reservas são um extra, nunca um requisito: sem configuração de Supabase, ou com
+ele em baixo, a interface esconde a funcionalidade e o catálogo continua a funcionar por inteiro.
+Verificado em browser com o serviço inalcançável.
 
 ## 7. Architecture
 
@@ -230,7 +243,7 @@ diretamente de dentro de um componente de UI.
 | `/[slug]` (opcional) | Páginas estáticas de conteúdo em `content/pages/` (ex: "Sobre") |
 
 **ROUTE-002** — Slugs de categoria e de produto são definidos no frontmatter MDX (`slug`) e devem
-ser únicos dentro do seu tipo (regra validada no script de sincronização — ver `SYNC-002`).
+ser únicos dentro do seu tipo (validado por `scripts/validate-content.ts` — ver `SYNC-002`).
 
 **ROUTE-003** — Filtros, ordenação e pesquisa usam `searchParams` (ex:
 `/pesquisa?loja=amazon&preco=mais-300`), nunca estado ad-hoc que se perde ao recarregar a página —
@@ -246,8 +259,9 @@ estática. Evita também duplicar a UI de filtros em duas rotas.
 (privado), `/dashboard/reservas`, `/colecoes/[slug]`. Ver secção 29 — Future Ideas.
 
 **ROUTE-005** — Páginas de detalhe de produto (`/produto/[slug]`) e de categoria
-(`/categoria/[slug]`) são geradas estaticamente sempre que possível (`generateStaticParams`), com
-revalidação após cada sincronização de conteúdo (ver `SYNC-001`).
+(`/categoria/[slug]`) são geradas estaticamente (`generateStaticParams`) a partir dos MDX. Não há
+revalidação a acionar: o conteúdo entra no build, e cada commit de conteúdo produz um build novo
+(`REPO-004`).
 
 ## 11. UI System
 
@@ -300,20 +314,27 @@ dos componentes puramente apresentacionais, para facilitar testes e reutilizaç�
 
 ## 14. Database
 
-Tabelas da V1:
+Tabelas em uso:
 
-**DB-001** — `products` — produto individual (nome, slug, descrição, prioridade, favorito, imagens, categoria, moeda). A loja e o preço **não** vivem aqui: um produto pode existir em várias lojas (ver `DB-004`).
-**DB-002** — `categories` — categorias de produtos.
-**DB-003** — `stores` — lojas onde os produtos podem ser comprados.
-**DB-004** — `product_links` — a relação produto↔loja: uma linha por loja onde o produto existe, com `store_id`, `url` (link direto) e `price` (preço nessa loja). Um produto tem no máximo uma entrada por loja (índice único `product_id, store_id`).
+**DB-001** — `heartbeat` — tabela de uma linha, existe unicamente para o workflow `keepalive` ter
+o que consultar (`CI-006`). Sem tabelas, o plano gratuito não teria como registar atividade.
+
+**DB-004** — `reservations` — quem já vai oferecer cada produto: `product_slug`, `reserver_name`,
+`token_hash`, `created_at`. Índice único em `product_slug` (um produto é oferecido uma vez). Não
+há chave estrangeira para produtos, porque o catálogo não vive aqui (`DB-002`): uma reserva de um
+produto entretanto removido do MDX deixa apenas de ser mostrada.
 
 Tabelas futuras (fora da V1):
 
-**DB-901** — `reservations` — sistema de reservas de presentes.
 **DB-902** — `price_history` — histórico de preços por produto.
 **DB-903** — `collections` — coleções/agrupamentos personalizados.
 
-**DB-005** — Nenhuma tabela da V1 deve ser editada manualmente; toda a escrita ocorre via sincronização MDX → Supabase.
+**DB-002** — O catálogo (produtos, categorias, lojas, links) **não** vive na base de dados: vem
+dos MDX (`REPO-004`). As tabelas `products`, `categories`, `stores` e `product_links` existiram na
+migração inicial e foram removidas em `0003_drop_catalog_tables.sql`.
+
+**DB-003** — Toda a tabela nova nasce com RLS ativado e apenas as políticas que a funcionalidade
+exige (ver secção 18).
 
 ## 15. MDX Content
 
@@ -333,38 +354,61 @@ stores:
     price: 134.90
 ```
 
-## 16. Synchronization
+## 16. Content Validation
 
-**SYNC-001** — A sincronização MDX → Supabase corre via GitHub Actions, nunca manualmente em produção.
-**SYNC-002** — Cada sincronização deve validar o frontmatter com Zod antes de escrever na base de dados.
-**SYNC-003** — Falhas de validação bloqueiam o merge/deploy (fail-fast).
+**SYNC-001** — O conteúdo MDX é validado por `scripts/validate-content.ts`, que corre no workflow
+`validate` em cada pull request. Não escreve em lado nenhum: só lê e verifica.
+**SYNC-002** — A validação cobre frontmatter contra os schemas Zod, unicidade de slugs por tipo, e
+referências resolvidas (categoria e lojas de cada produto existem em `content/`).
+**SYNC-003** — Falhas de validação bloqueiam o merge (fail-fast), com o ficheiro e o problema
+nomeados.
+**SYNC-004** — As regras de integridade vivem num único módulo,
+`lib/content/integrity.ts`, partilhado pelo validador e por `lib/catalog.ts`. Correm nos dois
+momentos: no PR (falha o merge) e no build (falha o build). Estarem num só sítio garante que uma
+regra nova entra nos dois de uma vez.
 
 ## 17. GitHub Actions
 
-Workflows previstos:
+**CI-001** — `validate` — pull requests: lint, typecheck, validação de conteúdo, testes, build.
+**CI-002** — `ci` — pushes em `main`: lint, typecheck, testes, build.
+**CI-003** — `release` — gestão de versões/releases a partir de tags `v*.*.*`.
+**CI-004** — `keepalive` — mantém o projeto Supabase gratuito ativo (ver 17.1).
 
-**CI-001** — `validate` — valida frontmatter MDX e corre lint/typecheck.
-**CI-002** — `sync` — sincroniza MDX → Supabase após merge em `main`.
-**CI-003** — `ci` — lint, typecheck, build, testes.
-**CI-004** — `release` — gestão de versões/releases.
-**CI-005** — `keepalive` — mantém o projeto Supabase gratuito ativo (ver 17.1).
+**CI-005** — Os workflows declaram `permissions` explícitas (mínimo privilégio) e `concurrency`
+por ref. Escritas em base de dados nunca usam `cancel-in-progress`.
 
 ### 17.1 Keepalive
 
-**CI-006** — Job agendado (cron) que faz um pedido simples ao Supabase para evitar que o projeto
-gratuito seja pausado por inatividade (pausa ocorre após 30 dias sem atividade).
+**CI-006** — Job agendado (cron semanal) que consulta a tabela `heartbeat` para evitar que o
+projeto gratuito seja pausado por inatividade (a pausa ocorre após 30 dias). Os secrets passam por
+`env`, nunca interpolados no `run`.
 
 ## 18. Security
 
-**SEC-001** — Row Level Security (RLS) ativado em todas as tabelas do Supabase. Política de
-leitura pública (`select`) para `products`, `categories`, `stores`, `product_links`; nenhuma
-política de escrita (`insert`/`update`/`delete`) para o cliente anónimo — só a `service_role`
-(usada exclusivamente nos scripts de sincronização, nunca exposta ao browser).
+**SEC-001** — Row Level Security (RLS) ativado em todas as tabelas do Supabase. Cada tabela recebe
+apenas as políticas que a sua funcionalidade exige — hoje, leitura pública em `heartbeat` e nada
+mais.
 
-**SEC-002** — `NEXT_PUBLIC_SUPABASE_URL` e `NEXT_PUBLIC_SUPABASE_ANON_KEY` são as únicas
-credenciais expostas ao browser. `SUPABASE_SERVICE_ROLE_KEY` nunca é usada em código que corre no
-cliente nem em Server Components acedidos diretamente por pedidos públicos — só em scripts de
-CI/CD (`scripts/sync-content.ts`, correndo em GitHub Actions).
+**SEC-002** — A aplicação só fala com o Supabase para **reservas** (`SEC-008`). O catálogo não
+passa por lá (`REPO-004`). Não há `service_role` em uso no repositório desde que a sincronização de
+catálogo foi removida.
+
+**SEC-008** — **Modelo de segurança das reservas, sem contas de utilizador.** A tabela
+`reservations` tem RLS ativa e **nenhuma política**: `anon` não a lê nem escreve diretamente (uma
+tentativa devolve `permission denied`). O acesso passa por três funções `security definer` com
+`search_path` fixo — `list_reservations`, `reserve_product`, `release_product` — que são a única
+superfície pública.
+
+Quem reserva guarda um token aleatório no seu browser; a base de dados guarda apenas o SHA-256
+desse token. Consequências: uma fuga da tabela não permite cancelar reservas de ninguém, e
+`list_reservations` devolve o nome mas nunca o hash — em vez disso compara-o com o token de quem
+pergunta e devolve um booleano `is_mine`.
+
+O modelo foi verificado contra um Postgres real (leitura direta negada, escrita direta negada,
+duplo `reserve` recusado, e um segundo token a falhar ao tentar cancelar reserva alheia).
+
+**SEC-009** — O nome de quem reserva é visível a qualquer pessoa com o link. É deliberado — serve
+para a família coordenar — e está limitado a 40 caracteres. Não recolher mais nada.
 
 **SEC-003** — Segredos vivem apenas em `.env.local` (nunca commitado — ver `.gitignore`) e em
 GitHub Actions Secrets. `.env.example` documenta as variáveis necessárias sem valores reais.
@@ -388,9 +432,9 @@ reduzindo JavaScript enviado ao cliente.
 **PERF-002** — Imagens de produtos servidas sempre via `next/image`, com dimensões definidas e
 `priority` apenas nas imagens acima da dobra (ex: hero da homepage).
 
-**PERF-003** — Páginas de produto e categoria geradas estaticamente (`generateStaticParams`) com
-revalidação acionada após cada sincronização de conteúdo (via `revalidatePath`/`revalidateTag` no
-script de sincronização ou webhook), em vez de `revalidate` por tempo fixo sempre que possível.
+**PERF-003** — Páginas de produto e categoria geradas estaticamente (`generateStaticParams`) no
+build, a partir dos MDX. Sem base de dados no caminho de leitura, não há revalidação a orquestrar:
+o site servido é HTML estático. As imagens Open Graph seguem a mesma regra (`SEO-003`).
 
 **PERF-004** — Pesquisa e filtros usam debounce no cliente (Client Component isolado e pequeno) e
 delegam a query pesada ao servidor — o Client Component nunca carrega o catálogo inteiro para
@@ -426,35 +470,58 @@ apenas `placeholder` como identificação do campo.
 frontmatter (`seo.title`, `seo.description` — ver `CONTENT-002`), usada via `generateMetadata` do
 Next.js.
 
-**SEO-002** — Sitemap (`sitemap.xml`) gerado dinamicamente a partir dos produtos, categorias e
-páginas publicados no Supabase.
+**SEO-002** — Sitemap (`sitemap.xml`) gerado dinamicamente a partir do catálogo. Não inclui
+`/pesquisa` (proibida no `robots.txt`) nem categorias sem produtos — listar no sitemap uma página
+bloqueada ou vazia é dar instruções contraditórias ao motor de busca.
 
-**SEO-003** — Open Graph e Twitter Card definidos por página (imagem do produto, título,
-descrição), para partilha do link da wishlist ter boa apresentação em apps de mensagens.
+**SEO-003** — Open Graph e Twitter Card definidos por página, com **imagem gerada** (`ImageResponse`)
+para a homepage, cada produto e cada categoria. As imagens são pré-geradas no build
+(`generateStaticParams`), para que a primeira partilha não dependa de um cold start nem do CDN da
+loja. A fonte Geist vive no repositório (`lib/og/`) em TTF: o build não pode depender da rede, e o
+Satori não lê WOFF2.
 
-**SEO-004** — Dados estruturados (JSON-LD, schema.org `Product`) nas páginas de produto, incluindo
-preço quando disponível.
+**SEO-004** — Dados estruturados (JSON-LD, schema.org) por tipo de página: `Product` com
+`AggregateOffer` (uma `Offer` por loja, com preço e vendedor) nas páginas de produto,
+`CollectionPage` nas de categoria, `WebSite` com `SearchAction` na homepage, e `BreadcrumbList` em
+ambas. **Nenhum `availability` é declarado** — não conhecemos o stock das lojas e um `InStock`
+falso é pior do que a ausência do campo (ver `PRODUCT.md`, "Evidence on Hand").
+
+**SEO-006** — `/pesquisa` é `noindex`: gera combinações infinitas de filtros e as páginas de
+categoria cobrem melhor o mesmo conteúdo. Categorias sem produtos são `noindex` enquanto vazias.
+
+**SEO-007** — `metadataBase` vem de `NEXT_PUBLIC_SITE_URL` (com recurso ao domínio de produção que
+a Vercel injeta). Sem ele, as imagens Open Graph saem em caminho relativo e nenhuma aplicação de
+mensagens as resolve — o link fica sem pré-visualização.
 
 **SEO-005** — URLs amigáveis e estáveis: o `slug` de um produto/categoria não deve mudar depois de
 publicado (evitar links partidos partilhados por família/amigos).
 
 ## 22. Testing
 
-**TEST-001** — Validação de conteúdo (frontmatter MDX contra os schemas Zod) corre sempre no
-workflow `validate` (`CI-001`) — é a rede de segurança mínima e obrigatória antes de qualquer
-outro tipo de teste.
+**TEST-001** — Validação de conteúdo (frontmatter MDX contra os schemas Zod, slugs únicos,
+referências resolvidas) corre no workflow `validate` (`CI-001`) — é a rede de segurança mínima e
+obrigatória.
 
-**TEST-002** — Testes unitários (Vitest, a introduzir quando necessário) para lógica pura em
-`lib/` e `features/*/lib/` (ex: parsing de frontmatter, funções de filtragem/pesquisa).
+**TEST-002** — Testes unitários (Vitest) sobre a lógica pura de `lib/` e `features/*/lib/`:
+formatação de preço, filtros, ordenação, dados estruturados e regras de integridade. Correm em
+`ci` e em `validate`.
+
+**TEST-006** — Os testes existem para apanhar **as regressões que este projeto já teve**, não para
+encher cobertura. Cada caso não óbvio traz um comentário a dizer que erro previne — por exemplo o
+filtro de loja que só encontrava produtos pela primeira loja, ou o preço "desde" a prometer o valor
+errado. Um teste que nenhuma mutação plausível faria falhar não vale a manutenção.
+
+**TEST-007** — `lib/catalog.test.ts` corre contra o conteúdo real em `content/`, não contra
+fixtures: apanha um MDX partido antes do build e verifica a resolução de lojas de ponta a ponta.
 
 **TEST-003** — Testes de componentes (Testing Library) focados em componentes com lógica de
 estado relevante (ex: `Filters`, `SearchBar`), não em componentes puramente apresentacionais.
 
 **TEST-004** — Testes end-to-end (Playwright, fase futura) cobrindo os fluxos críticos: navegar
-por categoria, pesquisar, abrir um produto, alternar tema.
+por categoria, pesquisar, abrir um produto, alternar tema, reservar.
 
-**TEST-005** — Não é objetivo da V1 atingir cobertura de testes alta — prioriza-se testar o que
-tem maior risco de quebrar silenciosamente (validação de conteúdo e lógica de filtros/pesquisa).
+**TEST-005** — Não é objetivo atingir cobertura alta — prioriza-se o que tem maior risco de
+quebrar silenciosamente (validação de conteúdo, filtros, preços).
 
 ## 19. Performance
 
@@ -520,8 +587,8 @@ Uma funcionalidade/PR só é considerada "concluída" quando, cumulativamente:
 passa (ver `SYNC-002`, `TEST-001`).
 **DOD-004** — Segue as regras de arquitetura (`ARCH-XXX`), design (`UI-XXX`/`DESIGN-XXX`) e
 naming (`NAME-XXX`) aplicáveis.
-**DOD-005** — Não introduz escrita direta na base de dados fora do fluxo MDX → Supabase
-(`REPO-002`).
+**DOD-005** — Não introduz leitura do catálogo a partir de base de dados nem escrita de conteúdo
+fora do Git (`REPO-004`).
 **DOD-006** — Estados de loading/vazio/erro tratados nos componentes relevantes (`COMP-003`).
 **DOD-007** — Verificação manual básica de acessibilidade (navegação por teclado, contraste) em
 qualquer UI nova (`A11Y-XXX`).
@@ -544,7 +611,7 @@ desatualizado relativamente ao código (ver `DOC-001`/`DOC-002`).
 
 ## 29. Future Ideas
 
-- Sistema de reservas
+- Sistema de reservas ✅ implementado (`DB-004`/`SEC-008`)
 - Histórico de preços
 - Notificações
 - Coleções
@@ -573,17 +640,15 @@ desatualizado relativamente ao código (ver `DOC-001`/`DOC-002`).
 
 ## Próximos Passos (Implementação)
 
-Com o blueprint fechado, o trabalho passa a ser de implementação, não de planeamento:
+Estado atual: V1 funcional, partilhável, com reservas. O que falta, por ordem:
 
-1. Inicializar a aplicação Next.js 15 real (`app/layout.tsx`, `app/page.tsx`) e configurar
-   Tailwind CSS v4 + shadcn/ui (`COMP-002`).
-2. Criar o projeto Supabase, aplicar `supabase/migrations/0001_initial_schema.sql`, e configurar
-   `.env.local` (ver `.env.example`).
-3. Implementar `scripts/sync-content.ts` por completo (leitura de `content/`, validação com os
-   schemas de `lib/content/schemas.ts`, upsert nas tabelas — `SYNC-001`/`SYNC-002`).
-4. Configurar os secrets no GitHub (`SUPABASE_URL`, `SUPABASE_ANON_KEY`,
-   `SUPABASE_SERVICE_ROLE_KEY`) para os workflows `sync` e `keepalive`.
-5. Implementar as rotas da V1 (secção 10) e os componentes do inventário (secção 13), começando
-   pela homepage e pela página de produto.
-6. Ligar o repositório ao Vercel para deploy contínuo a partir de `main`.
-7. Rever este blueprint sempre que uma decisão de arquitetura mudar (`DOD-008`).
+1. **Aplicar a migração `0004_reservations.sql`** no Supabase e confirmar as variáveis
+   `NEXT_PUBLIC_SUPABASE_URL` e `NEXT_PUBLIC_SUPABASE_ANON_KEY` na Vercel. Até lá as reservas
+   simplesmente não aparecem (`REPO-006`).
+2. **Encher o catálogo.** A aplicação está mais construída do que a wishlist está preenchida
+   (3 produtos para um alvo de 40–100 — ver `PRODUCT.md`).
+3. **Rever as descrições provisórias** das categorias criadas sem produtos
+   (`sim-racing`, `lego`, `sneakers`, `perfumes`, `coffee`, `home`, `accessories`).
+4. **Testes** (`TEST-002`/`TEST-003`) — Vitest sobre `lib/` e `features/*/lib/`, começando pela
+   lógica de filtros e pela resolução de lojas.
+5. Rever este blueprint sempre que uma decisão de arquitetura mudar (`DOD-008`).

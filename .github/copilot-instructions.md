@@ -19,8 +19,9 @@ ideias de presentes. Não é uma loja online. Deve parecer um produto comercial 
 
 ## Regras a seguir sempre
 
-- **REPO-001/002**: o Git (ficheiros MDX) é a única fonte de verdade. Nunca gerar código que
-  escreva diretamente na base de dados fora do fluxo `MDX → GitHub Actions → Supabase`.
+- **REPO-001/004**: o Git (ficheiros MDX) é a única fonte de verdade, e o catálogo é servido a
+  partir deles no build. Nunca gerar código que leia o catálogo de uma base de dados nem que
+  escreva conteúdo fora do Git.
 - **ARCH-001/002**: preferir Server Components. Usar `"use client"` apenas quando necessário.
 - **ARCH-004/005**: componentes pequenos, sem duplicação de código, extrair para `lib/`/`hooks/`.
 - **ARCH-006/007**: TypeScript strict, validar dados externos com Zod.
@@ -34,8 +35,8 @@ ideias de presentes. Não é uma loja online. Deve parecer um produto comercial 
   de outra feature; acesso a dados centralizado em `lib/supabase/` e funções por feature.
 - **ROUTE-001..005**: rotas da V1 são `/`, `/categoria/[slug]`, `/produto/[slug]`, `/pesquisa`;
   filtros/pesquisa refletidos sempre na URL via `searchParams`.
-- **SEC-001..006**: RLS ativado, leitura pública apenas; `service_role` nunca em código exposto
-  ao browser; segredos apenas em `.env.local` / GitHub Actions Secrets.
+- **SEC-001..007**: RLS ativado com apenas as políticas que cada funcionalidade exige; a aplicação
+  não fala com o Supabase; segredos apenas em GitHub Actions Secrets.
 - **DOD-001..009**: uma tarefa só está concluída com lint + typecheck + build a passar, estados
   de loading/vazio/erro tratados, e o blueprint atualizado se necessário.
 
@@ -44,9 +45,9 @@ ideias de presentes. Não é uma loja online. Deve parecer um produto comercial 
 - `app/` — rotas (App Router)
 - `components/` — componentes de UI reutilizáveis (`components/ui` = shadcn/ui)
 - `features/` — lógica e componentes organizados por feature
-- `lib/` — utilitários e clients (ex: cliente Supabase)
+- `lib/` — utilitários (catálogo, formatação, dados estruturados, imagens OG)
 - `hooks/` — hooks React reutilizáveis
-- `scripts/` — scripts de sincronização e manutenção
+- `scripts/` — validação de conteúdo e manutenção
 - `supabase/` — migrations e configuração
 - `types/` — tipos partilhados
 - `content/` — conteúdo MDX (`wishlist/`, `stores/`, `categories/`, `pages/`)

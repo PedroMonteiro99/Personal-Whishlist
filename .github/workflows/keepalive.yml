@@ -34,7 +34,7 @@ jobs:
           fi
 
           # -sS mantém o output silencioso mas mostra o erro quando falha.
-          curl -fsS "${SUPABASE_URL}/rest/v1/categories?select=id&limit=1" \
+          curl -fsS "${SUPABASE_URL}/rest/v1/heartbeat?select=id&limit=1" \
             -H "apikey: ${SUPABASE_ANON_KEY}" \
             -H "Authorization: Bearer ${SUPABASE_ANON_KEY}" \
             -o /dev/null

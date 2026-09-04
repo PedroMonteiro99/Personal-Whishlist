@@ -6,6 +6,7 @@ import { ArrowRight } from "lucide-react";
 import { FavoriteIndicator } from "@/components/FavoriteIndicator";
 import { PriorityBadge } from "@/components/PriorityBadge";
 import { Card } from "@/components/ui/card";
+import { ReservationBadge } from "@/features/reservations/components/ReservationBadge";
 import { formatPrice, formatStoreCount } from "@/lib/format";
 import { cn } from "@/lib/utils";
 
@@ -14,9 +15,11 @@ import type { CatalogProduct } from "@/lib/catalog";
 export function ProductCard({
   product,
   className,
+  priority = false,
 }: {
   product: CatalogProduct;
   className?: string;
+  priority?: boolean;
 }) {
   const imageUrl = product.availableImages[0];
 
@@ -37,6 +40,9 @@ export function ProductCard({
               src={imageUrl}
               alt={product.name}
               fill
+              // Acima da dobra é quase sempre a imagem do LCP: carregar com
+              // prioridade evita que o browser a descubra tarde (PERF-002).
+              priority={priority}
               className="object-contain p-5 transition-transform duration-500 group-hover:scale-105"
               sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
             />
@@ -55,6 +61,7 @@ export function ProductCard({
               <div className="flex flex-wrap items-center gap-2">
                 <PriorityBadge priority={product.priority} />
                 <FavoriteIndicator favorite={product.favorite} />
+                <ReservationBadge productSlug={product.slug} />
               </div>
               <h3 className="text-lg font-semibold leading-tight tracking-tight transition-colors group-hover:text-primary">
                 {product.name}

@@ -6,6 +6,7 @@ import { FavoriteIndicator } from "@/components/FavoriteIndicator";
 import { PriorityBadge } from "@/components/PriorityBadge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { GiftAction } from "@/features/reservations/components/GiftAction";
 import { formatAmount, formatPrice, formatStoreCount } from "@/lib/format";
 import { cn } from "@/lib/utils";
 
@@ -104,6 +105,8 @@ export function ProductDetail({ product }: { product: CatalogProduct }) {
             </div>
           </CardContent>
         </Card>
+
+        <GiftAction productSlug={product.slug} productName={product.name} />
 
         {product.storeEntries.length > 0 ? (
           <Card className="border-border/70 bg-card/80">

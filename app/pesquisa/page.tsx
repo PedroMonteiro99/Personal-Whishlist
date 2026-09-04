@@ -19,6 +19,9 @@ type SearchPageProps = Readonly<{
 export const metadata: Metadata = {
   title: "Pesquisar",
   description: "Procura produtos, categorias e lojas na wishlist.",
+  // Gera combinações infinitas de filtros; as páginas de categoria cobrem
+  // melhor o mesmo conteúdo (alinhado com o robots.txt).
+  robots: { index: false, follow: true },
 };
 
 export default async function SearchPage({ searchParams }: SearchPageProps) {

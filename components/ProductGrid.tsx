@@ -7,10 +7,13 @@ export function ProductGrid({
   products,
   emptyTitle = "Sem produtos",
   emptyDescription = "Ainda não há produtos para apresentar nesta vista.",
+  priorityCount = 0,
 }: {
   products: CatalogProduct[];
   emptyTitle?: string;
   emptyDescription?: string;
+  /** Quantos cartões carregam a imagem com prioridade (os que ficam acima da dobra). */
+  priorityCount?: number;
 }) {
   if (products.length === 0) {
     return <EmptyState title={emptyTitle} description={emptyDescription} />;
@@ -18,8 +21,12 @@ export function ProductGrid({
 
   return (
     <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-      {products.map((product) => (
-        <ProductCard key={product.slug} product={product} />
+      {products.map((product, index) => (
+        <ProductCard
+          key={product.slug}
+          product={product}
+          priority={index < priorityCount}
+        />
       ))}
     </div>
   );

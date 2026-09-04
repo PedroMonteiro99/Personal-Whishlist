@@ -65,9 +65,11 @@ categoria; alternância Dark/Light; SEO por página (metadata, sitemap, Open Gra
 (baixa/média/alta), favorito, preço, notas pessoais.
 
 **Restrições duráveis:**
-- Git é a única fonte de verdade; nenhuma escrita fora do fluxo MDX → GitHub Actions → Supabase.
-- Leitura pública apenas; RLS ativo, sem políticas de escrita para o cliente anónimo.
-- `SUPABASE_SERVICE_ROLE_KEY` nunca em código exposto ao browser.
+- Git é a única fonte de verdade; o catálogo é servido a partir dos MDX no build, sem base de
+  dados no caminho de leitura.
+- O projeto Supabase existe para estado gerado por visitantes (reservas), não para conteúdo.
+  Enquanto isso não existir, a aplicação não fala com nenhuma base de dados.
+- Credenciais de base de dados vivem apenas em GitHub Actions Secrets, nunca no browser.
 - TypeScript strict; todo o dado externo validado com Zod.
 - Server Components por defeito; `"use client"` apenas quando necessário.
 - Estado de pesquisa e filtros vive sempre na URL (`searchParams`), nunca só em memória.

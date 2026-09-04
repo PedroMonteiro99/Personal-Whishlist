@@ -8,24 +8,34 @@ verdade para arquitetura, base de dados, UI e regras de desenvolvimento deste pr
 
 ## Stack
 
-Next.js 15 · React 19 · TypeScript · Tailwind CSS v4 · shadcn/ui · Framer Motion · Supabase ·
-MDX · Vercel · GitHub Actions · pnpm
+Next.js 16 · React 19 · TypeScript · Tailwind CSS v4 · shadcn/ui · MDX · Vercel ·
+GitHub Actions · pnpm
 
 ## Início rápido
 
 ```bash
 pnpm install
-cp .env.example .env.local   # preencher as credenciais do Supabase
+cp .env.example .env.local
 pnpm dev
 ```
 
+Nenhuma credencial é necessária para correr o site localmente: o catálogo vem dos ficheiros MDX.
+
 ## Filosofia
 
-O Git é a única fonte de verdade. Todo o conteúdo (produtos, categorias, lojas) é escrito em
-MDX em `content/` e sincronizado para o Supabase via GitHub Actions:
+O Git é a única fonte de verdade. Todo o conteúdo (produtos, categorias, lojas) é escrito em MDX
+em `content/` e entra no build:
 
 ```
-MDX → GitHub → GitHub Actions → Supabase → Aplicação
+MDX → GitHub → build (Next.js) → site estático
+```
+
+Não há base de dados no caminho de leitura. Como cada alteração de conteúdo é um commit, e um
+commit já dispara um build, uma cópia em base de dados só acrescentaria uma dependência e uma
+divergência silenciosa. O Supabase existe para estado futuro gerado por visitantes (reservas).
+
+```bash
+pnpm validate:content   # valida frontmatter, slugs únicos e referências
 ```
 
 ## Estrutura

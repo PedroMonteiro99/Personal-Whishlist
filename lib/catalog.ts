@@ -5,6 +5,10 @@ import matter from "gray-matter";
 import { cache } from "react";
 
 import {
+  collectContentProblems,
+  formatContentProblems,
+} from "@/lib/content/integrity";
+import {
   categorySchema,
   productSchema,
   storeSchema,
@@ -138,80 +142,30 @@ function toRelativePath(filePath: string) {
   return path.relative(process.cwd(), filePath).split(path.sep).join("/");
 }
 
-function collectDuplicateSlugs<T extends { slug: string }>(
-  entries: ContentEntry<T>[],
-  label: string,
-) {
-  const seen = new Map<string, string>();
-  const problems: string[] = [];
-
-  for (const { data, filePath } of entries) {
-    const previous = seen.get(data.slug);
-
-    if (previous) {
-      problems.push(
-        `${toRelativePath(filePath)}: o slug "${data.slug}" (${label}) já é usado por ${previous}`,
-      );
-      continue;
-    }
-
-    seen.set(data.slug, toRelativePath(filePath));
-  }
-
-  return problems;
-}
-
 /**
  * O Git é a única fonte de verdade: uma referência partida faria o produto
  * desaparecer da aplicação sem qualquer aviso. Falha já, nomeando o ficheiro e
- * a referência em falta (ver SYNC-003 e ROUTE-002 no PROJECT_BLUEPRINT.md).
+ * a referência em falta (ver SYNC-003/SYNC-004 no PROJECT_BLUEPRINT.md).
  */
 function assertContentIntegrity(
   productEntries: ContentEntry<Product>[],
   categoryEntries: ContentEntry<Category>[],
   storeEntries: ContentEntry<Store>[],
 ) {
-  const categorySlugs = new Set(categoryEntries.map(({ data }) => data.slug));
-  const storeSlugs = new Set(storeEntries.map(({ data }) => data.slug));
+  const withRelativePaths = <T>(entries: ContentEntry<T>[]) =>
+    entries.map((entry) => ({
+      ...entry,
+      filePath: toRelativePath(entry.filePath),
+    }));
 
-  const problems = [
-    ...collectDuplicateSlugs(productEntries, "produto"),
-    ...collectDuplicateSlugs(categoryEntries, "categoria"),
-    ...collectDuplicateSlugs(storeEntries, "loja"),
-  ];
-
-  for (const { data, filePath } of productEntries) {
-    if (!categorySlugs.has(data.category)) {
-      problems.push(
-        `${toRelativePath(filePath)}: a categoria "${data.category}" não existe em content/categories/`,
-      );
-    }
-
-    const seenStores = new Set<string>();
-
-    for (const entry of data.stores) {
-      if (!storeSlugs.has(entry.store)) {
-        problems.push(
-          `${toRelativePath(filePath)}: a loja "${entry.store}" não existe em content/stores/`,
-        );
-      }
-
-      if (seenStores.has(entry.store)) {
-        problems.push(
-          `${toRelativePath(filePath)}: a loja "${entry.store}" está repetida no mesmo produto`,
-        );
-      }
-
-      seenStores.add(entry.store);
-    }
-  }
+  const problems = collectContentProblems(
+    withRelativePaths(productEntries),
+    withRelativePaths(categoryEntries),
+    withRelativePaths(storeEntries),
+  );
 
   if (problems.length > 0) {
-    throw new Error(
-      `Conteúdo MDX inválido:\n${problems
-        .map((problem) => `  · ${problem}`)
-        .join("\n")}`,
-    );
+    throw new Error(formatContentProblems(problems));
   }
 }
 
