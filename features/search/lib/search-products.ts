@@ -12,7 +12,7 @@ export const getSearchResults = cache(async (query: string) => {
     ? await searchProducts(normalizedQuery)
     : catalog.products;
 
-  const storeSlugs = new Set(products.map((product) => product.store));
+  const storeSlugs = new Set(products.flatMap((product) => product.storeSlugs));
   const categorySlugs = new Set(products.map((product) => product.category));
 
   return {

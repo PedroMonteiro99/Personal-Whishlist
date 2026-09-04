@@ -15,14 +15,26 @@ import {
 
 type RawProduct = Product & { body: string };
 
+/** Uma loja resolvida: o link do produto mais os dados de `content/stores/`. */
+export type CatalogProductStore = {
+  slug: string;
+  name: string;
+  productUrl: string;
+  storeUrl: string;
+  logo?: string;
+  price?: number;
+};
+
 export type CatalogProduct = RawProduct & {
   categoryName: string;
   categoryDescription?: string;
   categoryIcon?: string;
-  storeName: string;
-  storeUrl: string;
-  storeLogo?: string;
   availableImages: string[];
+  /** Ordenadas da mais barata para a mais cara; sem preço vão para o fim. */
+  storeEntries: CatalogProductStore[];
+  storeSlugs: string[];
+  lowestPrice?: number;
+  hasMultiplePrices: boolean;
 };
 
 export type CatalogData = {
@@ -175,10 +187,22 @@ function assertContentIntegrity(
       );
     }
 
-    if (!storeSlugs.has(data.store)) {
-      problems.push(
-        `${toRelativePath(filePath)}: a loja "${data.store}" não existe em content/stores/`,
-      );
+    const seenStores = new Set<string>();
+
+    for (const entry of data.stores) {
+      if (!storeSlugs.has(entry.store)) {
+        problems.push(
+          `${toRelativePath(filePath)}: a loja "${entry.store}" não existe em content/stores/`,
+        );
+      }
+
+      if (seenStores.has(entry.store)) {
+        problems.push(
+          `${toRelativePath(filePath)}: a loja "${entry.store}" está repetida no mesmo produto`,
+        );
+      }
+
+      seenStores.add(entry.store);
     }
   }
 
@@ -219,6 +243,40 @@ function createProductId(product: Product) {
   return product.slug;
 }
 
+/**
+ * Resolve as lojas de um produto contra `content/stores/` e ordena-as da mais
+ * barata para a mais cara. Lojas sem preço vão para o fim: não têm posição.
+ */
+function resolveProductStores(
+  entries: Product["stores"],
+  storeBySlug: Map<string, Store>,
+): CatalogProductStore[] {
+  return entries
+    .map((entry) => {
+      const store = storeBySlug.get(entry.store);
+
+      return {
+        slug: entry.store,
+        name: entry.label ?? store?.name ?? entry.store,
+        productUrl: entry.url,
+        storeUrl: store?.url ?? "",
+        logo: store?.logo,
+        price: entry.price,
+      } satisfies CatalogProductStore;
+    })
+    .sort((left, right) => {
+      if (typeof left.price !== "number") {
+        return typeof right.price === "number" ? 1 : 0;
+      }
+
+      if (typeof right.price !== "number") {
+        return -1;
+      }
+
+      return left.price - right.price;
+    });
+}
+
 export const getCatalogData = cache(async (): Promise<CatalogData> => {
   const [categoryEntries, storeEntries, productEntries] = await Promise.all([
     readCollection(path.join(CONTENT_ROOT, "categories"), categorySchema),
@@ -241,7 +299,10 @@ export const getCatalogData = cache(async (): Promise<CatalogData> => {
   const products = await Promise.all(
     productEntries.map(async ({ data, body }) => {
       const category = categoryBySlug.get(data.category);
-      const store = storeBySlug.get(data.store);
+      const storeEntries = resolveProductStores(data.stores, storeBySlug);
+      const prices = storeEntries
+        .map((entry) => entry.price)
+        .filter((price): price is number => typeof price === "number");
 
       return {
         ...data,
@@ -250,9 +311,10 @@ export const getCatalogData = cache(async (): Promise<CatalogData> => {
         categoryName: category?.name ?? data.category,
         categoryDescription: category?.description,
         categoryIcon: category?.icon,
-        storeName: store?.name ?? data.store,
-        storeUrl: store?.url ?? "",
-        storeLogo: store?.logo,
+        storeEntries,
+        storeSlugs: storeEntries.map((entry) => entry.slug),
+        lowestPrice: prices[0],
+        hasMultiplePrices: new Set(prices).size > 1,
       } satisfies CatalogProduct;
     }),
   );
@@ -303,7 +365,7 @@ export const searchProducts = cache(async (query: string) => {
     const haystack = [
       product.name,
       product.categoryName,
-      product.storeName,
+      ...product.storeEntries.map((entry) => entry.name),
       product.body,
       product.categoryDescription ?? "",
     ]

@@ -50,7 +50,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
         </div>
 
         <div className="space-y-4">
-          <SearchBar query={query} />
+          <SearchBar query={query} autoFocus={!query.trim()} />
           {products.length > 0 || activeFilterCount > 0 ? (
             <Filters
               filters={filters}

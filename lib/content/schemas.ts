@@ -5,9 +5,16 @@ import { z } from "zod";
  * Ver PROJECT_BLUEPRINT.md — secção 15 (MDX Content) e regras CONTENT-XXX.
  */
 
-export const productLinkSchema = z.object({
-  label: z.string().min(1),
+/**
+ * Uma loja onde o produto existe, com o link direto e o preço nessa loja.
+ * O nome visível vem de `content/stores/<slug>.mdx`; `label` só é preciso
+ * quando se quer sobrepor esse nome (ex.: "Amazon ES" vs "Amazon").
+ */
+export const productStoreSchema = z.object({
+  store: z.string().min(1),
   url: z.string().url(),
+  price: z.number().nonnegative().optional(),
+  label: z.string().min(1).optional(),
 });
 
 export const productSeoSchema = z.object({
@@ -19,13 +26,11 @@ export const productSchema = z.object({
   name: z.string().min(1),
   slug: z.string().min(1),
   category: z.string().min(1),
-  store: z.string().min(1),
-  price: z.number().nonnegative().optional(),
+  stores: z.array(productStoreSchema).default([]),
   currency: z.string().length(3).default("EUR"),
   priority: z.enum(["low", "medium", "high"]).default("medium"),
   favorite: z.boolean().default(false),
   images: z.array(z.string()).default([]),
-  links: z.array(productLinkSchema).default([]),
   seo: productSeoSchema.optional(),
 });
 
@@ -45,5 +50,6 @@ export const storeSchema = z.object({
 });
 
 export type Product = z.infer<typeof productSchema>;
+export type ProductStore = z.infer<typeof productStoreSchema>;
 export type Category = z.infer<typeof categorySchema>;
 export type Store = z.infer<typeof storeSchema>;

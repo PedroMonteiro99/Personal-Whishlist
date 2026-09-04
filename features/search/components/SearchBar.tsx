@@ -8,7 +8,13 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { useDebounce } from "@/hooks/use-debounce";
 
-export function SearchBar({ query }: { query: string }) {
+export function SearchBar({
+  query,
+  autoFocus = false,
+}: {
+  query: string;
+  autoFocus?: boolean;
+}) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -81,6 +87,8 @@ export function SearchBar({ query }: { query: string }) {
         placeholder="Pesquisar por produto, loja ou categoria"
         className="h-12 rounded-2xl pl-11 pr-12"
         autoComplete="off"
+        // Chegando pelo ícone do cabeçalho, o campo já está pronto a escrever.
+        autoFocus={autoFocus}
         aria-busy={isPending}
       />
       {isPending ? (

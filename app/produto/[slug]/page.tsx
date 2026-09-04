@@ -31,7 +31,13 @@ export async function generateMetadata({
       product.seo?.description ??
       (product.body
         ? product.body.slice(0, 160)
-        : `${product.name} na wishlist, disponível em ${product.storeName}.`),
+        : `${product.name} na wishlist${
+            product.storeEntries.length > 0
+              ? `, disponível em ${product.storeEntries
+                  .map((entry) => entry.name)
+                  .join(", ")}`
+              : ""
+          }.`),
   };
 }
 

@@ -6,7 +6,7 @@ import { ArrowRight } from "lucide-react";
 import { FavoriteIndicator } from "@/components/FavoriteIndicator";
 import { PriorityBadge } from "@/components/PriorityBadge";
 import { Card } from "@/components/ui/card";
-import { formatPrice } from "@/lib/format";
+import { formatPrice, formatStoreCount } from "@/lib/format";
 import { cn } from "@/lib/utils";
 
 import type { CatalogProduct } from "@/lib/catalog";
@@ -71,7 +71,9 @@ export function ProductCard({
 
           <div className="mt-auto flex items-center justify-between gap-3 border-t border-border/70 pt-4 text-sm">
             <span className="text-muted-foreground">
-              {product.categoryName}
+              {product.storeEntries.length > 1
+                ? formatStoreCount(product.storeEntries.length)
+                : product.categoryName}
             </span>
             <span className="font-medium tabular-nums text-foreground">
               {formatPrice(product)}

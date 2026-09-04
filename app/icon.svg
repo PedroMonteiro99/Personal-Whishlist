@@ -1,14 +1,19 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
-  <rect width="64" height="64" rx="16" fill="#030712" />
-  <rect x="0.5" y="0.5" width="63" height="63" rx="15.5" fill="none" stroke="#1f2937" />
-  <text
-    x="32"
-    y="41"
-    text-anchor="middle"
-    font-family="system-ui, -apple-system, 'Segoe UI', sans-serif"
-    font-size="23"
-    font-weight="600"
-    letter-spacing="2"
-    fill="#3b82f6"
-  >WP</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <defs>
+    <linearGradient id="tag" x1="16" y1="4" x2="16" y2="28" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#60a5fa" />
+      <stop offset="100%" stop-color="#2563eb" />
+    </linearGradient>
+    <radialGradient id="lit" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#dbeafe" stop-opacity="0.9" />
+      <stop offset="100%" stop-color="#dbeafe" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+  <rect width="32" height="32" rx="7" fill="#030712" />
+  <path
+    d="M17.6 5H25a2 2 0 0 1 2 2v7.4a2 2 0 0 1-.59 1.42L16.4 26.41a2 2 0 0 1-2.83 0L5.59 18.4a2 2 0 0 1 0-2.83L16.18 5.59A2 2 0 0 1 17.6 5Z"
+    fill="url(#tag)"
+  />
+  <circle cx="21.4" cy="10.6" r="5.5" fill="url(#lit)" />
+  <circle cx="21.4" cy="10.6" r="2.1" fill="#030712" />
 </svg>

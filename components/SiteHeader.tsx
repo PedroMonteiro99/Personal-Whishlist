@@ -1,8 +1,7 @@
 import Link from "next/link";
 
-import { Search } from "lucide-react";
-
-import { Button } from "@/components/ui/button";
+import { BrandMark } from "@/components/BrandMark";
+import { HeaderSearch } from "@/features/search/components/HeaderSearch";
 import { ThemeToggle } from "@/features/theme/components/ThemeToggle";
 
 export function SiteHeader() {
@@ -10,8 +9,8 @@ export function SiteHeader() {
     <header className="sticky top-0 z-40 border-b border-border/70 bg-background/80 backdrop-blur-xl">
       <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
         <Link href="/" className="group flex items-center gap-3">
-          <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl border border-border/70 bg-card text-sm font-semibold tracking-[0.2em] text-foreground shadow-sm transition-transform group-hover:-translate-y-0.5">
-            WP
+          <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl border border-border/70 bg-card text-primary shadow-sm transition-transform group-hover:-translate-y-0.5">
+            <BrandMark className="size-6" />
           </span>
           <span className="flex flex-col leading-tight">
             <span className="text-base font-semibold text-foreground">
@@ -24,17 +23,7 @@ export function SiteHeader() {
         </Link>
 
         <div className="flex items-center gap-2 sm:gap-3">
-          <Button asChild variant="outline" size="icon" className="sm:hidden">
-            <Link href="/pesquisa" aria-label="Pesquisar">
-              <Search className="size-4" />
-            </Link>
-          </Button>
-          <Button asChild variant="outline" className="hidden sm:inline-flex">
-            <Link href="/pesquisa">
-              <Search className="size-4" />
-              Pesquisar
-            </Link>
-          </Button>
+          <HeaderSearch />
           <ThemeToggle />
         </div>
       </div>

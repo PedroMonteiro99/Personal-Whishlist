@@ -1,13 +1,13 @@
 import Link from "next/link";
 
-import { ArrowRight, ExternalLink } from "lucide-react";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
 
 import { FavoriteIndicator } from "@/components/FavoriteIndicator";
 import { PriorityBadge } from "@/components/PriorityBadge";
-import { StoreLink } from "@/components/StoreLink";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { formatPrice, resolvePurchaseLink } from "@/lib/format";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { formatAmount, formatPrice, formatStoreCount } from "@/lib/format";
+import { cn } from "@/lib/utils";
 
 import { ProductGallery } from "./ProductGallery";
 
@@ -22,10 +22,8 @@ function splitBody(body: string) {
 
 export function ProductDetail({ product }: { product: CatalogProduct }) {
   const paragraphs = splitBody(product.body);
-  const purchase = resolvePurchaseLink(product);
-  const extraLinks = purchase?.isProductLink
-    ? product.links.slice(1)
-    : product.links;
+  const [bestStore] = product.storeEntries;
+  const showsCheapestBadge = product.hasMultiplePrices;
 
   return (
     <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr]">
@@ -54,28 +52,20 @@ export function ProductDetail({ product }: { product: CatalogProduct }) {
               >
                 {product.categoryName}
               </Link>
-              {" · "}
-              {product.storeName}
+              {product.storeEntries.length > 0
+                ? ` · ${formatStoreCount(product.storeEntries.length)}`
+                : null}
             </p>
           </CardHeader>
+
           <CardContent className="space-y-5">
-            <div className="grid gap-3 sm:grid-cols-2">
-              <div className="rounded-2xl border border-border/70 bg-background/60 p-4">
-                <p className="text-xs uppercase tracking-[0.22em] text-muted-foreground">
-                  Preço
-                </p>
-                <p className="mt-2 text-lg font-semibold tabular-nums">
-                  {formatPrice(product)}
-                </p>
-              </div>
-              <div className="rounded-2xl border border-border/70 bg-background/60 p-4">
-                <p className="text-xs uppercase tracking-[0.22em] text-muted-foreground">
-                  Loja
-                </p>
-                <p className="mt-2 text-lg font-semibold">
-                  {product.storeName}
-                </p>
-              </div>
+            <div className="rounded-2xl border border-border/70 bg-background/60 p-4">
+              <p className="text-xs uppercase tracking-[0.22em] text-muted-foreground">
+                Preço
+              </p>
+              <p className="mt-2 text-2xl font-semibold tabular-nums">
+                {formatPrice(product)}
+              </p>
             </div>
 
             {paragraphs.length > 0 ? (
@@ -92,15 +82,18 @@ export function ProductDetail({ product }: { product: CatalogProduct }) {
             ) : null}
 
             <div className="flex flex-wrap gap-3">
-              {purchase ? (
-                <StoreLink
-                  href={purchase.url}
-                  label={
-                    purchase.isProductLink
-                      ? `Ver na ${product.storeName}`
-                      : `Abrir ${product.storeName}`
-                  }
-                />
+              {bestStore ? (
+                <Button asChild>
+                  <Link
+                    href={bestStore.productUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Ver na {bestStore.name}
+                    <ArrowUpRight className="size-4" />
+                    <span className="sr-only">(abre num separador novo)</span>
+                  </Link>
+                </Button>
               ) : null}
               <Button asChild variant="outline">
                 <Link href={`/categoria/${product.category}`}>
@@ -112,24 +105,63 @@ export function ProductDetail({ product }: { product: CatalogProduct }) {
           </CardContent>
         </Card>
 
-        {extraLinks.length > 0 ? (
+        {product.storeEntries.length > 0 ? (
           <Card className="border-border/70 bg-card/80">
             <CardHeader>
-              <CardTitle>Outros links</CardTitle>
+              <h2 className="text-lg font-semibold leading-none tracking-tight">
+                Onde comprar
+              </h2>
             </CardHeader>
             <CardContent className="space-y-3">
-              {extraLinks.map((link) => (
-                <a
-                  key={`${link.label}-${link.url}`}
-                  href={link.url}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex items-center justify-between rounded-2xl border border-border/70 bg-background/60 px-4 py-3 text-sm transition-colors hover:border-primary/40 hover:bg-background"
-                >
-                  <span>{link.label}</span>
-                  <ExternalLink className="size-4 text-muted-foreground" />
-                </a>
-              ))}
+              {product.storeEntries.map((store, index) => {
+                const extra =
+                  typeof store.price === "number" &&
+                  typeof product.lowestPrice === "number"
+                    ? store.price - product.lowestPrice
+                    : 0;
+
+                return (
+                  <a
+                    key={store.slug}
+                    href={store.productUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className={cn(
+                      "flex items-center justify-between gap-4 rounded-2xl border bg-background/60 px-4 py-3 text-sm transition-colors hover:bg-background",
+                      index === 0 && showsCheapestBadge
+                        ? "border-primary/40"
+                        : "border-border/70 hover:border-primary/40",
+                    )}
+                  >
+                    <span className="flex flex-wrap items-center gap-2">
+                      <span className="font-medium text-foreground">
+                        {store.name}
+                      </span>
+                      {index === 0 && showsCheapestBadge ? (
+                        <span className="rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
+                          Mais barato
+                        </span>
+                      ) : null}
+                    </span>
+                    <span className="flex shrink-0 items-center gap-2 text-muted-foreground">
+                      <span className="text-right">
+                        <span className="block tabular-nums">
+                          {typeof store.price === "number"
+                            ? formatAmount(store.price, product.currency)
+                            : "Sob consulta"}
+                        </span>
+                        {extra > 0 ? (
+                          <span className="block text-xs tabular-nums">
+                            +{formatAmount(extra, product.currency)}
+                          </span>
+                        ) : null}
+                      </span>
+                      <ArrowUpRight className="size-4" />
+                    </span>
+                    <span className="sr-only">(abre num separador novo)</span>
+                  </a>
+                );
+              })}
             </CardContent>
           </Card>
         ) : null}

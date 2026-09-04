@@ -302,10 +302,10 @@ dos componentes puramente apresentacionais, para facilitar testes e reutilizaç�
 
 Tabelas da V1:
 
-**DB-001** — `products` — produto individual (nome, slug, descrição, preço, prioridade, favorito, imagens, categoria, loja).
+**DB-001** — `products` — produto individual (nome, slug, descrição, prioridade, favorito, imagens, categoria, moeda). A loja e o preço **não** vivem aqui: um produto pode existir em várias lojas (ver `DB-004`).
 **DB-002** — `categories` — categorias de produtos.
 **DB-003** — `stores` — lojas onde os produtos podem ser comprados.
-**DB-004** — `product_links` — links externos associados a um produto (podem existir vários por produto/loja).
+**DB-004** — `product_links` — a relação produto↔loja: uma linha por loja onde o produto existe, com `store_id`, `url` (link direto) e `price` (preço nessa loja). Um produto tem no máximo uma entrada por loja (índice único `product_id, store_id`).
 
 Tabelas futuras (fora da V1):
 
@@ -318,9 +318,20 @@ Tabelas futuras (fora da V1):
 ## 15. MDX Content
 
 **CONTENT-001** — Um produto = um ficheiro MDX.
-**CONTENT-002** — O frontmatter contém toda a informação estruturada (nome, categoria, loja, preço, prioridade, favorito, imagens, SEO, links).
+**CONTENT-002** — O frontmatter contém toda a informação estruturada (nome, categoria, lojas, prioridade, favorito, imagens, SEO).
 **CONTENT-003** — O corpo Markdown contém apenas notas pessoais/descritivas, nunca dados estruturados.
 **CONTENT-004** — Estrutura de pastas de conteúdo espelha as categorias (ver secção 8).
+**CONTENT-005** — As lojas de um produto vivem num único bloco `stores:`, uma entrada por loja, com `store` (slug validado contra `content/stores/`), `url` (link direto ao produto) e `price` opcional. O nome visível vem do ficheiro da loja; `label` só existe para o sobrepor. Não há campo `store` nem `price` no topo do produto: o preço mostrado é o mais baixo entre as lojas, anunciado como "desde" quando as lojas pedem valores diferentes.
+
+```yaml
+stores:
+  - store: "amazon"
+    url: "https://www.amazon.es/dp/B0CZ9P1QW9"
+    price: 129.99
+  - store: "pc-diga"
+    url: "https://www.pcdiga.com/..."
+    price: 134.90
+```
 
 ## 16. Synchronization
 

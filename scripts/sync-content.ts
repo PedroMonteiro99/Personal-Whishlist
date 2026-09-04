@@ -126,10 +126,22 @@ function assertProductReferences(
       );
     }
 
-    if (!storeSlugs.has(product.data.store)) {
-      throw new Error(
-        `[sync-content] Unknown store slug "${product.data.store}" referenced by product "${product.data.slug}" in ${product.filePath}`,
-      );
+    const seenStores = new Set<string>();
+
+    for (const entry of product.data.stores) {
+      if (!storeSlugs.has(entry.store)) {
+        throw new Error(
+          `[sync-content] Unknown store slug "${entry.store}" referenced by product "${product.data.slug}" in ${product.filePath}`,
+        );
+      }
+
+      if (seenStores.has(entry.store)) {
+        throw new Error(
+          `[sync-content] Duplicate store "${entry.store}" on product "${product.data.slug}" in ${product.filePath}`,
+        );
+      }
+
+      seenStores.add(entry.store);
     }
   }
 }
@@ -212,11 +224,10 @@ async function upsertProducts(
     return [] as Array<{ id: string; slug: string }>;
   }
 
-  const { categoryIdBySlug, storeIdBySlug } = await getForeignKeyMaps();
+  const { categoryIdBySlug } = await getForeignKeyMaps();
 
   const rows = products.map(({ data }) => {
     const categoryId = categoryIdBySlug.get(data.category);
-    const storeId = storeIdBySlug.get(data.store);
 
     if (!categoryId) {
       throw new Error(
@@ -224,18 +235,10 @@ async function upsertProducts(
       );
     }
 
-    if (!storeId) {
-      throw new Error(
-        `[sync-content] Unknown store slug "${data.store}" referenced by product "${data.slug}"`,
-      );
-    }
-
     return {
       slug: data.slug,
       name: data.name,
       category_id: categoryId,
-      store_id: storeId,
-      price: data.price ?? null,
       currency: data.currency,
       priority: data.priority,
       favorite: data.favorite,
@@ -267,14 +270,16 @@ async function replaceProductLinks(
 ) {
   if (mode === "dry-run") {
     const links = products.reduce(
-      (total, { data }) => total + data.links.length,
+      (total, { data }) => total + data.stores.length,
       0,
     );
     console.log(`[sync-content] dry-run product_links: ${links}`);
     return;
   }
 
+  const { storeIdBySlug } = await getForeignKeyMaps();
   const productIdBySlug = new Map(productIds.map((row) => [row.slug, row.id]));
+
   const links = products.flatMap(({ data }) => {
     const productId = productIdBySlug.get(data.slug);
 
@@ -284,11 +289,23 @@ async function replaceProductLinks(
       );
     }
 
-    return data.links.map((link) => ({
-      product_id: productId,
-      label: link.label,
-      url: link.url,
-    }));
+    return data.stores.map((entry) => {
+      const storeId = storeIdBySlug.get(entry.store);
+
+      if (!storeId) {
+        throw new Error(
+          `[sync-content] Unknown store slug "${entry.store}" referenced by product "${data.slug}"`,
+        );
+      }
+
+      return {
+        product_id: productId,
+        store_id: storeId,
+        label: entry.label ?? null,
+        url: entry.url,
+        price: entry.price ?? null,
+      };
+    });
   });
 
   const client = createSupabaseServiceClient();

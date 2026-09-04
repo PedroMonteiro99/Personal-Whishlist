@@ -483,9 +483,14 @@ pílula. Se isso contém coisas, é um seixo de 24px. Um elemento embutido dentr
 ### Navigation
 
 - **Cabeçalho:** fixo no topo, fundo a 80% com `backdrop-blur-xl`, fio de borda inferior. A marca é
-  um quadrado de 2.75rem com raio de 1rem, borda e monograma em maiúsculas com `0.2em` de
-  espaçamento, seguido de duas linhas: "WISHLIST" em etiqueta espaçada e o nome em 1rem peso 600.
-  Em hover, o quadrado sobe 2px.
+  um quadrado de 2.75rem com raio de 1rem e borda, contendo a etiqueta da marca em Azul de Vitrine
+  (24px), seguido de duas linhas: o nome em 1rem peso 600 e um subtítulo em 12px cinza. Em hover,
+  o quadrado sobe 2px.
+- **Pesquisa no cabeçalho:** um campo real, não um botão que finge sê-lo. A partir de `sm` é uma
+  pílula de 2.5rem com lupa à esquerda que alarga de 10rem para 14rem (13rem → 18rem em `lg`) ao
+  receber foco, em 300ms; escreve-se e submete-se ali. Abaixo de `sm` não há largura para o campo,
+  por isso fica um botão-ícone que leva a `/pesquisa`, onde o campo abre já em foco. Na própria
+  `/pesquisa` desaparece, para não haver dois campos de pesquisa no mesmo ecrã.
 - **Rodapé:** fundo translúcido sem blur, fio de borda superior, texto de 0.875rem em cinza
   secundário, empilhado no telemóvel e distribuído nos extremos a partir de `sm`.
 
@@ -551,6 +556,40 @@ Barra de controlos de `/pesquisa`, a única superfície de filtragem da aplicaç
   dono apenas do seu parâmetro e parte sempre da URL atual — incluindo o campo de pesquisa, que só
   escreve `q`.
 
+### A marca
+
+Uma **etiqueta de preço**, não um monograma. Diz o que o site é — preços e lojas — e sobrevive a
+16px no separador do browser, que é onde a marca é mais vezes vista. O furo da etiqueta é
+preenchido com a cor da superfície onde assenta, e no favicon recebe um halo claro: a etiqueta é
+iluminada pela mesma luz que ilumina a página, vinda de cima.
+
+Foi escolhida contra duas alternativas testadas em tamanho real: um monograma "WP", ilegível a
+16px, e uma grelha de vitrine com um painel aceso — conceptualmente mais próxima da North Star,
+mas que a 16px lia como ícone de launcher de aplicações, exatamente a estética "dashboard" que o
+`UI-003` do blueprint proíbe.
+
+O ficheiro do favicon (`app/icon.svg`) leva o seu próprio fundo Ardósia; o componente
+`BrandMark` é só o glifo e herda a cor por `currentColor`.
+
+### Onde comprar
+
+A secção que resolve a pergunta "onde é que compro isto". Uma linha por loja dentro do seixo, cada
+uma um link externo: nome da loja à esquerda, preço em `tabular-nums` e seta à direita. Ordenadas
+da mais barata para a mais cara; lojas sem preço mostram "Sob consulta" e caem para o fim.
+
+Quando há preços diferentes entre lojas, a primeira ganha borda de Azul de Vitrine e uma pílula
+"Mais barato" a 10% — e o preço no topo da página, tal como no cartão da grelha, passa a "desde
+X €". Com uma só loja, ou com preços iguais, nada disto aparece: o destaque só existe quando há
+mesmo uma escolha a fazer.
+
+O botão principal aponta sempre para a loja mais barata.
+
+**Sem logótipos de loja.** As lojas são identificadas por nome, nunca pela sua marca gráfica. São
+marcas de terceiros com paletas próprias — a Amazon laranja, e depois Worten, Fnac, Auchan — e
+deixá-las entrar transforma a lista num mosaico de cores, contra a Regra da Única Luz. Além disso,
+o nome já está escrito ao lado: o logótipo não acrescentaria informação, só decoração. O que
+acrescenta informação é a **diferença de preço**, e é isso que a linha mostra.
+
 ### Pílulas de orçamento (homepage)
 
 A porta de entrada do hero: uma fila de pílulas de 2.5rem — "Até 50 €", "50 € – 150 €", … — cada
@@ -606,11 +645,19 @@ oferece um presente antes de ela ser feita.
   uma decisão nova, não uma continuação.
 - **Don't** usar classes literais da paleta do Tailwind para cor (`text-amber-200`, `bg-slate-900`)
   — um valor fixo só pode estar certo num dos dois temas.
+- **Do** anunciar o preço mais baixo como "desde X €" sempre que as lojas pedirem valores
+  diferentes, para não prometer um preço que só existe num sítio.
 - **Don't** cortar fotografia de produto com `object-cover` — os rácios de origem variam de 0.83 a
   1.34 e o corte come o produto.
 - **Don't** mostrar uma categoria sem produtos na grelha da homepage.
 - **Don't** reconstruir a URL de raiz num controlo: cada um é dono só do seu parâmetro e parte
   sempre da URL atual, ou apaga os filtros dos outros ao hidratar.
+- **Do** mostrar, nas lojas mais caras, quanto custa a mais face à mais barata (`+20,12 €`) — é a
+  informação que decide, ao contrário de um logótipo.
+- **Don't** usar logótipos de lojas: são marcas de terceiros com paletas próprias e violam a Regra
+  da Única Luz, sem acrescentar informação ao nome que já está escrito.
+- **Don't** disfarçar navegação de campo de entrada: se parece um campo de pesquisa, tem de se
+  poder escrever nele.
 - **Don't** desenhar em light mode primeiro. O dark mode é a origem e o light mode é a tradução
   (`UI-004` do blueprint).
 - **Don't** recorrer a padrões de Bootstrap, Material UI ou "dashboard gaming" (`UI-003` do

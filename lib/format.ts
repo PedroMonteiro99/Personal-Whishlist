@@ -2,19 +2,11 @@ import type { CatalogProduct } from "@/lib/catalog";
 
 const PRICE_LOCALE = "pt-PT";
 
-/**
- * Formatação de preço partilhada pela grelha e pela página de detalhe.
- * Um produto pode não ter preço definido no frontmatter (ver `productSchema`).
- */
-export function formatPrice(product: CatalogProduct) {
-  if (typeof product.price !== "number") {
-    return "Preço sob consulta";
-  }
-
+export function formatAmount(value: number, currency: string) {
   return new Intl.NumberFormat(PRICE_LOCALE, {
     style: "currency",
-    currency: product.currency,
-  }).format(product.price);
+    currency,
+  }).format(value);
 }
 
 /**
@@ -24,20 +16,21 @@ export function formatProductCount(count: number) {
   return count === 1 ? "1 produto" : `${count} produtos`;
 }
 
+export function formatStoreCount(count: number) {
+  return count === 1 ? "1 loja" : `${count} lojas`;
+}
+
 /**
- * O link que o visitante deve seguir para comprar: o primeiro link explícito do
- * produto quando existe, caso contrário a página da loja.
+ * O preço que o visitante vê primeiro: o mais baixo entre as lojas. Quando as
+ * lojas pedem valores diferentes, é anunciado como "desde", para não prometer
+ * um preço que só existe num sítio.
  */
-export function resolvePurchaseLink(product: CatalogProduct) {
-  const [primaryLink] = product.links;
-
-  if (primaryLink) {
-    return { url: primaryLink.url, isProductLink: true };
+export function formatPrice(product: CatalogProduct) {
+  if (typeof product.lowestPrice !== "number") {
+    return "Preço sob consulta";
   }
 
-  if (product.storeUrl) {
-    return { url: product.storeUrl, isProductLink: false };
-  }
+  const amount = formatAmount(product.lowestPrice, product.currency);
 
-  return null;
+  return product.hasMultiplePrices ? `desde ${amount}` : amount;
 }

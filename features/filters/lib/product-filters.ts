@@ -125,7 +125,7 @@ export function applyProductFilters(
     : undefined;
 
   const filtered = products.filter((product) => {
-    if (filters.store && product.store !== filters.store) {
+    if (filters.store && !product.storeSlugs.includes(filters.store)) {
       return false;
     }
 
@@ -137,7 +137,7 @@ export function applyProductFilters(
       return false;
     }
 
-    return bucket ? matchesPriceBucket(product.price, bucket) : true;
+    return bucket ? matchesPriceBucket(product.lowestPrice, bucket) : true;
   });
 
   if (filters.sort !== "preco-asc" && filters.sort !== "preco-desc") {
@@ -148,15 +148,15 @@ export function applyProductFilters(
 
   return [...filtered].sort((left, right) => {
     // Produtos sem preço não têm posição na ordenação: ficam sempre no fim.
-    if (typeof left.price !== "number") {
+    if (typeof left.lowestPrice !== "number") {
       return 1;
     }
 
-    if (typeof right.price !== "number") {
+    if (typeof right.lowestPrice !== "number") {
       return -1;
     }
 
-    return (left.price - right.price) * direction;
+    return (left.lowestPrice - right.lowestPrice) * direction;
   });
 }
 
@@ -170,7 +170,7 @@ export function countByPriceBucket(products: CatalogProduct[]) {
   return priceBuckets.map((bucket) => ({
     bucket,
     count: products.filter((product) =>
-      matchesPriceBucket(product.price, bucket),
+      matchesPriceBucket(product.lowestPrice, bucket),
     ).length,
   }));
 }
