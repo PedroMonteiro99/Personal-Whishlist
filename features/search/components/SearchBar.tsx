@@ -57,6 +57,14 @@ export function SearchBar({
   useEffect(() => {
     const normalizedValue = debouncedValue.trim();
 
+    // O debounce ainda está a decorrer: o valor atrasado já não corresponde ao
+    // campo. Sem esta guarda, uma mudança de URL vinda de fora (botão de
+    // voltar) reagendava o efeito com o termo antigo e escrevia-o de volta na
+    // URL, desfazendo a navegação do visitante.
+    if (normalizedValue !== value.trim()) {
+      return;
+    }
+
     // Sem alteração face à URL atual não há nada a navegar — sem esta guarda,
     // a montagem do componente reescrevia a URL e limpava os filtros ativos.
     if (normalizedValue === (searchParams.get("q") ?? "")) {
@@ -64,7 +72,7 @@ export function SearchBar({
     }
 
     commit(normalizedValue);
-  }, [commit, debouncedValue, searchParams]);
+  }, [commit, debouncedValue, searchParams, value]);
 
   return (
     <form

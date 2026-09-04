@@ -545,7 +545,19 @@ errado. Um teste que nenhuma mutação plausível faria falhar não vale a manut
 fixtures: apanha um MDX partido antes do build e verifica a resolução de lojas de ponta a ponta.
 
 **TEST-003** — Testes de componentes (Testing Library) focados em componentes com lógica de
-estado relevante (ex: `Filters`, `SearchBar`), não em componentes puramente apresentacionais.
+estado relevante — `Filters`, `SearchBar` e `GiftAction` —, não em componentes puramente
+apresentacionais. O que se testa é o contrato observável: a URL navegada (`ROUTE-005`) e o que o
+visitante lê no ecrã, nunca o estado interno.
+
+**TEST-008** — O Vitest corre em dois projetos, porque as duas famílias de teste têm necessidades
+opostas: `unit` (`{lib,features,scripts}/**/*.test.ts`) em ambiente `node`, e `components`
+(`{components,features,hooks}/**/*.test.tsx`) em `jsdom` com `vitest.setup.ts`. A extensão do
+ficheiro decide o ambiente — `.test.ts` para lógica pura, `.test.tsx` para componentes.
+
+**TEST-009** — `next/navigation` é substituído pelo duplo em `lib/test-navigation.ts`, partilhado
+por todos os testes de componentes. As instâncias de `router` e de `searchParams` são estáveis
+entre renders de propósito: devolver objetos novos a cada render invalidaria os `useCallback` dos
+componentes e criaria efeitos em cadeia que o Next real não provoca.
 
 **TEST-004** — Testes end-to-end (Playwright, fase futura) cobrindo os fluxos críticos: navegar
 por categoria, pesquisar, abrir um produto, alternar tema, reservar.
@@ -681,5 +693,6 @@ Estado atual: V1 funcional, partilhável, com reservas e ciclo de ocasiões. O q
    (`sim-racing`, `lego`, `sneakers`, `perfumes`, `coffee`, `home`, `accessories`).
 4. **Depois do Natal:** marcar os presentes recebidos com `received:`, fechar `natal-2026` e abrir
    a ocasião seguinte (`CONTENT-006`/`CONTENT-008`).
-5. **Testes de componentes** (`TEST-003`) — `Filters`, `SearchBar`, `GiftAction`.
+5. **Testes end-to-end** (`TEST-004`, fase futura) — os testes de componentes (`TEST-003`) de
+   `Filters`, `SearchBar` e `GiftAction` já estão feitos.
 6. Rever este blueprint sempre que uma decisão de arquitetura mudar (`DOD-008`).
