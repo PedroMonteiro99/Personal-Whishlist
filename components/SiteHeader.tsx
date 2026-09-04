@@ -4,7 +4,7 @@ import { BrandMark } from "@/components/BrandMark";
 import { HeaderSearch } from "@/features/search/components/HeaderSearch";
 import { ThemeToggle } from "@/features/theme/components/ThemeToggle";
 
-export function SiteHeader() {
+export function SiteHeader({ occasionName }: { occasionName: string }) {
   return (
     <header className="sticky top-0 z-40 border-b border-border/70 bg-background/80 backdrop-blur-xl">
       <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
@@ -16,8 +16,10 @@ export function SiteHeader() {
             <span className="text-base font-semibold text-foreground">
               Wishlist do Pedro
             </span>
+            {/* A ocasião aberta dá contexto a quem chega — e denuncia uma
+                ocasião que ficou por fechar. */}
             <span className="text-xs text-muted-foreground">
-              Ideias de presentes
+              {occasionName}
             </span>
           </span>
         </Link>

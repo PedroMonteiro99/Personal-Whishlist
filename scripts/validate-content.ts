@@ -10,6 +10,7 @@ import {
 } from "@/lib/content/integrity";
 import {
   categorySchema,
+  occasionSchema,
   productSchema,
   storeSchema,
 } from "@/lib/content/schemas";
@@ -84,7 +85,7 @@ async function parseCollection<T>(
 async function main() {
   const parseProblems: string[] = [];
 
-  const [categories, stores, products] = await Promise.all([
+  const [categories, stores, products, occasions] = await Promise.all([
     parseCollection(
       path.join(CONTENT_ROOT, "categories"),
       categorySchema,
@@ -100,11 +101,16 @@ async function main() {
       productSchema,
       parseProblems,
     ),
+    parseCollection(
+      path.join(CONTENT_ROOT, "occasions"),
+      occasionSchema,
+      parseProblems,
+    ),
   ]);
 
   const problems = [
     ...parseProblems,
-    ...collectContentProblems(products, categories, stores),
+    ...collectContentProblems(products, categories, stores, occasions),
   ];
 
   if (problems.length > 0) {
@@ -121,10 +127,15 @@ async function main() {
     (total, { data }) => total + data.stores.length,
     0,
   );
+  const received = products.filter(({ data }) => data.received).length;
+  const active = occasions.find(({ data }) => data.status === "aberta");
 
   console.log(
-    `Conteúdo válido: ${products.length} produtos, ${categories.length} categorias, ${stores.length} lojas, ${storeLinks} ligações a loja.`,
+    `Conteúdo válido: ${products.length} produtos (${received} já recebidos), ` +
+      `${categories.length} categorias, ${stores.length} lojas, ` +
+      `${storeLinks} ligações a loja, ${occasions.length} ocasiões.`,
   );
+  console.log(`Ocasião aberta: ${active?.data.name ?? "—"}`);
 }
 
 main().catch((error: unknown) => {

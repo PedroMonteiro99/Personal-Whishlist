@@ -4,7 +4,7 @@ import { getCatalogData } from "@/lib/catalog";
 import { absoluteUrl } from "@/lib/site";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const { categories, products } = await getCatalogData();
+  const { categories, products, receivedProducts } = await getCatalogData();
 
   const productCountByCategory = new Map<string, number>();
 
@@ -27,6 +27,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // `/pesquisa` fica de fora: está proibida no robots.txt e listá-la aqui
     // seria dar instruções contraditórias ao motor de busca.
     // Categorias vazias também não entram: seriam páginas sem nada para indexar.
+    ...(receivedProducts.length > 0
+      ? [
+          {
+            url: absoluteUrl("/recebidos"),
+            lastModified,
+            changeFrequency: "monthly" as const,
+            priority: 0.3,
+          },
+        ]
+      : []),
     ...categories
       .filter(
         (category) => (productCountByCategory.get(category.slug) ?? 0) > 0,

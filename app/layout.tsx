@@ -5,6 +5,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { ReservationsProvider } from "@/features/reservations/components/ReservationsProvider";
 import { ThemeProvider } from "@/features/theme/components/ThemeProvider";
+import { getActiveOccasion } from "@/lib/catalog";
 import {
   openGraphDefaults,
   SITE_DESCRIPTION,
@@ -49,11 +50,14 @@ export const metadata: Metadata = {
 
 const themeScript = `try{var t=localStorage.getItem("wishlist-premium-theme");document.documentElement.classList.toggle("dark",t!=="light")}catch(e){}`;
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // A ocasião aberta vem do MDX: é ela que dá contexto às reservas.
+  const activeOccasion = await getActiveOccasion();
+
   return (
     <html
       lang="pt-PT"
@@ -70,7 +74,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} min-h-screen bg-background font-sans text-foreground antialiased`}
       >
         <ThemeProvider>
-          <ReservationsProvider>
+          <ReservationsProvider occasion={activeOccasion.slug}>
             <a
               href="#conteudo"
               className="sr-only focus-visible:not-sr-only focus-visible:absolute focus-visible:left-4 focus-visible:top-4 focus-visible:z-50 focus-visible:rounded-full focus-visible:border focus-visible:border-border/70 focus-visible:bg-card focus-visible:px-4 focus-visible:py-2 focus-visible:text-sm focus-visible:font-medium"
@@ -78,7 +82,7 @@ export default function RootLayout({
               Saltar para o conteúdo
             </a>
             <div className="relative flex min-h-screen flex-col">
-              <SiteHeader />
+              <SiteHeader occasionName={activeOccasion.name} />
               <main id="conteudo" className="flex-1">
                 {children}
               </main>

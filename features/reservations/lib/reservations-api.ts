@@ -111,9 +111,13 @@ async function callRpc(fn: string, body: Record<string, unknown>) {
 }
 
 export async function fetchReservations(
+  occasion: string,
   token: string | null,
 ): Promise<Reservation[]> {
-  const data = await callRpc("list_reservations", { p_token: token });
+  const data = await callRpc("list_reservations", {
+    p_occasion: occasion,
+    p_token: token,
+  });
   const parsed = reservationListSchema.safeParse(data);
 
   if (!parsed.success) {
@@ -132,11 +136,13 @@ export async function reserveProduct(
   productSlug: string,
   name: string,
   token: string,
+  occasion: string,
 ): Promise<boolean> {
   const data = await callRpc("reserve_product", {
     p_slug: productSlug,
     p_name: name,
     p_token: token,
+    p_occasion: occasion,
   });
 
   return data === true;
@@ -145,10 +151,12 @@ export async function reserveProduct(
 export async function releaseProduct(
   productSlug: string,
   token: string,
+  occasion: string,
 ): Promise<boolean> {
   const data = await callRpc("release_product", {
     p_slug: productSlug,
     p_token: token,
+    p_occasion: occasion,
   });
 
   return data === true;

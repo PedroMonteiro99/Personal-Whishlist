@@ -1,6 +1,11 @@
 import { describe, expect, it } from "vitest";
 
-import { getCatalogData, getProductBySlug, searchProducts } from "@/lib/catalog";
+import {
+  getCatalogData,
+  getProductBySlug,
+  getProductSlugs,
+  searchProducts,
+} from "@/lib/catalog";
 
 /**
  * Testes contra o conteúdo real em `content/`. São a rede que apanha um MDX
@@ -14,6 +19,26 @@ describe("getCatalogData", () => {
     expect(catalogo.products.length).toBeGreaterThan(0);
     expect(catalogo.categories.length).toBeGreaterThan(0);
     expect(catalogo.stores.length).toBeGreaterThan(0);
+  });
+
+  it("há exatamente uma ocasião aberta, e é a ativa", async () => {
+    const { occasions, activeOccasion } = await getCatalogData();
+    const abertas = occasions.filter((o) => o.status === "aberta");
+
+    expect(abertas).toHaveLength(1);
+    expect(activeOccasion.slug).toBe(abertas[0]!.slug);
+  });
+
+  it("produtos recebidos saem da lista ativa mas não desaparecem", async () => {
+    const { products, receivedProducts } = await getCatalogData();
+
+    for (const product of products) {
+      expect(product.received).toBeUndefined();
+    }
+
+    for (const product of receivedProducts) {
+      expect(product.received).toBeDefined();
+    }
   });
 
   it("todos os produtos apontam para categorias e lojas que existem", async () => {
@@ -70,6 +95,25 @@ describe("getCatalogData", () => {
 describe("getProductBySlug", () => {
   it("devolve null para um slug inexistente em vez de rebentar", async () => {
     expect(await getProductBySlug("nao-existe-de-certeza")).toBeNull();
+  });
+
+  it("resolve também produtos já recebidos", async () => {
+    // O slug pode ter sido partilhado: a página tem de continuar a existir
+    // depois de o presente ser recebido (SEO-005).
+    const { receivedProducts } = await getCatalogData();
+
+    for (const product of receivedProducts) {
+      expect(await getProductBySlug(product.slug)).not.toBeNull();
+    }
+  });
+});
+
+describe("getProductSlugs", () => {
+  it("inclui os recebidos, para as páginas continuarem a ser geradas", async () => {
+    const { products, receivedProducts } = await getCatalogData();
+    const slugs = await getProductSlugs();
+
+    expect(slugs).toHaveLength(products.length + receivedProducts.length);
   });
 });
 

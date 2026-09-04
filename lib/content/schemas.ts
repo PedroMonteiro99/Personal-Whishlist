@@ -31,7 +31,24 @@ export const productSchema = z.object({
   priority: z.enum(["low", "medium", "high"]).default("medium"),
   favorite: z.boolean().default(false),
   images: z.array(z.string()).default([]),
+  /**
+   * O slug da ocasião em que este presente foi recebido. Sai das listas de
+   * navegação mas mantém a sua página — o slug tem de continuar a resolver
+   * (SEO-005), porque pode ter sido partilhado.
+   */
+  received: z.string().min(1).optional(),
   seo: productSeoSchema.optional(),
+});
+
+/**
+ * Uma ocasião é um período de tempo, não um agrupamento de produtos: o Natal,
+ * um aniversário. Exatamente uma está aberta de cada vez (ver `CONTENT-006`).
+ */
+export const occasionSchema = z.object({
+  name: z.string().min(1),
+  slug: z.string().min(1),
+  date: z.string().min(1),
+  status: z.enum(["aberta", "fechada"]),
 });
 
 export const categorySchema = z.object({
@@ -53,3 +70,4 @@ export type Product = z.infer<typeof productSchema>;
 export type ProductStore = z.infer<typeof productStoreSchema>;
 export type Category = z.infer<typeof categorySchema>;
 export type Store = z.infer<typeof storeSchema>;
+export type Occasion = z.infer<typeof occasionSchema>;

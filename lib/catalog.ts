@@ -10,9 +10,11 @@ import {
 } from "@/lib/content/integrity";
 import {
   categorySchema,
+  occasionSchema,
   productSchema,
   storeSchema,
   type Category,
+  type Occasion,
   type Product,
   type Store,
 } from "@/lib/content/schemas";
@@ -39,12 +41,20 @@ export type CatalogProduct = RawProduct & {
   storeSlugs: string[];
   lowestPrice?: number;
   hasMultiplePrices: boolean;
+  /** O nome da ocasião em que foi recebido, quando já o foi. */
+  receivedOccasionName?: string;
 };
 
 export type CatalogData = {
   categories: Category[];
   stores: Store[];
+  occasions: Occasion[];
+  /** A ocasião a que as novas reservas ficam associadas. */
+  activeOccasion: Occasion;
+  /** Só os que ainda não foram recebidos: é a lista que se navega. */
   products: CatalogProduct[];
+  /** Já recebidos. Mantêm a página, saem das listas (SEO-005). */
+  receivedProducts: CatalogProduct[];
 };
 
 const CONTENT_ROOT = path.join(process.cwd(), "content");
@@ -151,6 +161,7 @@ function assertContentIntegrity(
   productEntries: ContentEntry<Product>[],
   categoryEntries: ContentEntry<Category>[],
   storeEntries: ContentEntry<Store>[],
+  occasionEntries: ContentEntry<Occasion>[],
 ) {
   const withRelativePaths = <T>(entries: ContentEntry<T>[]) =>
     entries.map((entry) => ({
@@ -162,6 +173,7 @@ function assertContentIntegrity(
     withRelativePaths(productEntries),
     withRelativePaths(categoryEntries),
     withRelativePaths(storeEntries),
+    withRelativePaths(occasionEntries),
   );
 
   if (problems.length > 0) {
@@ -232,25 +244,45 @@ function resolveProductStores(
 }
 
 export const getCatalogData = cache(async (): Promise<CatalogData> => {
-  const [categoryEntries, storeEntries, productEntries] = await Promise.all([
-    readCollection(path.join(CONTENT_ROOT, "categories"), categorySchema),
-    readCollection(path.join(CONTENT_ROOT, "stores"), storeSchema),
-    readCollection(path.join(CONTENT_ROOT, "wishlist"), productSchema),
-  ]);
+  const [categoryEntries, storeEntries, productEntries, occasionEntries] =
+    await Promise.all([
+      readCollection(path.join(CONTENT_ROOT, "categories"), categorySchema),
+      readCollection(path.join(CONTENT_ROOT, "stores"), storeSchema),
+      readCollection(path.join(CONTENT_ROOT, "wishlist"), productSchema),
+      readCollection(path.join(CONTENT_ROOT, "occasions"), occasionSchema),
+    ]);
 
-  assertContentIntegrity(productEntries, categoryEntries, storeEntries);
+  assertContentIntegrity(
+    productEntries,
+    categoryEntries,
+    storeEntries,
+    occasionEntries,
+  );
 
   const categories = sortCategories(categoryEntries.map(({ data }) => data));
   const stores = storeEntries
     .map(({ data }) => data)
     .sort((left, right) => left.name.localeCompare(right.name, "pt"));
 
+  // Mais recentes primeiro: é a ordem em que uma lista de ocasiões se lê.
+  const occasions = occasionEntries
+    .map(({ data }) => data)
+    .sort((left, right) => right.date.localeCompare(left.date));
+
   const categoryBySlug = new Map(
     categories.map((category) => [category.slug, category]),
   );
   const storeBySlug = new Map(stores.map((store) => [store.slug, store]));
+  const occasionBySlug = new Map(
+    occasions.map((occasion) => [occasion.slug, occasion]),
+  );
 
-  const products = await Promise.all(
+  // A integridade já garantiu que existe exatamente uma.
+  const activeOccasion = occasions.find(
+    (occasion) => occasion.status === "aberta",
+  )!;
+
+  const allProducts = await Promise.all(
     productEntries.map(async ({ data, body }) => {
       const category = categoryBySlug.get(data.category);
       const storeEntries = resolveProductStores(data.stores, storeBySlug);
@@ -269,14 +301,24 @@ export const getCatalogData = cache(async (): Promise<CatalogData> => {
         storeSlugs: storeEntries.map((entry) => entry.slug),
         lowestPrice: prices[0],
         hasMultiplePrices: new Set(prices).size > 1,
+        receivedOccasionName: data.received
+          ? (occasionBySlug.get(data.received)?.name ?? data.received)
+          : undefined,
       } satisfies CatalogProduct;
     }),
   );
 
+  // Um presente recebido sai das listas mas mantém a sua página: o slug foi
+  // partilhado e tem de continuar a resolver (SEO-005).
+  const sorted = sortProducts(allProducts);
+
   return {
     categories,
     stores,
-    products: sortProducts(products),
+    occasions,
+    activeOccasion,
+    products: sorted.filter((product) => !product.received),
+    receivedProducts: sorted.filter((product) => Boolean(product.received)),
   };
 });
 
@@ -295,9 +337,14 @@ export const getCategoryBySlug = cache(async (slug: string) => {
 });
 
 export const getProductBySlug = cache(async (slug: string) => {
-  const { products } = await getCatalogData();
+  const { products, receivedProducts } = await getCatalogData();
 
-  return products.find((product) => createProductId(product) === slug) ?? null;
+  // Procura também nos recebidos: a página tem de continuar a resolver.
+  return (
+    [...products, ...receivedProducts].find(
+      (product) => createProductId(product) === slug,
+    ) ?? null
+  );
 });
 
 export const getProductsByCategorySlug = cache(async (slug: string) => {
@@ -337,7 +384,38 @@ export const getCategorySlugs = cache(async () => {
 });
 
 export const getProductSlugs = cache(async () => {
-  const { products } = await getCatalogData();
+  const { products, receivedProducts } = await getCatalogData();
 
-  return products.map((product) => product.slug);
+  // Inclui os recebidos: as páginas deles continuam a ser geradas (SEO-005).
+  return [...products, ...receivedProducts].map((product) => product.slug);
+});
+
+export const getActiveOccasion = cache(async () => {
+  const { activeOccasion } = await getCatalogData();
+
+  return activeOccasion;
+});
+
+/**
+ * As ocasiões já fechadas, da mais recente para a mais antiga. É a partir
+ * delas que se monta a vista de agradecimentos.
+ */
+export const getClosedOccasions = cache(async () => {
+  const { occasions } = await getCatalogData();
+
+  return occasions.filter((occasion) => occasion.status === "fechada");
+});
+
+export const getOccasionBySlug = cache(async (slug: string) => {
+  const { occasions } = await getCatalogData();
+
+  return occasions.find((occasion) => occasion.slug === slug) ?? null;
+});
+
+export const getProductsReceivedIn = cache(async (occasionSlug: string) => {
+  const { receivedProducts } = await getCatalogData();
+
+  return receivedProducts.filter(
+    (product) => product.received === occasionSlug,
+  );
 });

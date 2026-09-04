@@ -239,7 +239,8 @@ diretamente de dentro de um componente de UI.
 | `/` | Homepage — destaque de favoritos/prioridade alta, acesso rápido às categorias |
 | `/categoria/[slug]` | Lista de produtos de uma categoria |
 | `/produto/[slug]` | Página de detalhe de um produto |
-| `/pesquisa` | Resultados de pesquisa (`?q=`) |
+| `/pesquisa` | Pesquisa, filtros e ordenação (`ROUTE-006`) |
+| `/recebidos` | Presentes já recebidos, agrupados por ocasião (`CONTENT-008`) |
 | `/[slug]` (opcional) | Páginas estáticas de conteúdo em `content/pages/` (ex: "Sobre") |
 
 **ROUTE-002** — Slugs de categoria e de produto são definidos no frontmatter MDX (`slug`) e devem
@@ -320,9 +321,13 @@ Tabelas em uso:
 o que consultar (`CI-006`). Sem tabelas, o plano gratuito não teria como registar atividade.
 
 **DB-004** — `reservations` — quem já vai oferecer cada produto: `product_slug`, `reserver_name`,
-`token_hash`, `created_at`. Índice único em `product_slug` (um produto é oferecido uma vez). Não
-há chave estrangeira para produtos, porque o catálogo não vive aqui (`DB-002`): uma reserva de um
-produto entretanto removido do MDX deixa apenas de ser mostrada.
+`token_hash`, `occasion`, `created_at`. Índice único em **`(product_slug, occasion)`**: um produto
+é oferecido uma vez **por ocasião**, não uma vez para sempre. Sem isto, passado o Natal um produto
+ficaria eternamente "já tratado".
+
+Não há chaves estrangeiras para produtos nem para ocasiões, porque nenhum deles vive aqui
+(`DB-002`, `CONTENT-006`): o conteúdo é do Git. Uma reserva de um produto entretanto removido do
+MDX deixa apenas de ser mostrada.
 
 Tabelas futuras (fora da V1):
 
@@ -343,6 +348,26 @@ exige (ver secção 18).
 **CONTENT-003** — O corpo Markdown contém apenas notas pessoais/descritivas, nunca dados estruturados.
 **CONTENT-004** — Estrutura de pastas de conteúdo espelha as categorias (ver secção 8).
 **CONTENT-005** — As lojas de um produto vivem num único bloco `stores:`, uma entrada por loja, com `store` (slug validado contra `content/stores/`), `url` (link direto ao produto) e `price` opcional. O nome visível vem do ficheiro da loja; `label` só existe para o sobrepor. Não há campo `store` nem `price` no topo do produto: o preço mostrado é o mais baixo entre as lojas, anunciado como "desde" quando as lojas pedem valores diferentes.
+
+**CONTENT-006** — **Ocasiões.** Uma ocasião é um **período de tempo** (o Natal, um aniversário),
+não um agrupamento de produtos — não confundir com as "Coleções" da secção 29. Vive em
+`content/occasions/<slug>.mdx` com `name`, `slug`, `date` e `status: aberta | fechada`.
+
+Tem de existir **exatamente uma ocasião aberta**: zero significa que as reservas não teriam onde
+aterrar, duas significa que ninguém sabe qual conta. A validação falha o build nos dois casos.
+
+A ocasião vive no Git, e não numa base de dados, por três razões: muda 2 a 4 vezes por ano (a
+fricção de um commit é a certa para isso), dá historial de quando mudou, e mantém o catálogo fora
+do caminho de leitura dinâmico (`REPO-004`). Fechar uma ocasião é um ato deliberado, nunca uma
+transição automática por data — num site estático a data muda mas ninguém reconstrói.
+
+**CONTENT-007** — Um produto **não é etiquetado por ocasião**. Se o queres, queres — a ocasião é
+apenas quando alguém calha oferecê-lo. Etiquetar obrigaria a reetiquetar o catálogo a cada época.
+
+**CONTENT-008** — `received: "<slug-da-ocasião>"` no frontmatter marca um presente como recebido.
+O produto sai das listas de navegação (homepage, categorias, pesquisa, sitemap) mas **mantém a
+sua página**: o slug pode ter sido partilhado e tem de continuar a resolver (`SEO-005`). A página
+troca a ação de oferecer por uma nota, e o produto passa a aparecer em `/recebidos`.
 
 ```yaml
 stores:
@@ -409,6 +434,11 @@ duplo `reserve` recusado, e um segundo token a falhar ao tentar cancelar reserva
 
 **SEC-009** — O nome de quem reserva é visível a qualquer pessoa com o link. É deliberado — serve
 para a família coordenar — e está limitado a 40 caracteres. Não recolher mais nada.
+
+**SEC-010** — As reservas são sempre lidas e escritas **dentro de uma ocasião**. Um cliente
+malicioso pode enviar uma ocasião inventada: o resultado é uma linha que nenhuma página mostra,
+porque a lista só pede as ocasiões que existem em `content/occasions/`. Sem impacto em dados de
+terceiros.
 
 **SEC-003** — Segredos vivem apenas em `.env.local` (nunca commitado — ver `.gitignore`) e em
 GitHub Actions Secrets. `.env.example` documenta as variáveis necessárias sem valores reais.
@@ -640,15 +670,16 @@ desatualizado relativamente ao código (ver `DOC-001`/`DOC-002`).
 
 ## Próximos Passos (Implementação)
 
-Estado atual: V1 funcional, partilhável, com reservas. O que falta, por ordem:
+Estado atual: V1 funcional, partilhável, com reservas e ciclo de ocasiões. O que falta, por ordem:
 
-1. **Aplicar a migração `0004_reservations.sql`** no Supabase e confirmar as variáveis
+1. **Aplicar as migrações `0004` e `0005`** no Supabase e confirmar as variáveis
    `NEXT_PUBLIC_SUPABASE_URL` e `NEXT_PUBLIC_SUPABASE_ANON_KEY` na Vercel. Até lá as reservas
    simplesmente não aparecem (`REPO-006`).
 2. **Encher o catálogo.** A aplicação está mais construída do que a wishlist está preenchida
    (3 produtos para um alvo de 40–100 — ver `PRODUCT.md`).
 3. **Rever as descrições provisórias** das categorias criadas sem produtos
    (`sim-racing`, `lego`, `sneakers`, `perfumes`, `coffee`, `home`, `accessories`).
-4. **Testes** (`TEST-002`/`TEST-003`) — Vitest sobre `lib/` e `features/*/lib/`, começando pela
-   lógica de filtros e pela resolução de lojas.
-5. Rever este blueprint sempre que uma decisão de arquitetura mudar (`DOD-008`).
+4. **Depois do Natal:** marcar os presentes recebidos com `received:`, fechar `natal-2026` e abrir
+   a ocasião seguinte (`CONTENT-006`/`CONTENT-008`).
+5. **Testes de componentes** (`TEST-003`) — `Filters`, `SearchBar`, `GiftAction`.
+6. Rever este blueprint sempre que uma decisão de arquitetura mudar (`DOD-008`).

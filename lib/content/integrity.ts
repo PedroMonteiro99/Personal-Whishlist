@@ -1,4 +1,9 @@
-import type { Category, Product, Store } from "@/lib/content/schemas";
+import type {
+  Category,
+  Occasion,
+  Product,
+  Store,
+} from "@/lib/content/schemas";
 
 /**
  * As regras de integridade do conteúdo, num único sítio.
@@ -41,15 +46,23 @@ export function collectBrokenReferences(
   products: ContentEntry<Product>[],
   categories: ContentEntry<Category>[],
   stores: ContentEntry<Store>[],
+  occasions: ContentEntry<Occasion>[] = [],
 ) {
   const categorySlugs = new Set(categories.map(({ data }) => data.slug));
   const storeSlugs = new Set(stores.map(({ data }) => data.slug));
+  const occasionSlugs = new Set(occasions.map(({ data }) => data.slug));
   const problems: string[] = [];
 
   for (const { data, filePath } of products) {
     if (!categorySlugs.has(data.category)) {
       problems.push(
         `${filePath}: a categoria "${data.category}" não existe em content/categories/`,
+      );
+    }
+
+    if (data.received && !occasionSlugs.has(data.received)) {
+      problems.push(
+        `${filePath}: a ocasião "${data.received}" não existe em content/occasions/`,
       );
     }
 
@@ -78,16 +91,47 @@ export function collectBrokenReferences(
   return problems;
 }
 
+/**
+ * Exatamente uma ocasião aberta de cada vez. Zero significa que as reservas não
+ * teriam onde aterrar; duas significa que ninguém sabe qual conta.
+ */
+export function collectOccasionProblems(occasions: ContentEntry<Occasion>[]) {
+  const open = occasions.filter(({ data }) => data.status === "aberta");
+
+  if (occasions.length === 0) {
+    return ["content/occasions/: não existe nenhuma ocasião"];
+  }
+
+  if (open.length === 0) {
+    return [
+      "content/occasions/: nenhuma ocasião está aberta — as reservas não teriam onde aterrar",
+    ];
+  }
+
+  if (open.length > 1) {
+    return [
+      `content/occasions/: há ${open.length} ocasiões abertas (${open
+        .map(({ data }) => data.slug)
+        .join(", ")}) — só pode haver uma`,
+    ];
+  }
+
+  return [];
+}
+
 export function collectContentProblems(
   products: ContentEntry<Product>[],
   categories: ContentEntry<Category>[],
   stores: ContentEntry<Store>[],
+  occasions: ContentEntry<Occasion>[] = [],
 ) {
   return [
     ...collectDuplicateSlugs(products, "produto"),
     ...collectDuplicateSlugs(categories, "categoria"),
     ...collectDuplicateSlugs(stores, "loja"),
-    ...collectBrokenReferences(products, categories, stores),
+    ...collectDuplicateSlugs(occasions, "ocasião"),
+    ...collectOccasionProblems(occasions),
+    ...collectBrokenReferences(products, categories, stores, occasions),
   ];
 }
 

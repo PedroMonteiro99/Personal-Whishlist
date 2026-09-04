@@ -55,8 +55,11 @@ function getOwnerServerSnapshot() {
 }
 
 export function ReservationsProvider({
+  occasion,
   children,
 }: {
+  /** A ocasião aberta, vinda do MDX pelo layout. */
+  occasion: string;
   children: React.ReactNode;
 }) {
   const enabled = areReservationsEnabled();
@@ -85,7 +88,7 @@ export function ReservationsProvider({
 
     let cancelled = false;
 
-    fetchReservations(getReservationToken())
+    fetchReservations(occasion, getReservationToken())
       .then((rows) => {
         if (!cancelled) {
           applyRows(rows);
@@ -102,15 +105,15 @@ export function ReservationsProvider({
     return () => {
       cancelled = true;
     };
-  }, [applyRows, enabled]);
+  }, [applyRows, enabled, occasion]);
 
   const refresh = useCallback(async () => {
     try {
-      applyRows(await fetchReservations(getReservationToken()));
+      applyRows(await fetchReservations(occasion, getReservationToken()));
     } catch {
       setStatus("error");
     }
-  }, [applyRows]);
+  }, [applyRows, occasion]);
 
   const reserve = useCallback(
     async (productSlug: string, name: string): Promise<ReserveResult> => {
@@ -121,7 +124,12 @@ export function ReservationsProvider({
       }
 
       try {
-        const created = await reserveProduct(productSlug, name, token);
+        const created = await reserveProduct(
+          productSlug,
+          name,
+          token,
+          occasion,
+        );
         await refresh();
 
         return created ? { ok: true } : { ok: false, reason: "taken" };
@@ -129,7 +137,7 @@ export function ReservationsProvider({
         return { ok: false, reason: "failed" };
       }
     },
-    [refresh],
+    [occasion, refresh],
   );
 
   const release = useCallback(
@@ -141,7 +149,7 @@ export function ReservationsProvider({
       }
 
       try {
-        const removed = await releaseProduct(productSlug, token);
+        const removed = await releaseProduct(productSlug, token, occasion);
         await refresh();
 
         return removed ? { ok: true } : { ok: false, reason: "failed" };
@@ -149,7 +157,7 @@ export function ReservationsProvider({
         return { ok: false, reason: "failed" };
       }
     },
-    [refresh],
+    [occasion, refresh],
   );
 
   const value = useMemo<ReservationsContextValue>(

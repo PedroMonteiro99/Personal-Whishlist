@@ -11,6 +11,7 @@ import { formatAmount, formatPrice, formatStoreCount } from "@/lib/format";
 import { cn } from "@/lib/utils";
 
 import { ProductGallery } from "./ProductGallery";
+import { ReceivedNotice } from "./ReceivedNotice";
 
 import type { CatalogProduct } from "@/lib/catalog";
 
@@ -106,7 +107,13 @@ export function ProductDetail({ product }: { product: CatalogProduct }) {
           </CardContent>
         </Card>
 
-        <GiftAction productSlug={product.slug} productName={product.name} />
+        {product.received ? (
+          <ReceivedNotice
+            occasionName={product.receivedOccasionName ?? product.received}
+          />
+        ) : (
+          <GiftAction productSlug={product.slug} productName={product.name} />
+        )}
 
         {product.storeEntries.length > 0 ? (
           <Card className="border-border/70 bg-card/80">

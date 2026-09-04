@@ -52,7 +52,7 @@ hooks/        React hooks reutilizáveis
 scripts/      Validação de conteúdo e manutenção
 supabase/     Migrations (estado futuro, não o catálogo)
 types/        Tipos TypeScript partilhados
-content/      Conteúdo MDX (wishlist/, stores/, categories/, pages/)
+content/      Conteúdo MDX (wishlist/, stores/, categories/, occasions/, pages/)
 docs/         Documentação derivada do blueprint
 .ai/          Contexto adicional para agentes de IA
 ```

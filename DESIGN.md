@@ -639,6 +639,21 @@ aplicação a proteger o Pedro de si próprio, e ele é a única pessoa interess
 está ativo, permanece visível a dizer que está ativo — caso contrário a ausência de reservas
 pareceria uma avaria.
 
+### Ocasiões
+
+A wishlist vive dentro de uma **ocasião** — o Natal, um aniversário. O nome da ocasião aberta
+aparece no cabeçalho, por baixo da marca, no lugar de um subtítulo genérico: dá contexto a quem
+chega e denuncia uma ocasião que ficou por fechar.
+
+**Presente recebido.** A página mantém-se — o slug pode ter sido partilhado — mas troca a ação de
+oferecer por uma nota discreta: "Já recebi este presente no Natal 2026." Sem cor de acento, sem
+apelo à ação: é informação, não convite.
+
+**`/recebidos`.** As ocasiões fechadas e o que se recebeu em cada uma, da mais recente para a mais
+antiga. Cada linha é um seixo embutido que leva à página do produto. Com o modo dono ativo, cada
+linha ganha o nome de quem ofereceu — é aqui que as reservas deixam de ser segredo e passam a ser
+a lista de agradecimentos.
+
 ## Do's and Don'ts
 
 ### Do:
@@ -691,6 +706,8 @@ pareceria uma avaria.
   diferentes, para não prometer um preço que só existe num sítio.
 - **Do** tratar funcionalidades que dependem de serviços externos como extras: se o serviço falhar,
   a interface esconde-as em silêncio em vez de mostrar um erro ao visitante.
+- **Do** mostrar a ocasião aberta no cabeçalho: é o contexto que explica a lista, e o aviso de que
+  ficou por fechar.
 - **Don't** cortar fotografia de produto com `object-cover` — os rácios de origem variam de 0.83 a
   1.34 e o corte come o produto.
 - **Don't** mostrar uma categoria sem produtos na grelha da homepage.
