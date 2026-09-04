@@ -1,9 +1,29 @@
-import { z } from "zod";
+import { z } from "@/lib/zod";
 
 /**
  * Schemas de validação para o frontmatter dos ficheiros MDX.
  * Ver PROJECT_BLUEPRINT.md — secção 15 (MDX Content) e regras CONTENT-XXX.
  */
+
+/**
+ * Só `http`/`https`. O `.url()` do Zod aceita qualquer esquema — incluindo
+ * `javascript:` e `data:` — e estes valores vão parar diretamente a um `href`
+ * em `StoreLink` e em `ProductDetail` (`SEC-012`).
+ */
+function isHttpUrl(value: string) {
+  try {
+    const { protocol } = new URL(value);
+
+    return protocol === "http:" || protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
+const externalUrlSchema = z
+  .string()
+  .url()
+  .refine(isHttpUrl, "O URL tem de usar http:// ou https://.");
 
 /**
  * Uma loja onde o produto existe, com o link direto e o preço nessa loja.
@@ -12,7 +32,7 @@ import { z } from "zod";
  */
 export const productStoreSchema = z.object({
   store: z.string().min(1),
-  url: z.string().url(),
+  url: externalUrlSchema,
   price: z.number().nonnegative().optional(),
   label: z.string().min(1).optional(),
 });
@@ -62,7 +82,7 @@ export const categorySchema = z.object({
 export const storeSchema = z.object({
   name: z.string().min(1),
   slug: z.string().min(1),
-  url: z.string().url(),
+  url: externalUrlSchema,
   logo: z.string().optional(),
 });
 

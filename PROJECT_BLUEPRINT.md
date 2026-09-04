@@ -398,6 +398,7 @@ regra nova entra nos dois de uma vez.
 **CI-002** — `ci` — pushes em `main`: lint, typecheck, testes, build.
 **CI-003** — `release` — gestão de versões/releases a partir de tags `v*.*.*`.
 **CI-004** — `keepalive` — mantém o projeto Supabase gratuito ativo (ver 17.1).
+**CI-007** — `codeql` — SAST do código próprio em pushes, pull requests e semanalmente (`SEC-014`).
 
 **CI-005** — Os workflows declaram `permissions` explícitas (mínimo privilégio) e `concurrency`
 por ref. Escritas em base de dados nunca usam `cancel-in-progress`.
@@ -451,8 +452,40 @@ implicitamente na estrutura de um ficheiro MDX.
 Supabase Auth e RLS adicional restrita ao utilizador dono da wishlist; não implementar
 autenticação antes de essa funcionalidade ser efetivamente necessária (ver `Non Goals`).
 
-**SEC-006** — Dependências mantidas atualizadas; o workflow `ci` (secção 17) deve idealmente
-incluir, no futuro, verificação automática de vulnerabilidades (`pnpm audit` ou Dependabot).
+**SEC-006** — Dependências mantidas atualizadas pelo Renovate, com
+`vulnerabilityAlerts` e `osvVulnerabilityAlerts` ativos (`renovate.json`): um aviso de
+vulnerabilidade abre PR fora do horário agendado. `pnpm audit` corre localmente antes de uma
+revisão de segurança.
+
+**SEC-011** — A saída JSON-LD é escapada em `components/JsonLd.tsx`, não apenas serializada.
+`JSON.stringify` não escapa `<`, `>`, `&` nem U+2028/U+2029, e `productJsonLd` inclui o corpo do
+MDX: um `</script>` numa nota pessoal fechava o elemento. A barreira fica na saída, não na
+confiança em quem escreve o ficheiro.
+
+**SEC-012** — URLs externas do frontmatter (`stores[].url`, `store.url`) são restritas a
+`http`/`https` no schema Zod. O `.url()` do Zod aceita qualquer esquema, incluindo `javascript:` e
+`data:`, e estes valores vão diretamente para um `href`.
+
+**SEC-013** — Cabeçalhos de segurança definidos em `next.config.ts`: `Content-Security-Policy`,
+`X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy` e `Permissions-Policy`. O
+`script-src` usa `'unsafe-inline'` porque a alternativa (nonces) exigiria `middleware` e tornaria
+dinâmicas páginas hoje estáticas (`REPO-004`) — troca deliberada num site sem sessões nem dados
+privados. As diretivas que mais valem aqui (`frame-ancestors`, `object-src`, `base-uri`,
+`form-action`) ficam estritas.
+
+**SEC-014** — SAST no CI através do workflow `codeql` (`CI-007`), com a suite `security-extended`.
+O Renovate cobre as dependências (`SEC-006`); o CodeQL cobre o código próprio.
+
+**SEC-015** — *Risco aceite:* `reserve_product` é chamável por `anon` sem limite de taxa. Quem
+descobrir o site pode ocupar todos os produtos com nomes falsos, e não existe função de
+administração para os limpar. É incómodo, não é perda de dados: o catálogo vive no Git e nada do
+que interessa depende da tabela. Se acontecer, a mitigação é apagar as linhas na consola do
+Supabase. Rever se o site alguma vez deixar de ser partilhado só com família e amigos.
+
+**SEC-016** — *Risco aceite:* o "modo dono" (`features/reservations/lib/reservations-api.ts`) é
+apenas um interruptor no `localStorage` que esconde as reservas na interface. Não é controlo de
+acesso: qualquer pessoa — incluindo o dono — pode chamar `list_reservations` diretamente com a
+chave anónima e ver tudo. Serve para não estragar a surpresa por distração, não para a impedir.
 
 ## 19. Performance
 

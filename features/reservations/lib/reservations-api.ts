@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from "@/lib/zod";
 
 /**
  * Acesso às reservas por `fetch` direto ao PostgREST, sem o SDK do Supabase.

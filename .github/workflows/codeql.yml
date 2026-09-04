@@ -1,0 +1,46 @@
+name: CodeQL
+
+# Ver PROJECT_BLUEPRINT.md — CI-007/SEC-014. Análise estática (SAST) do código
+# próprio. O Renovate já cobre as dependências (`vulnerabilityAlerts` e
+# `osvVulnerabilityAlerts`); isto fecha o lado do código.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    # Segunda-feira às 07:00 UTC, uma hora depois do keepalive: apanha regras
+    # novas do CodeQL sem ser preciso um commit.
+    - cron: "0 7 * * 1"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  analyze:
+    name: Analisar
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: Inicializar CodeQL
+        uses: github/codeql-action/init@0499de31b99561a6d14a36a5f662c2a54f91beee # v4
+        with:
+          languages: javascript-typescript
+          # `security-extended` acrescenta as regras de qualidade com relevância
+          # de segurança que a suite por defeito deixa de fora.
+          queries: security-extended
+
+      - name: Analisar
+        uses: github/codeql-action/analyze@0499de31b99561a6d14a36a5f662c2a54f91beee # v4
+        with:
+          category: "/language:javascript-typescript"

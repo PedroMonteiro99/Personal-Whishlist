@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from "@/lib/zod";
 
 import type { CatalogProduct } from "@/lib/catalog";
 import type { Product } from "@/lib/content/schemas";
