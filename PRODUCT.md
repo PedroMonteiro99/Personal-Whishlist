@@ -37,52 +37,58 @@ ser tão simples como criar um ficheiro.
 
 ## Positioning
 
-O catálogo é gerado a partir de ficheiros MDX versionados em Git, sincronizados para Supabase por
-GitHub Actions. O conteúdo tem histórico, revisão e validação de esquema antes de chegar à
-aplicação — algo que nem uma folha de cálculo partilhada nem uma app de wishlist genérica de
-retalhista oferecem. Não é uma loja: não há carrinho, checkout, pagamentos nem contas.
+O catálogo é gerado a partir de ficheiros MDX versionados em Git e servido a partir deles no
+build — não há base de dados no caminho de leitura. O conteúdo tem histórico, revisão e validação
+de esquema antes de chegar à aplicação — algo que nem uma folha de cálculo partilhada nem uma app
+de wishlist genérica de retalhista oferecem. Não é uma loja: não há carrinho, checkout, pagamentos
+nem contas.
 
 ## Operating Context
 
 **Visitante:** abre o link → homepage com favoritos/prioridade alta → navega por categoria ou
 pesquisa → aplica filtros (prioridade, loja, categoria) → abre a página do produto → segue o link
-externo para a loja. Tudo público, sem autenticação.
+externo para a loja. Pelo caminho pode deixar o nome a dizer que vai oferecer aquele presente,
+para ninguém repetir. Tudo público, sem autenticação.
 
 **Dono:** cria/edita `content/wishlist/<categoria>/<slug>.mdx` → commit e push → GitHub Actions
-valida o frontmatter com Zod e sincroniza para Supabase → produção reflete a alteração.
+valida o frontmatter com Zod → o build seguinte inclui o produto e a produção reflete a alteração.
 
 **Ciclo de vida:** arranca como wishlist de Natal e evolui para outras ocasiões (aniversários,
 etc.) ao longo de vários anos, sem reescrita da estrutura de dados.
 
 ## Capabilities and Constraints
 
-**Âmbito confirmado da V1:** rotas `/`, `/categoria/[slug]`, `/produto/[slug]`, `/pesquisa`;
-destaque de favoritos e prioridade alta; pesquisa com debounce; filtros por prioridade, loja e
-categoria; alternância Dark/Light; SEO por página (metadata, sitemap, Open Graph, JSON-LD
-`Product`); responsivo.
+**Âmbito confirmado da V1:** rotas `/`, `/categoria/[slug]`, `/produto/[slug]`, `/pesquisa` e
+`/recebidos`; destaque de favoritos e prioridade alta; pesquisa com debounce; filtros por
+prioridade, loja e categoria; alternância Dark/Light; reservas de presentes por ocasião; SEO por
+página (metadata, sitemap, Open Graph, JSON-LD `Product`); responsivo.
 
 **Terminologia do domínio (visível ao utilizador, pt-PT):** produto, categoria, loja, prioridade
-(baixa/média/alta), favorito, preço, notas pessoais.
+(baixa/média/alta), favorito, preço, notas pessoais, ocasião, recebidos.
 
 **Restrições duráveis:**
 - Git é a única fonte de verdade; o catálogo é servido a partir dos MDX no build, sem base de
   dados no caminho de leitura.
-- O projeto Supabase existe para estado gerado por visitantes (reservas), não para conteúdo.
-  Enquanto isso não existir, a aplicação não fala com nenhuma base de dados.
-- Credenciais de base de dados vivem apenas em GitHub Actions Secrets, nunca no browser.
+- O Supabase guarda apenas estado gerado por visitantes — as reservas —, nunca conteúdo. É a
+  única coisa que a aplicação lhe pede, e se o serviço falhar a interface esconde a
+  funcionalidade em silêncio e o catálogo continua a funcionar.
+- A chave anónima do Supabase é pública por desenho: a tabela tem RLS sem políticas e a única
+  superfície exposta são três funções `security definer`. Não existe `service_role` no
+  repositório.
 - TypeScript strict; todo o dado externo validado com Zod.
 - Server Components por defeito; `"use client"` apenas quando necessário.
 - Estado de pesquisa e filtros vive sempre na URL (`searchParams`), nunca só em memória.
-- Slugs estáveis depois de publicados — links partilhados não podem partir.
-- Locale único: português europeu; rotas em português (`/categoria`, `/produto`, `/pesquisa`).
-  Não há i18n planeado.
+- Slugs estáveis depois de publicados — links partilhados não podem partir, incluindo os de
+  produtos já recebidos.
+- Locale único: português europeu; rotas em português (`/categoria`, `/produto`, `/pesquisa`,
+  `/recebidos`). Não há i18n planeado.
 - Preços em EUR, definidos no frontmatter; podem estar ausentes num produto.
 
-**Explicitamente fora da V1 (não implementar sem pedido):** reservas de presentes, histórico de
-preços, notificações, coleções, dashboard privado, autenticação, integração com APIs de preços.
+**Explicitamente fora da V1 (não implementar sem pedido):** histórico de preços, notificações,
+coleções, dashboard privado, autenticação, integração com APIs de preços.
 
-**Por decidir:** quais as categorias efetivamente publicadas na V1 além de `setup`; se as páginas
-estáticas em `content/pages/` (`/[slug]`) entram na V1 — o blueprint marca-as como opcionais.
+**Por decidir:** se as páginas estáticas em `content/pages/` (`/[slug]`) entram na V1 — a pasta
+existe mas está vazia, e o blueprint marca-as como opcionais.
 
 ## Brand Commitments
 
@@ -97,15 +103,18 @@ estáticas em `content/pages/` (`/[slug]`) entram na V1 — o blueprint marca-as
 
 ## Evidence on Hand
 
-**Conteúdo real hoje:** um produto (`content/wishlist/setup/benq-screenbar-pro.mdx`), uma
-categoria (`content/categories/setup.mdx`), uma loja (`content/stores/amazon.mdx`).
+**Conteúdo real hoje:** 3 produtos, 9 categorias criadas (das quais 2 — `gaming` e `setup` — já
+têm produtos e por isso aparecem na navegação), 2 lojas (`amazon`, `pc-diga`) e uma ocasião aberta
+(`natal-2026`), ainda sem nada marcado como recebido.
 
 **Escala alvo no lançamento:** ~40 a 100 produtos (confirmado pelo dono) — o catálogo é grande o
 suficiente para que filtros, pesquisa e densidade de grelha sejam funcionalmente necessários, não
 decorativos.
 
-**Imagens:** URLs remotas do CDN da Amazon, referenciadas no frontmatter. Não existem assets
-próprios em `public/` — sem logótipo, sem fotografia original.
+**Imagens:** as fotografias de produto são URLs remotas do CDN da Amazon, referenciadas no
+frontmatter — não há fotografia original. Assets próprios existem, mas são poucos: a marca é um
+SVG desenhado no repositório (`app/icon.svg` e o componente `BrandMark`), e `public/images/` tem
+apenas os favicons das duas lojas.
 
 **Ideias de conteúdo de referência** (Apêndice do blueprint, ainda não publicadas): gaming, setup,
 perfumes, ténis, colecionismo/LEGO.
@@ -128,9 +137,10 @@ social. Nenhum destes elementos existe e nenhum deve aparecer como conteúdo de 
 
 ## Accessibility & Inclusion
 
-WCAG AA como mínimo, verificado em Dark Mode e Light Mode, incluindo estados de foco e hover.
-Navegação completa por teclado com `focus-visible` claramente estilizado em toda a navegação
-principal (categorias, pesquisa, filtros, cartões de produto). Elementos interativos não-nativos
-usam roles e atributos `aria-*` adequados. Imagens de produto têm `alt` descritivo derivado do
-nome; decorativas usam `alt=""`. O campo de pesquisa tem `label` associado, nunca apenas
-`placeholder`.
+WCAG AA como mínimo, verificado em Dark Mode e Light Mode, incluindo estados de foco e hover — e
+verificado automaticamente: o workflow `e2e` corre axe-core em todas as rotas, nos dois temas, a
+cada push e pull request. Navegação completa por teclado com `focus-visible` claramente estilizado
+em toda a navegação principal (categorias, pesquisa, filtros, cartões de produto). Elementos
+interativos não-nativos usam roles e atributos `aria-*` adequados. Imagens de produto têm `alt`
+descritivo derivado do nome; decorativas usam `alt=""`. O campo de pesquisa tem `label` associado,
+nunca apenas `placeholder`.
