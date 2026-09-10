@@ -1,7 +1,5 @@
 import Link from "next/link";
 
-import { OwnerModeToggle } from "@/features/reservations/components/OwnerModeToggle";
-
 export function SiteFooter() {
   return (
     <footer className="border-t border-border/70 bg-background/80">
@@ -12,7 +10,6 @@ export function SiteFooter() {
             já recebidos
           </Link>
         </p>
-        <OwnerModeToggle />
       </div>
     </footer>
   );

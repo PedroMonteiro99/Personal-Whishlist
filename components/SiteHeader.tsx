@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { BrandMark } from "@/components/BrandMark";
+import { OwnerModeToggle } from "@/features/reservations/components/OwnerModeToggle";
 import { HeaderSearch } from "@/features/search/components/HeaderSearch";
 import { ThemeToggle } from "@/features/theme/components/ThemeToggle";
 
@@ -26,6 +27,7 @@ export function SiteHeader({ occasionName }: { occasionName: string }) {
 
         <div className="flex items-center gap-2 sm:gap-3">
           <HeaderSearch />
+          <OwnerModeToggle />
           <ThemeToggle />
         </div>
       </div>

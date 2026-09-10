@@ -640,10 +640,19 @@ o "Onde comprar" — decidir que se vai oferecer vem antes de decidir onde compr
 sobre a borda, para não se abrir um produto que já está resolvido. Só aparece depois de os dados
 chegarem — nunca faz piscar a grelha.
 
-**O interruptor do dono.** Vive no rodapé, em texto simples. Não é uma barreira de segurança: é a
-aplicação a proteger o Pedro de si próprio, e ele é a única pessoa interessada em não ver. Quando
-está ativo, permanece visível a dizer que está ativo — caso contrário a ausência de reservas
-pareceria uma avaria.
+**O interruptor do dono.** Vive no cabeçalho, ao lado do tema, como botão de ícone (um olho
+riscado). É a mesma categoria de coisa que o tema — uma preferência de como *este* aparelho mostra
+o site, não conteúdo —, e por isso mora ao lado dele. Em rodapé era uma frase pública dirigida a
+uma pessoa pelo nome, que não dizia nada a quem visita.
+
+Não é uma barreira de segurança (`SEC-016`): é a aplicação a proteger o Pedro de si próprio, e ele
+é a única pessoa interessada em não ver. Quando está ativo ganha a tinta azul a 10% e fica
+visivelmente ligado — caso contrário a ausência de reservas pareceria uma avaria.
+
+O que ele **não** resolve: a primeira visita num aparelho novo. As reservas aparecem nos cartões
+antes de haver oportunidade de carregar no botão, e nenhuma posição no ecrã corrige isso — só um
+`default` diferente corrigiria, ao custo de os convidados perderem a proteção contra presentes
+repetidos, que é a razão de a funcionalidade existir.
 
 ### Ocasiões
 
