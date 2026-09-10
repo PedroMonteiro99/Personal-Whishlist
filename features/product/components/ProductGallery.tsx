@@ -192,6 +192,12 @@ export function ProductGallery({
                 src={image}
                 alt=""
                 fill
+                // A primeira miniatura está acima da dobra, tal como o slide
+                // que representa. Sem isto ficaria `lazy` e, como o `src` de
+                // fallback é idêntico ao do slide (a mesma imagem, na maior
+                // variante), sobrepunha-se ao registo do slide na deteção de
+                // LCP do next/image e disparava um aviso falso (PERF-002).
+                priority={index === 0}
                 className="object-contain p-1.5"
                 sizes="64px"
               />

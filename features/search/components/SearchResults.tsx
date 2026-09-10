@@ -72,7 +72,9 @@ export function SearchResults({
             }`
           : `${formatProductCount(products.length)} para "${normalizedQuery}".`}
       </p>
-      <ProductGrid products={products} />
+      {/* Mesma dobra que a home e as categorias: a primeira linha da grelha
+          chega a três cartões em ecrã largo, e é lá que está o LCP (PERF-002). */}
+      <ProductGrid products={products} priorityCount={3} />
     </div>
   );
 }
