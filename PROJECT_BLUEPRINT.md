@@ -393,6 +393,13 @@ stores:
 `validate` em cada pull request. Não escreve em lado nenhum: só lê e verifica.
 **SYNC-002** — A validação cobre frontmatter contra os schemas Zod, unicidade de slugs por tipo, e
 referências resolvidas (categoria e lojas de cada produto existem em `content/`).
+**SYNC-003** — `pnpm new:product` (`scripts/new-product.ts`) cria um produto novo. Pergunta o que é
+preciso, oferece as categorias e lojas que existem em `content/`, deriva o slug do nome
+(`lib/slug.ts`, com os acentos do português tratados) e valida contra os mesmos schemas Zod antes
+de escrever — um ficheiro saído daqui nunca falha o `validate:content`. Existe porque o catálogo é
+escrito à mão, dezenas de vezes, e os erros são sempre os mesmos: o slug da loja que não existe, o
+preço escrito como texto, a categoria que não casa com a pasta. Não altera a fonte de verdade
+(`REPO-004`): escreve o MDX que a seguir é commitado como qualquer outro.
 **SYNC-003** — Falhas de validação bloqueiam o merge (fail-fast), com o ficheiro e o problema
 nomeados.
 **SYNC-004** — As regras de integridade vivem num único módulo,
@@ -497,6 +504,14 @@ Supabase. Rever se o site alguma vez deixar de ser partilhado só com família e
 apenas um interruptor no `localStorage` que esconde as reservas na interface. Não é controlo de
 acesso: qualquer pessoa — incluindo o dono — pode chamar `list_reservations` diretamente com a
 chave anónima e ver tudo. Serve para não estragar a surpresa por distração, não para a impedir.
+
+**SEC-017** — *Limitação conhecida do modo dono:* protege apenas a partir do momento em que é
+ligado, e é por aparelho. Na primeira visita num telemóvel novo, numa janela anónima ou depois de
+limpar o armazenamento, os marcadores "Já tratado" aparecem nos cartões antes de haver
+oportunidade de carregar no botão. Mudar o botão de sítio não resolve isto — só inverter o
+`default` resolveria, e isso tiraria aos convidados a proteção contra presentes repetidos, que é a
+razão de as reservas existirem. Fica assim conscientemente: o custo cai sobre uma pessoa que sabe
+do problema, em vez de cair sobre quem vem oferecer.
 
 ## 19. Performance
 
