@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-03T19:12:07+01:00",
+  "generatedAt": "2026-09-10T22:05:51.900Z",
   "title": "Design System: Wishlist do Pedro",
   "extensions": {
     "colorMeta": {
@@ -273,6 +273,22 @@
           "hsl(0 0% 88%)",
           "hsl(0 0% 100%)"
         ]
+      },
+      "azul-vitrine-tinta-dia": {
+        "role": "primary",
+        "displayName": "Azul de Vitrine Texto sobre Tinta (Dia)",
+        "canonical": "hsl(221.2 83.2% 45%)",
+        "purpose": "Texto pequeno sobre um fundo a 10% do azul, como a pílula \"Mais barato\". O azul normal dá 4.48:1 sobre essa tinta e falha o mínimo AA; a 45% de luminosidade sobe para 5.9:1. Em dark mode não é preciso e o token acompanha o Azul de Vitrine.",
+        "tonalRamp": [
+          "hsl(221.2 83.2% 15%)",
+          "hsl(221.2 83.2% 26%)",
+          "hsl(221.2 83.2% 37%)",
+          "hsl(221.2 83.2% 45%)",
+          "hsl(221.2 83.2% 60%)",
+          "hsl(221.2 83.2% 71%)",
+          "hsl(221.2 83.2% 82%)",
+          "hsl(221.2 83.2% 93%)"
+        ]
       }
     },
     "typographyMeta": {
@@ -443,9 +459,9 @@
       "name": "Cabeçalho do Site",
       "kind": "nav",
       "refersTo": null,
-      "description": "Barra fixa com blur forte e fundo a 80%. A marca é um monograma em seixo de 16px seguido de duas linhas de tipografia contrastante.",
-      "html": "<header class=\"ds-header\"><a class=\"ds-brand\" href=\"#\"><span class=\"ds-brand-mark\">WP</span><span class=\"ds-brand-text\"><span class=\"ds-brand-eyebrow\">Wishlist</span><span class=\"ds-brand-name\">do Pedro</span></span></a><button class=\"ds-icon-btn\" type=\"button\" aria-label=\"Ativar modo claro\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"12\" r=\"4\"/><path d=\"M12 3v1\"/><path d=\"M12 20v1\"/><path d=\"M3 12h1\"/><path d=\"M20 12h1\"/><path d=\"m18.36 5.64-.7.7\"/><path d=\"m6.34 17.66-.7.7\"/><path d=\"m5.64 5.64.7.7\"/><path d=\"m17.66 17.66.7.7\"/></svg></button></header>",
-      "css": ".ds-header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem 1.5rem; border-bottom: 1px solid hsl(var(--border) / 0.7); background: hsl(var(--background) / 0.8); backdrop-filter: blur(24px); } .ds-brand { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; } .ds-brand-mark { display: flex; align-items: center; justify-content: center; width: 2.75rem; height: 2.75rem; border: 1px solid hsl(var(--border) / 0.7); border-radius: 1rem; background: hsl(var(--card)); color: hsl(var(--foreground)); font-family: var(--font-geist-sans), system-ui, sans-serif; font-size: 0.875rem; font-weight: 600; letter-spacing: 0.2em; box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1); transition: transform 150ms cubic-bezier(0.4, 0, 0.2, 1); } .ds-brand:hover .ds-brand-mark { transform: translateY(-0.125rem); } .ds-brand-text { display: flex; flex-direction: column; font-family: var(--font-geist-sans), system-ui, sans-serif; } .ds-brand-eyebrow { font-size: 0.875rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.32em; color: hsl(var(--muted-foreground)); } .ds-brand-name { font-size: 1rem; font-weight: 600; color: hsl(var(--foreground)); } .ds-icon-btn { display: inline-flex; align-items: center; justify-content: center; width: 2.5rem; height: 2.5rem; border: 1px solid hsl(var(--input)); border-radius: 9999px; background: hsl(var(--background)); color: hsl(var(--foreground)); cursor: pointer; transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1); } .ds-icon-btn svg { width: 1rem; height: 1rem; } .ds-icon-btn:hover { background: hsl(var(--accent)); } .ds-icon-btn:focus-visible { outline: none; box-shadow: 0 0 0 2px hsl(var(--background)), 0 0 0 4px hsl(var(--ring)); }"
+      "description": "Barra fixa com blur forte e fundo a 80%. A marca é um monograma em seixo de 16px seguido de duas linhas de tipografia contrastante, e ao lado vivem as duas pílulas da navegação principal. A página atual usa a superfície secundária, nunca o Azul de Vitrine.",
+      "html": "<header class=\"ds-header\"><a class=\"ds-brand\" href=\"#\"><span class=\"ds-brand-mark\">WP</span><span class=\"ds-brand-text\"><span class=\"ds-brand-eyebrow\">Wishlist</span><span class=\"ds-brand-name\">do Pedro</span></span></a><nav class=\"ds-nav\" aria-label=\"Navegação principal\"><a class=\"ds-nav-link ds-nav-link--current\" href=\"#\" aria-current=\"page\">Wishlist</a><a class=\"ds-nav-link\" href=\"#\">Recebidos</a></nav><button class=\"ds-icon-btn\" type=\"button\" aria-label=\"Ativar modo claro\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"12\" r=\"4\"/><path d=\"M12 3v1\"/><path d=\"M12 20v1\"/><path d=\"M3 12h1\"/><path d=\"M20 12h1\"/><path d=\"m18.36 5.64-.7.7\"/><path d=\"m6.34 17.66-.7.7\"/><path d=\"m5.64 5.64.7.7\"/><path d=\"m17.66 17.66.7.7\"/></svg></button></header>",
+      "css": ".ds-header { display: flex; align-items: center; justify-content: flex-start; gap: 1rem; padding: 1rem 1.5rem; border-bottom: 1px solid hsl(var(--border) / 0.7); background: hsl(var(--background) / 0.8); backdrop-filter: blur(24px); } .ds-brand { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; } .ds-brand-mark { display: flex; align-items: center; justify-content: center; width: 2.75rem; height: 2.75rem; border: 1px solid hsl(var(--border) / 0.7); border-radius: 1rem; background: hsl(var(--card)); color: hsl(var(--foreground)); font-family: var(--font-geist-sans), system-ui, sans-serif; font-size: 0.875rem; font-weight: 600; letter-spacing: 0.2em; box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1); transition: transform 150ms cubic-bezier(0.4, 0, 0.2, 1); } .ds-brand:hover .ds-brand-mark { transform: translateY(-0.125rem); } .ds-brand-text { display: flex; flex-direction: column; font-family: var(--font-geist-sans), system-ui, sans-serif; } .ds-brand-eyebrow { font-size: 0.875rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.32em; color: hsl(var(--muted-foreground)); } .ds-brand-name { font-size: 1rem; font-weight: 600; color: hsl(var(--foreground)); } .ds-icon-btn { display: inline-flex; align-items: center; justify-content: center; width: 2.5rem; height: 2.5rem; border: 1px solid hsl(var(--input)); border-radius: 9999px; background: hsl(var(--background)); color: hsl(var(--foreground)); cursor: pointer; transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1); } .ds-icon-btn svg { width: 1rem; height: 1rem; } .ds-icon-btn:hover { background: hsl(var(--accent)); } .ds-icon-btn:focus-visible { outline: none; box-shadow: 0 0 0 2px hsl(var(--background)), 0 0 0 4px hsl(var(--ring)); } .ds-nav { display: flex; align-items: center; gap: 0.25rem; margin-right: auto; margin-left: 0.25rem; } .ds-nav-link { display: inline-flex; align-items: center; height: 2.25rem; padding: 0 0.875rem; border-radius: 9999px; font-family: var(--font-geist-sans), system-ui, sans-serif; font-size: 0.875rem; font-weight: 500; text-decoration: none; color: hsl(var(--muted-foreground)); transition: color 150ms cubic-bezier(0.4, 0, 0.2, 1), background-color 150ms cubic-bezier(0.4, 0, 0.2, 1); } .ds-nav-link:hover { color: hsl(var(--foreground)); } .ds-nav-link--current { background: hsl(var(--secondary)); color: hsl(var(--foreground)); } .ds-nav-link:focus-visible { outline: none; box-shadow: 0 0 0 2px hsl(var(--background)), 0 0 0 4px hsl(var(--ring)); }"
     },
     {
       "name": "Estado Vazio",

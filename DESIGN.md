@@ -4,6 +4,7 @@ description: Wishlist pública de ideias de presentes, dark-mode-first, com o co
 colors:
   azul-vitrine: "hsl(217.2 91.2% 59.8%)"
   azul-vitrine-dia: "hsl(221.2 83.2% 53.3%)"
+  azul-vitrine-tinta-dia: "hsl(221.2 83.2% 45%)"
   ardosia-meia-noite: "hsl(224 71.4% 4.1%)"
   superficie-meia-noite: "hsl(224 71.4% 6%)"
   cinza-penumbra: "hsl(215 27.9% 16.9%)"
