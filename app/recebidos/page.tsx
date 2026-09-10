@@ -8,12 +8,12 @@ import { getCatalogData } from "@/lib/catalog";
 import { openGraphDefaults } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Já recebidos",
+  title: "Recebidos",
   description: "Presentes já recebidos, por ocasião.",
   alternates: { canonical: "/recebidos" },
   openGraph: {
     ...openGraphDefaults(),
-    title: "Já recebidos",
+    title: "Recebidos",
     description: "Presentes já recebidos, por ocasião.",
     url: "/recebidos",
   },
@@ -37,7 +37,7 @@ export default async function ReceivedPage() {
       <div className="space-y-8">
         <div className="space-y-4">
           <h1 className="text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
-            Já recebidos
+            Recebidos
           </h1>
           <p className="max-w-2xl text-sm leading-7 text-muted-foreground sm:text-base">
             O que já foi oferecido, por ocasião. Estes continuam a ter página,

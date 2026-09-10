@@ -493,7 +493,7 @@ pílula. Se isso contém coisas, é um seixo de 24px. Um elemento embutido dentr
   um quadrado de 2.75rem com raio de 1rem e borda, contendo a etiqueta da marca em Azul de Vitrine
   (24px), seguido de duas linhas: o nome em 1rem peso 600 e um subtítulo em 12px cinza. Em hover,
   o quadrado sobe 2px.
-- **Navegação principal:** duas pílulas de texto — "Wishlist" e "Já recebidos" —, os dois estados
+- **Navegação principal:** duas pílulas de texto — "Wishlist" e "Recebidos" —, os dois estados
   em que um presente vive nesta lista. A página atual ganha a superfície secundária e texto
   primário; as outras ficam em cinza e acendem em hover. O ativo **não** usa o Azul de Vitrine: a
   Regra da Única Luz reserva-o, e "onde estou" não é o mesmo tipo de destaque que um filtro ligado.
@@ -509,7 +509,7 @@ pílula. Se isso contém coisas, é um seixo de 24px. Um elemento embutido dentr
   `/pesquisa` desaparece, para não haver dois campos de pesquisa no mesmo ecrã.
 - **Rodapé:** fundo translúcido sem blur, fio de borda superior. Não é uma linha de créditos: é a
   segunda porta do site. À esquerda a marca em 2.25rem e uma frase que diz o que isto é e o que não
-  é; à direita dois grupos de ligações — "Navegar" (Wishlist, Já recebidos, Pesquisar) e
+  é; à direita dois grupos de ligações — "Navegar" (Wishlist, Recebidos, Pesquisar) e
   "Categorias", esta última só com as que têm produtos, pela mesma regra da grelha da homepage. Um
   fio separa a nota final sobre os preços. Empilha no telemóvel e distribui-se nos extremos a
   partir de `sm`.

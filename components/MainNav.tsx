@@ -15,7 +15,7 @@ import { cn } from "@/lib/utils";
  */
 const LINKS = [
   { href: "/", label: "Wishlist" },
-  { href: "/recebidos", label: "Já recebidos" },
+  { href: "/recebidos", label: "Recebidos" },
 ] as const;
 
 export function MainNav({ className }: { className?: string }) {

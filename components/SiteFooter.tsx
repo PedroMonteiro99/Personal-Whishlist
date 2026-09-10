@@ -5,7 +5,7 @@ import { getCatalogData, selectPopulatedCategories } from "@/lib/catalog";
 
 const NAVIGATION = [
   { href: "/", label: "Wishlist" },
-  { href: "/recebidos", label: "Já recebidos" },
+  { href: "/recebidos", label: "Recebidos" },
   { href: "/pesquisa", label: "Pesquisar" },
 ];
 
