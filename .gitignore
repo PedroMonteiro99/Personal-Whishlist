@@ -33,6 +33,12 @@ next-env.d.ts
 /blob-report/
 /playwright/.cache/
 
+# impeccable
+# O motor é um binário de 14 MB descarregado por plataforma pelo `impeccable
+# update`. Não entra no repositório: é específico de windows-x64, não serve aos
+# runners Linux do CI, e volta a ser instalado por quem correr o updater.
+.github/skills/impeccable/scripts/bin/
+
 # vercel
 .vercel
 
