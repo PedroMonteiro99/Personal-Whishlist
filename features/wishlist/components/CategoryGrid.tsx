@@ -5,6 +5,7 @@ import { ArrowRight } from "lucide-react";
 import { EmptyState } from "@/components/EmptyState";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { resolveCategoryIcon } from "@/features/wishlist/lib/category-icons";
+import { selectPopulatedCategories } from "@/lib/catalog";
 import { formatProductCount } from "@/lib/format";
 
 import type { CatalogData } from "@/lib/catalog";
@@ -13,19 +14,7 @@ export function CategoryGrid({
   categories,
   products,
 }: Pick<CatalogData, "categories" | "products">) {
-  const productCountByCategory = new Map<string, number>();
-
-  for (const product of products) {
-    productCountByCategory.set(
-      product.category,
-      (productCountByCategory.get(product.category) ?? 0) + 1,
-    );
-  }
-
-  // Uma categoria sem produtos não é navegável: mostrá-la só criaria becos sem saída.
-  const populatedCategories = categories.filter(
-    (category) => (productCountByCategory.get(category.slug) ?? 0) > 0,
-  );
+  const populatedCategories = selectPopulatedCategories(categories, products);
 
   if (populatedCategories.length === 0) {
     return (
@@ -38,7 +27,7 @@ export function CategoryGrid({
 
   return (
     <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-      {populatedCategories.map((category) => {
+      {populatedCategories.map(({ category, count }) => {
         const Icon = resolveCategoryIcon(category.icon);
 
         return (
@@ -64,9 +53,7 @@ export function CategoryGrid({
                   {category.description ?? "Categoria disponível na wishlist."}
                 </p>
                 <p className="text-sm font-medium tabular-nums text-foreground">
-                  {formatProductCount(
-                    productCountByCategory.get(category.slug) ?? 0,
-                  )}
+                  {formatProductCount(count)}
                 </p>
               </CardContent>
             </Card>

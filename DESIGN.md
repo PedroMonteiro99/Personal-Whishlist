@@ -337,8 +337,9 @@ com grelha assimétrica — `1.05fr 0.95fr` a partir de `lg`, com 2rem de interv
 produtos passa de 1 coluna para 2 em `md` (768px) e 3 em `xl` (1280px), com 1.25rem de intervalo;
 a grelha de categorias segue o mesmo padrão com 1rem.
 
-**Âncoras.** Secções alvo de ligações internas levam `scroll-mt-28` (7rem) para não ficarem
-escondidas atrás do cabeçalho fixo.
+**Âncoras.** Secções alvo de ligações internas levam `scroll-mt-36` (9rem) no telemóvel e
+`scroll-mt-28` (7rem) a partir de `sm`, para não ficarem escondidas atrás do cabeçalho fixo — que é
+mais alto no telemóvel, onde a navegação ocupa a sua própria linha.
 
 **Densidade.** Cartões de produto usam 1.25rem de padding interior, cartões de conteúdo 1.5rem, e
 os painéis embutidos (preço, loja, notas) 1rem. As imagens de produto são sempre 4:3.
@@ -492,13 +493,26 @@ pílula. Se isso contém coisas, é um seixo de 24px. Um elemento embutido dentr
   um quadrado de 2.75rem com raio de 1rem e borda, contendo a etiqueta da marca em Azul de Vitrine
   (24px), seguido de duas linhas: o nome em 1rem peso 600 e um subtítulo em 12px cinza. Em hover,
   o quadrado sobe 2px.
+- **Navegação principal:** duas pílulas de texto — "Wishlist" e "Já recebidos" —, os dois estados
+  em que um presente vive nesta lista. A página atual ganha a superfície secundária e texto
+  primário; as outras ficam em cinza e acendem em hover. O ativo **não** usa o Azul de Vitrine: a
+  Regra da Única Luz reserva-o, e "onde estou" não é o mesmo tipo de destaque que um filtro ligado.
+  A marcação é `aria-current="page"` por correspondência exata do caminho — numa página de produto
+  ou de categoria não se mente a dizer que se está na raiz.
+  A partir de `sm` fica em linha, entre a marca e os controlos. No telemóvel não cabe: a marca e os
+  três controlos deixam 32px livres a 390px, por isso a navegação passa para a sua própria linha
+  por baixo, e o cabeçalho cresce de 77px para 121px.
 - **Pesquisa no cabeçalho:** um campo real, não um botão que finge sê-lo. A partir de `sm` é uma
   pílula de 2.5rem com lupa à esquerda que alarga de 10rem para 14rem (13rem → 18rem em `lg`) ao
   receber foco, em 300ms; escreve-se e submete-se ali. Abaixo de `sm` não há largura para o campo,
   por isso fica um botão-ícone que leva a `/pesquisa`, onde o campo abre já em foco. Na própria
   `/pesquisa` desaparece, para não haver dois campos de pesquisa no mesmo ecrã.
-- **Rodapé:** fundo translúcido sem blur, fio de borda superior, texto de 0.875rem em cinza
-  secundário, empilhado no telemóvel e distribuído nos extremos a partir de `sm`.
+- **Rodapé:** fundo translúcido sem blur, fio de borda superior. Não é uma linha de créditos: é a
+  segunda porta do site. À esquerda a marca em 2.25rem e uma frase que diz o que isto é e o que não
+  é; à direita dois grupos de ligações — "Navegar" (Wishlist, Já recebidos, Pesquisar) e
+  "Categorias", esta última só com as que têm produtos, pela mesma regra da grelha da homepage. Um
+  fio separa a nota final sobre os preços. Empilha no telemóvel e distribui-se nos extremos a
+  partir de `sm`.
 
 ### Empty State
 

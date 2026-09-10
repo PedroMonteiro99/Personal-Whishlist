@@ -330,6 +330,31 @@ export const getFeaturedProducts = cache(async () => {
   );
 });
 
+/**
+ * As categorias que têm produtos por oferecer, com a contagem de cada uma.
+ *
+ * Uma categoria vazia não é navegável: mostrá-la — na grelha da homepage ou nas
+ * ligações do rodapé — só criaria becos sem saída. A regra vive aqui, e não em
+ * cada sítio que a precisa, para os dois nunca discordarem sobre o que conta.
+ */
+export function selectPopulatedCategories(
+  categories: Category[],
+  products: CatalogProduct[],
+) {
+  const countBySlug = new Map<string, number>();
+
+  for (const product of products) {
+    countBySlug.set(
+      product.category,
+      (countBySlug.get(product.category) ?? 0) + 1,
+    );
+  }
+
+  return categories
+    .map((category) => ({ category, count: countBySlug.get(category.slug) ?? 0 }))
+    .filter((entry) => entry.count > 0);
+}
+
 export const getCategoryBySlug = cache(async (slug: string) => {
   const { categories } = await getCatalogData();
 

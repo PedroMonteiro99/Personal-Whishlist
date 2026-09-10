@@ -56,7 +56,7 @@ test.describe("reservas", () => {
     });
     await page.goto(PRODUCT);
 
-    await expect(page.getByText("Rita")).toBeVisible();
+    await expect(page.getByText("Rita", { exact: true })).toBeVisible();
     await expect(page.getByLabel("O teu nome")).toHaveCount(0);
   });
 
@@ -98,10 +98,13 @@ test.describe("reservas", () => {
     });
     await page.goto(PRODUCT);
 
-    await expect(page.getByText("Rita")).toBeVisible();
+    // `exact` é obrigatório: sem ele o Playwright faz correspondência parcial
+    // sem distinguir maiúsculas, e "Rita" aparecia também dentro de "escrita",
+    // no texto do rodapé.
+    await expect(page.getByText("Rita", { exact: true })).toBeVisible();
 
     await page.getByRole("button", { name: /esconder as reservas/i }).click();
 
-    await expect(page.getByText("Rita")).toHaveCount(0);
+    await expect(page.getByText("Rita", { exact: true })).toHaveCount(0);
   });
 });

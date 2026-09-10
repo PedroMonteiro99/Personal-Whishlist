@@ -55,7 +55,7 @@ export default async function HomePage() {
 
       <section
         id="destaques"
-        className="mx-auto w-full max-w-6xl scroll-mt-28 px-4 pb-16 sm:px-6 lg:px-8 lg:pb-20"
+        className="mx-auto w-full max-w-6xl scroll-mt-36 px-4 pb-16 sm:scroll-mt-28 sm:px-6 lg:px-8 lg:pb-20"
       >
         <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
           <h2 className="text-2xl font-semibold tracking-tight">Destaques</h2>
@@ -76,7 +76,7 @@ export default async function HomePage() {
 
       <section
         id="categorias"
-        className="mx-auto w-full max-w-6xl scroll-mt-28 px-4 pb-20 sm:px-6 lg:px-8 lg:pb-24"
+        className="mx-auto w-full max-w-6xl scroll-mt-36 px-4 pb-20 sm:scroll-mt-28 sm:px-6 lg:px-8 lg:pb-24"
       >
         <h2 className="mb-8 text-2xl font-semibold tracking-tight">
           Categorias
