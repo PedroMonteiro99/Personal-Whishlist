@@ -259,6 +259,14 @@ estática. Evita também duplicar a UI de filtros em duas rotas.
 **ROUTE-004** — Rotas de fases futuras (fora da V1, não implementar ainda): `/dashboard`
 (privado), `/dashboard/reservas`, `/colecoes/[slug]`. Ver secção 29 — Future Ideas.
 
+**ROUTE-006** — `/produto/[slug]` e `/categoria/[slug]` declaram `dynamicParams = false`. Todo o
+catálogo é conhecido no build a partir dos MDX (`REPO-004`), e `generateStaticParams` já inclui os
+recebidos (`SEO-005`): não existe slug legítimo fora dessa lista. Sem isto, um slug inventado era
+renderizado a pedido e — por causa do `loading.tsx`, que abre uma fronteira de streaming — a
+resposta comprometia o estado HTTP 200 antes de o `notFound()` correr. O resultado era um *soft
+404*: uma página de "não encontrado" servida com 200 e guardada em cache com `s-maxage` de um ano,
+que os motores de busca indexavam como válida.
+
 **ROUTE-005** — Páginas de detalhe de produto (`/produto/[slug]`) e de categoria
 (`/categoria/[slug]`) são geradas estaticamente (`generateStaticParams`) a partir dos MDX. Não há
 revalidação a acionar: o conteúdo entra no build, e cada commit de conteúdo produz um build novo
@@ -399,6 +407,9 @@ regra nova entra nos dois de uma vez.
 **CI-003** — `release` — gestão de versões/releases a partir de tags `v*.*.*`.
 **CI-004** — `keepalive` — mantém o projeto Supabase gratuito ativo (ver 17.1).
 **CI-007** — `codeql` — SAST do código próprio em pushes, pull requests e semanalmente (`SEC-014`).
+**CI-008** — `e2e` — fluxos críticos e acessibilidade no browser (`TEST-004`/`TEST-011`). Fica
+separado do `ci`/`validate` porque precisa de descarregar um browser, e porque uma falha aqui
+aponta para comportamento em runtime, não para tipos ou lint.
 
 **CI-005** — Os workflows declaram `permissions` explícitas (mínimo privilégio) e `concurrency`
 por ref. Escritas em base de dados nunca usam `cancel-in-progress`.
@@ -592,8 +603,22 @@ por todos os testes de componentes. As instâncias de `router` e de `searchParam
 entre renders de propósito: devolver objetos novos a cada render invalidaria os `useCallback` dos
 componentes e criaria efeitos em cadeia que o Next real não provoca.
 
-**TEST-004** — Testes end-to-end (Playwright, fase futura) cobrindo os fluxos críticos: navegar
-por categoria, pesquisar, abrir um produto, alternar tema, reservar.
+**TEST-004** — Testes end-to-end (Playwright, `e2e/`) cobrindo os fluxos críticos: navegar por
+categoria, pesquisar, abrir um produto, alternar tema e reservar. Correm contra o **build de
+produção**, não contra o `next dev`: é o único sítio onde a CSP (`SEC-013`), os cabeçalhos e a
+prerenderização se comportam como em produção.
+
+**TEST-010** — As reservas são testadas com as três RPC intercetadas (`e2e/helpers.ts`). O
+`playwright.config.ts` compila a aplicação com um `NEXT_PUBLIC_SUPABASE_URL` falso — sem
+configuração a funcionalidade é compilada para fora e não haveria nada para testar —, e os testes
+respondem aos pedidos localmente. Nenhum Supabase real é tocado, e o resultado não depende do
+estado que lá esteja.
+
+**TEST-011** — A acessibilidade é verificada com axe-core (`e2e/a11y.spec.ts`) em todas as rotas da
+V1, **nos dois temas**, contra as regras WCAG 2.0/2.1 A e AA. Existe porque as regras `A11Y-XXX`
+estavam escritas mas nada as verificava: a pílula "Mais barato" tinha saído de conformidade
+(4.48:1 contra 4.5:1) sem ninguém dar por isso. O contraste é uma propriedade de cada tema — o
+dark mode passava enquanto o light mode falhava —, por isso testar só um não chegava.
 
 **TEST-005** — Não é objetivo atingir cobertura alta — prioriza-se o que tem maior risco de
 quebrar silenciosamente (validação de conteúdo, filtros, preços).
@@ -726,6 +751,6 @@ Estado atual: V1 funcional, partilhável, com reservas e ciclo de ocasiões. O q
    (`sim-racing`, `lego`, `sneakers`, `perfumes`, `coffee`, `home`, `accessories`).
 4. **Depois do Natal:** marcar os presentes recebidos com `received:`, fechar `natal-2026` e abrir
    a ocasião seguinte (`CONTENT-006`/`CONTENT-008`).
-5. **Testes end-to-end** (`TEST-004`, fase futura) — os testes de componentes (`TEST-003`) de
-   `Filters`, `SearchBar` e `GiftAction` já estão feitos.
+5. **Encher o catálogo** e rever as descrições provisórias das categorias sem produtos — é o que
+   falta para o site estar "completo" (ver `PRODUCT.md`).
 6. Rever este blueprint sempre que uma decisão de arquitetura mudar (`DOD-008`).

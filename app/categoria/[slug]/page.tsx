@@ -13,6 +13,13 @@ type CategoryPageProps = {
   params: Promise<{ slug: string }>;
 };
 
+/**
+ * As categorias vêm todas de `content/categories/` no build (`REPO-004`).
+ * Ver a nota em `app/produto/[slug]/page.tsx`: sem isto, um slug inventado
+ * devolvia um soft 404 — página de "não encontrado" com estado HTTP 200.
+ */
+export const dynamicParams = false;
+
 export async function generateStaticParams() {
   const slugs = await getCategorySlugs();
 

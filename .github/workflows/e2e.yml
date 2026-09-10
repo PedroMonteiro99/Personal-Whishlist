@@ -1,0 +1,76 @@
+name: E2E
+
+# Ver PROJECT_BLUEPRINT.md — CI-008/TEST-004. Corre os fluxos críticos e a
+# verificação de acessibilidade (A11Y-001..005) contra o build de produção.
+#
+# Fica num workflow próprio, e não dentro do `ci`/`validate`, por duas razões:
+# precisa de descarregar um browser (o que os outros não precisam), e uma falha
+# aqui aponta para comportamento no browser, não para tipos ou lint.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    env:
+      # O `playwright.config.ts` já define estes valores para o servidor que
+      # arranca; ficam aqui para o caso de o build correr fora dele.
+      NEXT_PUBLIC_SUPABASE_URL: https://stub.supabase.co
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: stub-anon-key-for-e2e
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: 24
+          cache: "pnpm"
+
+      - name: Instalar dependências
+        run: pnpm install --frozen-lockfile
+
+      - name: Versão do Playwright
+        id: playwright
+        # A cache do browser tem de ser invalidada quando o Playwright muda:
+        # versões diferentes esperam builds de browser diferentes.
+        run: echo "version=$(node -p "require('@playwright/test/package.json').version")" >> "$GITHUB_OUTPUT"
+
+      - name: Cache dos browsers
+        id: browser-cache
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.playwright.outputs.version }}
+
+      - name: Instalar o Chromium
+        # Só o Chromium: é o motor onde o site é maioritariamente visto, e
+        # descarregar os três triplicaria o tempo do job.
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Testes end-to-end
+        run: pnpm test:e2e
+
+      - name: Guardar o relatório em caso de falha
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7

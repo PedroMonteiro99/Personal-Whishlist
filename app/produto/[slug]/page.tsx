@@ -12,6 +12,19 @@ type ProductPageProps = {
   params: Promise<{ slug: string }>;
 };
 
+/**
+ * Todo o catálogo é conhecido no build, a partir dos MDX (`REPO-004`), e
+ * `generateStaticParams` inclui também os recebidos (`SEO-005`): não existe
+ * slug legítimo fora dessa lista.
+ *
+ * Sem isto, um slug inventado era renderizado a pedido e, por causa do
+ * `loading.tsx` (que abre uma fronteira de streaming), a resposta comprometia
+ * o estado HTTP 200 antes de o `notFound()` correr. O resultado era um soft
+ * 404: uma página "não encontrado" servida com 200 e guardada em cache com
+ * `s-maxage` de um ano, que os motores de busca indexavam como válida.
+ */
+export const dynamicParams = false;
+
 export async function generateStaticParams() {
   const slugs = await getProductSlugs();
 

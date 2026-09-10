@@ -76,6 +76,7 @@ pnpm lint          # lint
 pnpm typecheck     # verificação de tipos
 pnpm test          # testes em watch
 pnpm test:run      # testes uma vez (é o que o CI corre)
+pnpm test:e2e      # testes end-to-end (Playwright); faz build antes de correr
 pnpm build         # build de produção
 pnpm validate:content  # validar o frontmatter dos MDX
 ```
