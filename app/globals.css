@@ -11,6 +11,11 @@
   --popover-foreground: 224 71.4% 4.1%;
   --primary: 221.2 83.2% 53.3%;
   --primary-foreground: 210 40% 98%;
+  /* Texto sobre um fundo `bg-primary/10`: o azul da marca a 53.3% dá 4.48:1
+     sobre esse tom, e falha o mínimo AA de 4.5:1 em texto pequeno (A11Y-001).
+     Escurecido até 45%, sobe para 5.9:1. Mesmo princípio de
+     `--favorite-foreground`. */
+  --primary-tint-foreground: 221.2 83.2% 45%;
   --secondary: 220 14.3% 95.9%;
   --secondary-foreground: 220.9 39.3% 11%;
   --muted: 220 14.3% 95.9%;
@@ -37,6 +42,9 @@
   --popover-foreground: 210 40% 98%;
   --primary: 217.2 91.2% 59.8%;
   --primary-foreground: 224 71.4% 4.1%;
+  /* Em fundo escuro o tom da marca já passa AA sobre o `bg-primary/10`:
+     não há nada a corrigir e o valor acompanha `--primary`. */
+  --primary-tint-foreground: 217.2 91.2% 59.8%;
   --secondary: 215 27.9% 16.9%;
   --secondary-foreground: 210 40% 98%;
   --muted: 215 27.9% 16.9%;
@@ -64,6 +72,7 @@
   --color-popover-foreground: hsl(var(--popover-foreground));
   --color-primary: hsl(var(--primary));
   --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-primary-tint-foreground: hsl(var(--primary-tint-foreground));
   --color-secondary: hsl(var(--secondary));
   --color-secondary-foreground: hsl(var(--secondary-foreground));
   --color-muted: hsl(var(--muted));

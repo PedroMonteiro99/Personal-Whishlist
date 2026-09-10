@@ -198,6 +198,12 @@ por um âmbar que só aparece uma vez por cartão.
   sobre fundo), no título do produto quando o cartão está em hover, e no halo do cartão de
   destaques. Em light mode escurece para **Azul de Vitrine (Dia)** (`hsl(221.2 83.2% 53.3%)`) para
   manter contraste sobre papel.
+- **Azul de Vitrine (Texto sobre tinta)** (`--primary-tint-foreground`: `hsl(217.2 91.2% 59.8%)`
+  escuro · `hsl(221.2 83.2% 45%)` claro): texto pequeno dentro de um fundo `bg-primary/10`, como a
+  pílula "Mais barato". Em light mode o azul normal dá 4.48:1 sobre essa tinta e fica abaixo do
+  mínimo AA de 4.5:1 (`A11Y-001`); escurecido até 45% sobe para 5.9:1. Em dark mode o azul já
+  passa, e o token acompanha `--primary`. Mesmo princípio do par âmbar abaixo — um ícone sobre a
+  mesma tinta continua a usar `text-primary`, porque o limiar de elemento não-textual é 3:1.
 
 ### Neutral
 
