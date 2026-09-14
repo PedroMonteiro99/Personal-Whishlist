@@ -521,6 +521,11 @@ reduzindo JavaScript enviado ao cliente.
 **PERF-002** — Imagens de produtos servidas sempre via `next/image`, com dimensões definidas e
 `priority` apenas nas imagens acima da dobra (ex: hero da homepage).
 
+Os CDNs externos são autorizados explicitamente em `images.remotePatterns` e no `img-src` da
+CSP em `next.config.ts` (`SEC-013`). Atualmente: `m.media-amazon.com` e `cdnpt2.primor.eu`; na
+Primor, apenas HTTPS, sem porta personalizada nem query string, sob `/media/catalog/product/`.
+Ao adicionar imagens de outra origem, atualizar ambas as listas sem permitir todos os domínios.
+
 **PERF-003** — Páginas de produto e categoria geradas estaticamente (`generateStaticParams`) no
 build, a partir dos MDX. Sem base de dados no caminho de leitura, não há revalidação a orquestrar:
 o site servido é HTML estático. As imagens Open Graph seguem a mesma regra (`SEO-003`).
