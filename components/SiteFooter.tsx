@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 import { BrandMark } from "@/components/BrandMark";
-import { getCatalogData, selectPopulatedCategories } from "@/lib/catalog";
+import { getCatalogData, selectPopulatedCategories, selectPopulatedStores } from "@/lib/catalog";
 
 const NAVIGATION = [
   { href: "/", label: "Wishlist" },
@@ -20,11 +20,39 @@ function FooterLink({ href, children }: { href: string; children: string }) {
   );
 }
 
+function FooterNav({
+  id,
+  title,
+  links,
+}: {
+  id: string;
+  title: string;
+  links: { href: string; label: string }[];
+}) {
+  return (
+    <nav aria-labelledby={id} className="space-y-3">
+      <h2 id={id} className="text-sm font-semibold text-foreground">
+        {title}
+      </h2>
+      <ul className="space-y-2.5 text-sm">
+        {links.map((link) => (
+          <li key={link.href}>
+            <FooterLink href={link.href}>{link.label}</FooterLink>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  );
+}
+
 export async function SiteFooter() {
-  const { categories, products } = await getCatalogData();
+  const { categories, stores, products } = await getCatalogData();
   // A mesma regra da grelha da homepage: uma categoria vazia é um beco sem
   // saída, e no rodapé seria ainda mais difícil de perceber porquê.
   const populatedCategories = selectPopulatedCategories(categories, products);
+  // As lojas dão a outra entrada útil: "tenho cartão da Worten", "quero juntar
+  // tudo numa encomenda". O filtro já existia em /pesquisa — faltava a porta.
+  const populatedStores = selectPopulatedStores(stores, products);
 
   return (
     <footer className="border-t border-border/70 bg-background/80">
@@ -46,41 +74,33 @@ export async function SiteFooter() {
             </p>
           </div>
 
-          <div className="flex flex-col gap-10 sm:flex-row sm:gap-16">
-            <nav aria-labelledby="rodape-navegar" className="space-y-3">
-              <h2
-                id="rodape-navegar"
-                className="text-sm font-semibold text-foreground"
-              >
-                Navegar
-              </h2>
-              <ul className="space-y-2.5 text-sm">
-                {NAVIGATION.map((item) => (
-                  <li key={item.href}>
-                    <FooterLink href={item.href}>{item.label}</FooterLink>
-                  </li>
-                ))}
-              </ul>
-            </nav>
+          <div className="flex flex-col gap-10 sm:flex-row sm:flex-wrap sm:gap-x-14 sm:gap-y-8">
+            <FooterNav
+              id="rodape-navegar"
+              title="Navegar"
+              links={NAVIGATION}
+            />
 
             {populatedCategories.length > 0 ? (
-              <nav aria-labelledby="rodape-categorias" className="space-y-3">
-                <h2
-                  id="rodape-categorias"
-                  className="text-sm font-semibold text-foreground"
-                >
-                  Categorias
-                </h2>
-                <ul className="space-y-2.5 text-sm">
-                  {populatedCategories.map(({ category }) => (
-                    <li key={category.slug}>
-                      <FooterLink href={`/categoria/${category.slug}`}>
-                        {category.name}
-                      </FooterLink>
-                    </li>
-                  ))}
-                </ul>
-              </nav>
+              <FooterNav
+                id="rodape-categorias"
+                title="Categorias"
+                links={populatedCategories.map(({ category }) => ({
+                  href: `/categoria/${category.slug}`,
+                  label: category.name,
+                }))}
+              />
+            ) : null}
+
+            {populatedStores.length > 0 ? (
+              <FooterNav
+                id="rodape-lojas"
+                title="Lojas"
+                links={populatedStores.map(({ store }) => ({
+                  href: `/pesquisa?loja=${store.slug}`,
+                  label: store.name,
+                }))}
+              />
             ) : null}
           </div>
         </div>

@@ -5,6 +5,40 @@ import type { NextConfig } from "next";
 const isDev = process.env.NODE_ENV === "development";
 
 /**
+ * Os CDNs de onde vêm as fotografias de produto (`PERF-002`).
+ *
+ * Esta lista é a única fonte: dela saem tanto `images.remotePatterns` como o
+ * `img-src` da CSP (`SEC-013`). Antes eram dois sítios a manter à mão, e
+ * esquecer um deixava a imagem a rebentar só em runtime — foi exatamente o que
+ * aconteceu ao acrescentar a Primor.
+ *
+ * O `pathname` fica colado ao prefixo de imagens de cada loja, em vez de abrir
+ * o domínio inteiro. Não se fixa `search`: estes CDNs dimensionam por query
+ * (`?sw=672`, `?crop=center&width=500`), e exigir uma query exata bloquearia
+ * as imagens.
+ */
+const productImageHosts = [
+  { hostname: "m.media-amazon.com", pathname: "/**" },
+  { hostname: "cdnpt2.primor.eu", pathname: "/media/catalog/product/**" },
+  { hostname: "www.auchan.pt", pathname: "/dw/image/**" },
+  { hostname: "www.castroelectronica.pt", pathname: "/Imgs/produtos/**" },
+  { hostname: "darty.pt", pathname: "/cdn/shop/**" },
+  { hostname: "dam.elcorteingles.es", pathname: "/**" },
+  { hostname: "static.fnac-static.com", pathname: "/**" },
+  { hostname: "www.globaldata.pt", pathname: "/dw/image/**" },
+  { hostname: "pcdiga-prod.eu.saleor.cloud", pathname: "/media/**" },
+  { hostname: "thumb.pccomponentes.com", pathname: "/**" },
+  { hostname: "www.perfumesecompanhia.pt", pathname: "/dw/image/**" },
+  { hostname: "lojae-s3-prd-files.radiopopular.pt", pathname: "/files/**" },
+  { hostname: "wells.pt", pathname: "/dw/image/**" },
+  { hostname: "www.worten.pt", pathname: "/i/**" },
+] as const;
+
+const productImageOrigins = [
+  ...new Set(productImageHosts.map(({ hostname }) => `https://${hostname}`)),
+].join(" ");
+
+/**
  * A origem do Supabase tem de estar no `connect-src`, senão as reservas
  * (`SEC-008`) são bloqueadas pela política. Sem a variável definida, a
  * funcionalidade está desligada e o curinga não abre nada em uso.
@@ -43,7 +77,7 @@ function contentSecurityPolicy() {
     "object-src 'none'",
     `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""}`,
     "style-src 'self' 'unsafe-inline'",
-    "img-src 'self' data: blob: https://m.media-amazon.com https://cdnpt2.primor.eu",
+    `img-src 'self' data: blob: ${productImageOrigins}`,
     "font-src 'self'",
     `connect-src 'self' ${supabaseOrigin()}${isDev ? " ws: wss:" : ""}`,
     "manifest-src 'self'",
@@ -54,21 +88,12 @@ function contentSecurityPolicy() {
 const nextConfig: NextConfig = {
   outputFileTracingRoot: path.resolve(__dirname),
   images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "m.media-amazon.com",
-        port: "",
-        pathname: "/**",
-      },
-      {
-        protocol: "https",
-        hostname: "cdnpt2.primor.eu",
-        port: "",
-        pathname: "/media/catalog/product/**",
-        search: "",
-      },
-    ],
+    remotePatterns: productImageHosts.map(({ hostname, pathname }) => ({
+      protocol: "https" as const,
+      hostname,
+      port: "",
+      pathname,
+    })),
   },
   async headers() {
     return [

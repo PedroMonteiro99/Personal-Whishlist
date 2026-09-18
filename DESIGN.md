@@ -510,10 +510,12 @@ pílula. Se isso contém coisas, é um seixo de 24px. Um elemento embutido dentr
   `/pesquisa` desaparece, para não haver dois campos de pesquisa no mesmo ecrã.
 - **Rodapé:** fundo translúcido sem blur, fio de borda superior. Não é uma linha de créditos: é a
   segunda porta do site. À esquerda a marca em 2.25rem e uma frase que diz o que isto é e o que não
-  é; à direita dois grupos de ligações — "Navegar" (Wishlist, Recebidos, Pesquisar) e
-  "Categorias", esta última só com as que têm produtos, pela mesma regra da grelha da homepage. Um
-  fio separa a nota final sobre os preços. Empilha no telemóvel e distribui-se nos extremos a
-  partir de `sm`.
+  é; à direita três grupos de ligações — "Navegar" (Wishlist, Recebidos, Pesquisar), "Categorias" e
+  "Lojas". As duas últimas listam só o que tem produtos, pela mesma regra da grelha da homepage. As
+  lojas ligam para `/pesquisa?loja=<slug>`: o filtro já existia, faltava-lhe a porta de entrada —
+  serve quem tem cartão-presente de uma loja ou quer juntar tudo numa encomenda. Em nome, nunca em
+  logótipo. Um fio separa a nota final sobre os preços. Empilha no telemóvel e distribui-se nos
+  extremos a partir de `sm`.
 
 ### Empty State
 

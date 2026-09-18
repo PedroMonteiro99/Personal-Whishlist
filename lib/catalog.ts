@@ -355,6 +355,29 @@ export function selectPopulatedCategories(
     .filter((entry) => entry.count > 0);
 }
 
+/**
+ * As lojas que têm pelo menos um produto por oferecer, com a contagem de cada
+ * uma. Mesma razão de `selectPopulatedCategories`: oferecer uma loja vazia como
+ * porta de entrada leva a uma lista sem nada.
+ */
+export function selectPopulatedStores(
+  stores: Store[],
+  products: CatalogProduct[],
+) {
+  const countBySlug = new Map<string, number>();
+
+  for (const product of products) {
+    // Um produto conta uma vez por loja, mesmo que repetisse o slug.
+    for (const slug of new Set(product.storeSlugs)) {
+      countBySlug.set(slug, (countBySlug.get(slug) ?? 0) + 1);
+    }
+  }
+
+  return stores
+    .map((store) => ({ store, count: countBySlug.get(store.slug) ?? 0 }))
+    .filter((entry) => entry.count > 0);
+}
+
 export const getCategoryBySlug = cache(async (slug: string) => {
   const { categories } = await getCatalogData();
 

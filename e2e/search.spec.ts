@@ -19,7 +19,9 @@ test.describe("pesquisa e filtros", () => {
     // de raiz apagava o termo pesquisado.
     await page.goto("/pesquisa?q=benq");
 
-    await page.getByLabel("Loja").selectOption("amazon");
+    // `exact` é obrigatório desde que o rodapé passou a ter um grupo "Lojas":
+    // o `getByLabel` faz correspondência parcial, e "Lojas" contém "Loja".
+    await page.getByLabel("Loja", { exact: true }).selectOption("amazon");
 
     await expect(page).toHaveURL(/q=benq/);
     await expect(page).toHaveURL(/loja=amazon/);
