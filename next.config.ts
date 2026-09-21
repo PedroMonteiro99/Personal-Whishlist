@@ -28,6 +28,7 @@ const productImageHosts = [
   { hostname: "www.globaldata.pt", pathname: "/dw/image/**" },
   { hostname: "pcdiga-prod.eu.saleor.cloud", pathname: "/media/**" },
   { hostname: "thumb.pccomponentes.com", pathname: "/**" },
+  { hostname: "img.pccomponentes.com", pathname: "/articles/**" },
   { hostname: "www.perfumesecompanhia.pt", pathname: "/dw/image/**" },
   { hostname: "lojae-s3-prd-files.radiopopular.pt", pathname: "/files/**" },
   { hostname: "wells.pt", pathname: "/dw/image/**" },
