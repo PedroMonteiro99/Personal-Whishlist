@@ -25,7 +25,7 @@ test.describe("reservas", () => {
     await page.getByLabel("O teu nome").fill("Ana");
     await page.getByRole("button", { name: /vou oferecer/i }).click();
 
-    await expect(page.getByText("Vais oferecer este.")).toBeVisible();
+    await expect(page.getByText("Este presente está marcado por ti.")).toBeVisible();
 
     await page.getByRole("button", { name: /afinal já não vou/i }).click();
 
@@ -67,7 +67,7 @@ test.describe("reservas", () => {
     await page.getByLabel("O teu nome").fill("Ana");
     await page.getByRole("button", { name: /vou oferecer/i }).click();
 
-    await expect(giftAlert(page)).toContainText("antecipou");
+    await expect(giftAlert(page)).toContainText("já escolheu este presente");
   });
 
   test("com o serviço em baixo, o catálogo continua utilizável", async ({
@@ -85,7 +85,10 @@ test.describe("reservas", () => {
     await expect(page.getByText("Onde comprar")).toBeVisible();
   });
 
-  test("o modo dono esconde as reservas na interface", async ({ page }) => {
+  test("reservas continuam visíveis sem o botão de dono", async ({ page }) => {
+    await page.addInitScript(() => {
+      window.localStorage.setItem("wishlist-owner-mode", "on");
+    });
     await stubReservations(page, {
       initial: [
         {
@@ -98,13 +101,13 @@ test.describe("reservas", () => {
     });
     await page.goto(PRODUCT);
 
-    // `exact` é obrigatório: sem ele o Playwright faz correspondência parcial
-    // sem distinguir maiúsculas, e "Rita" aparecia também dentro de "escrita",
-    // no texto do rodapé.
     await expect(page.getByText("Rita", { exact: true })).toBeVisible();
-
-    await page.getByRole("button", { name: /esconder as reservas/i }).click();
-
-    await expect(page.getByText("Rita", { exact: true })).toHaveCount(0);
+    await expect(
+      page.getByRole("banner").getByRole("button", { name: /reservas/i }),
+    ).toHaveCount(0);
+    await expect(page.getByText(/O Pedro não vê isto/i)).toHaveCount(0);
+    await expect(
+      page.getByRole("banner").getByRole("link", { name: "Recebidos" }),
+    ).toBeVisible();
   });
 });

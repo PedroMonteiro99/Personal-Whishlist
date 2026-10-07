@@ -452,7 +452,8 @@ O modelo foi verificado contra um Postgres real (leitura direta negada, escrita 
 duplo `reserve` recusado, e um segundo token a falhar ao tentar cancelar reserva alheia).
 
 **SEC-009** — O nome de quem reserva é visível a qualquer pessoa com o link. É deliberado — serve
-para a família coordenar — e está limitado a 40 caracteres. Não recolher mais nada.
+para a família coordenar — e está limitado a 40 caracteres. Também aparece em `/recebidos` quando
+existe uma reserva para o presente recebido. Não recolher mais nada.
 
 **SEC-010** — As reservas são sempre lidas e escritas **dentro de uma ocasião**. Um cliente
 malicioso pode enviar uma ocasião inventada: o resultado é uma linha que nenhuma página mostra,
@@ -500,18 +501,13 @@ administração para os limpar. É incómodo, não é perda de dados: o catálog
 que interessa depende da tabela. Se acontecer, a mitigação é apagar as linhas na consola do
 Supabase. Rever se o site alguma vez deixar de ser partilhado só com família e amigos.
 
-**SEC-016** — *Risco aceite:* o "modo dono" (`features/reservations/lib/reservations-api.ts`) é
-apenas um interruptor no `localStorage` que esconde as reservas na interface. Não é controlo de
-acesso: qualquer pessoa — incluindo o dono — pode chamar `list_reservations` diretamente com a
-chave anónima e ver tudo. Serve para não estragar a surpresa por distração, não para a impedir.
+**SEC-016** — Não existe "modo dono" nem promessa de que o Pedro não vê as reservas. Os estados
+de reserva e os nomes de quem vai oferecer são públicos para quem tem o link (`SEC-009`), sem
+botão para os ocultar no cabeçalho. Isto evita sugerir uma privacidade que não existe.
 
-**SEC-017** — *Limitação conhecida do modo dono:* protege apenas a partir do momento em que é
-ligado, e é por aparelho. Na primeira visita num telemóvel novo, numa janela anónima ou depois de
-limpar o armazenamento, os marcadores "Já tratado" aparecem nos cartões antes de haver
-oportunidade de carregar no botão. Mudar o botão de sítio não resolve isto — só inverter o
-`default` resolveria, e isso tiraria aos convidados a proteção contra presentes repetidos, que é a
-razão de as reservas existirem. Fica assim conscientemente: o custo cai sobre uma pessoa que sabe
-do problema, em vez de cair sobre quem vem oferecer.
+**SEC-017** — Em `/recebidos`, o nome de quem ofereceu um presente é mostrado a todos quando
+existe uma reserva dessa ocasião. Sem o serviço de reservas ou sem reserva para o produto,
+o arquivo continua a mostrar o presente a partir do MDX (`REPO-006`).
 
 ## 19. Performance
 

@@ -33,7 +33,7 @@ export function GiftAction({
       <Card className="border-border/70 bg-card/80">
         <CardContent className="flex items-center gap-3 p-5 text-sm text-muted-foreground">
           <Loader2 aria-hidden className="size-4 animate-spin" />
-          <span role="status">A ver se já está tratado…</span>
+          <span role="status">A confirmar se este presente já foi escolhido…</span>
         </CardContent>
       </Card>
     );
@@ -45,7 +45,7 @@ export function GiftAction({
     const trimmed = name.trim();
 
     if (!trimmed) {
-      setError("Escreve o teu nome para os outros saberem que já está tratado.");
+      setError("Escreve o teu nome para assinalar este presente.");
       return;
     }
 
@@ -63,9 +63,9 @@ export function GiftAction({
 
     setError(
       result.reason === "taken"
-        ? "Alguém se antecipou — este já vai ser oferecido."
+        ? "Alguém já escolheu este presente. Vê outra ideia."
         : result.reason === "no-token"
-          ? "O teu browser está a bloquear o armazenamento local, e sem ele não conseguimos guardar isto."
+          ? "Não foi possível guardar a escolha neste browser. Verifica se o armazenamento local está disponível e tenta novamente."
           : "Não foi possível guardar. Tenta outra vez.",
     );
   };
@@ -89,7 +89,7 @@ export function GiftAction({
         <CardContent className="flex flex-wrap items-center justify-between gap-4 p-5">
           <p className="flex items-center gap-2.5 text-sm font-medium">
             <Check aria-hidden className="size-4 text-primary" />
-            Vais oferecer este.
+            Este presente está marcado por ti.
           </p>
           <Button
             type="button"
@@ -122,7 +122,7 @@ export function GiftAction({
             <span className="font-medium text-foreground">
               {reservation.reserverName}
             </span>{" "}
-            já vai oferecer este. Escolhe outro para não se repetirem.
+            já escolheu este presente. Vê outra ideia para evitar presentes repetidos.
           </span>
         </CardContent>
       </Card>
@@ -133,10 +133,9 @@ export function GiftAction({
     <Card className="border-border/70 bg-card/80">
       <CardContent className="space-y-4 p-5">
         <div className="space-y-1">
-          <p className="text-sm font-medium">Vais oferecer este?</p>
+          <p className="text-sm font-medium">Vais oferecer este presente?</p>
           <p className="text-sm text-muted-foreground">
-            Deixa o teu nome para ninguém repetir o presente. O Pedro não vê
-            isto.
+            Deixa o teu nome para que os outros não escolham o mesmo presente.
           </p>
         </div>
 

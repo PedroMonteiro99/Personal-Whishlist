@@ -16,12 +16,8 @@ import {
 export type ArchivedProduct = { slug: string; name: string };
 
 /**
- * Os presentes recebidos numa ocasião já fechada.
- *
- * Os produtos vêm do MDX (estáticos); os nomes de quem ofereceu são carregados
- * à parte, e só quando o modo dono está ativo — as reservas de ocasiões
- * passadas não interessam a mais ninguém, e o provider global só conhece a
- * ocasião aberta.
+ * Os produtos vêm do MDX; os nomes de quem ofereceu são carregados da
+ * respetiva ocasião quando as reservas estão disponíveis.
  */
 export function OccasionArchive({
   occasionSlug,
@@ -30,10 +26,10 @@ export function OccasionArchive({
   occasionSlug: string;
   products: ArchivedProduct[];
 }) {
-  const { status, ownerMode } = useReservations();
+  const { status } = useReservations();
   const [givers, setGivers] = useState<Map<string, Reservation>>(new Map());
 
-  const showGivers = ownerMode && status !== "disabled" && status !== "error";
+  const showGivers = status !== "disabled" && status !== "error";
 
   useEffect(() => {
     if (!showGivers) {

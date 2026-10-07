@@ -7,17 +7,14 @@ import {
   useEffect,
   useMemo,
   useState,
-  useSyncExternalStore,
 } from "react";
 
 import {
   areReservationsEnabled,
   fetchReservations,
   getReservationToken,
-  isOwnerMode,
   releaseProduct,
   reserveProduct,
-  setOwnerMode,
   type Reservation,
 } from "@/features/reservations/lib/reservations-api";
 
@@ -25,10 +22,8 @@ type Status = "disabled" | "loading" | "ready" | "error";
 
 type ReservationsContextValue = {
   status: Status;
-  /** `undefined` enquanto carrega, ou quando o modo dono está ativo. */
+  /** `undefined` enquanto carrega ou quando não existe reserva. */
   getReservation: (productSlug: string) => Reservation | undefined;
-  ownerMode: boolean;
-  toggleOwnerMode: () => void;
   reserve: (productSlug: string, name: string) => Promise<ReserveResult>;
   release: (productSlug: string) => Promise<ReserveResult>;
 };
@@ -40,19 +35,6 @@ export type ReserveResult =
 const ReservationsContext = createContext<ReservationsContextValue | undefined>(
   undefined,
 );
-
-// O modo dono é estado externo ao React (localStorage), partilhado por toda a
-// árvore: lido com `useSyncExternalStore` para não haver render em cascata.
-const ownerListeners = new Set<() => void>();
-
-function subscribeOwnerMode(onStoreChange: () => void) {
-  ownerListeners.add(onStoreChange);
-  return () => ownerListeners.delete(onStoreChange);
-}
-
-function getOwnerServerSnapshot() {
-  return false;
-}
 
 export function ReservationsProvider({
   occasion,
@@ -68,12 +50,6 @@ export function ReservationsProvider({
   );
   const [reservations, setReservations] = useState<Map<string, Reservation>>(
     new Map(),
-  );
-
-  const ownerMode = useSyncExternalStore(
-    subscribeOwnerMode,
-    isOwnerMode,
-    getOwnerServerSnapshot,
   );
 
   const applyRows = useCallback((rows: Reservation[]) => {
@@ -163,20 +139,11 @@ export function ReservationsProvider({
   const value = useMemo<ReservationsContextValue>(
     () => ({
       status,
-      ownerMode,
-      getReservation: (productSlug) =>
-        ownerMode ? undefined : reservations.get(productSlug),
-      toggleOwnerMode: () => {
-        setOwnerMode(!isOwnerMode());
-
-        for (const listener of ownerListeners) {
-          listener();
-        }
-      },
+      getReservation: (productSlug) => reservations.get(productSlug),
       reserve,
       release,
     }),
-    [ownerMode, release, reservations, reserve, status],
+    [release, reservations, reserve, status],
   );
 
   return (

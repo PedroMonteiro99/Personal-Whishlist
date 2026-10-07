@@ -31,8 +31,6 @@ function mockReservations({
   mocks.useReservations.mockReturnValue({
     status,
     getReservation: () => reservation,
-    ownerMode: false,
-    toggleOwnerMode: vi.fn(),
     reserve,
     release,
   });
@@ -75,8 +73,23 @@ describe("GiftAction", () => {
     mockReservations({ status: "loading" });
     renderGiftAction();
 
-    expect(screen.getByRole("status")).toBeInTheDocument();
+    expect(screen.getByRole("status")).toHaveTextContent(
+      "A confirmar se este presente já foi escolhido",
+    );
     expect(screen.queryByLabelText("O teu nome")).not.toBeInTheDocument();
+  });
+
+  it("explica a reserva sem sugerir que é privada", () => {
+    mockReservations();
+    renderGiftAction();
+
+    expect(screen.getByText("Vais oferecer este presente?")).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        "Deixa o teu nome para que os outros não escolham o mesmo presente.",
+      ),
+    ).toBeInTheDocument();
+    expect(screen.queryByText(/O Pedro não vê isto/i)).not.toBeInTheDocument();
   });
 
   it("exige um nome antes de reservar", async () => {
@@ -136,7 +149,7 @@ describe("GiftAction", () => {
     await userEvent.click(submitButton());
 
     expect(await screen.findByRole("alert")).toHaveTextContent(
-      "Alguém se antecipou",
+      "Alguém já escolheu este presente",
     );
   });
 
@@ -178,7 +191,9 @@ describe("GiftAction", () => {
     });
     renderGiftAction();
 
-    expect(screen.getByText("Vais oferecer este.")).toBeInTheDocument();
+    expect(
+      screen.getByText("Este presente está marcado por ti."),
+    ).toBeInTheDocument();
 
     await userEvent.click(
       screen.getByRole("button", { name: /afinal já não vou/i }),

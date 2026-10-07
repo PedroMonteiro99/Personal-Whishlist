@@ -2,7 +2,6 @@ import Link from "next/link";
 
 import { BrandMark } from "@/components/BrandMark";
 import { MainNav } from "@/components/MainNav";
-import { OwnerModeToggle } from "@/features/reservations/components/OwnerModeToggle";
 import { HeaderSearch } from "@/features/search/components/HeaderSearch";
 import { ThemeToggle } from "@/features/theme/components/ThemeToggle";
 
@@ -10,10 +9,8 @@ export function SiteHeader({ occasionName }: { occasionName: string }) {
   return (
     <header className="sticky top-0 z-40 border-b border-border/70 bg-background/80 backdrop-blur-xl">
       {/*
-        No telemóvel a marca e os três controlos deixam 32px livres — não cabe
-        lá uma ligação de texto. A navegação passa para a sua própria linha
-        abaixo (`order-last` + `w-full`) e volta a ficar em linha a partir de
-        `sm`, onde a coluna tem largura de sobra.
+        No telemóvel a navegação ocupa a linha de baixo para dar espaço à
+        marca, pesquisa e tema. Volta a ficar em linha a partir de `sm`.
       */}
       <div className="mx-auto flex w-full max-w-6xl flex-wrap items-center gap-x-4 gap-y-2 px-4 py-4 sm:px-6 lg:px-8">
         <Link href="/" className="group flex items-center gap-3">
@@ -36,7 +33,6 @@ export function SiteHeader({ occasionName }: { occasionName: string }) {
 
         <div className="ml-auto flex items-center gap-2 sm:gap-3">
           <HeaderSearch />
-          <OwnerModeToggle />
           <ThemeToggle />
         </div>
       </div>

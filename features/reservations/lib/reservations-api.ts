@@ -15,7 +15,6 @@ const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 const TOKEN_KEY = "wishlist-reservation-token";
-const OWNER_MODE_KEY = "wishlist-owner-mode";
 
 export const MAX_NAME_LENGTH = 40;
 
@@ -65,26 +64,6 @@ export function getReservationToken() {
   } catch {
     // Sem storage não há reservas persistentes, mas o site não parte.
     return null;
-  }
-}
-
-export function isOwnerMode() {
-  if (typeof window === "undefined") {
-    return false;
-  }
-
-  try {
-    return window.localStorage.getItem(OWNER_MODE_KEY) === "on";
-  } catch {
-    return false;
-  }
-}
-
-export function setOwnerMode(enabled: boolean) {
-  try {
-    window.localStorage.setItem(OWNER_MODE_KEY, enabled ? "on" : "off");
-  } catch {
-    // Sem storage o modo não persiste; não há mais nada a fazer.
   }
 }
 
