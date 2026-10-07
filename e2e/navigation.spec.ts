@@ -9,7 +9,7 @@ test.describe("navegação", () => {
     await page.goto("/");
 
     await expect(
-      page.getByRole("heading", { name: /ideias de presentes/i }),
+      page.getByRole("heading", { name: /ideias para oferecer ao Pedro/i }),
     ).toBeVisible();
 
     await page.getByRole("link", { name: /^Gaming/ }).first().click();

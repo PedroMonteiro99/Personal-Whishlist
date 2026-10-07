@@ -19,19 +19,15 @@ export default async function HomePage() {
       <JsonLd data={websiteJsonLd()} />
       <section className="mx-auto w-full max-w-6xl px-4 pb-16 pt-14 sm:px-6 lg:px-8 lg:pb-20 lg:pt-20">
         <h1 className="max-w-3xl text-4xl font-semibold tracking-tight text-balance sm:text-5xl lg:text-6xl">
-          Ideias de presentes, num só sítio.
+          Ideias para oferecer ao Pedro.
         </h1>
         <p className="mt-5 max-w-2xl text-base leading-7 text-muted-foreground sm:text-lg">
-          Uma lista sempre atualizada do que me daria jeito — organizada por
-          categoria, com preço e link para a loja. Sem contas, sem compras: é só
-          para consultar.
+          Escolhe por orçamento ou categoria e vê onde comprar cada presente.
         </p>
 
         {budgets.length > 0 ? (
           <div className="mt-9">
-            <p className="text-sm text-muted-foreground">
-              Se já sabes quanto queres gastar, começa por aqui:
-            </p>
+            <p className="text-sm text-muted-foreground">Por orçamento</p>
             <nav
               aria-label="Ideias por orçamento"
               className="mt-3 flex flex-wrap gap-2"

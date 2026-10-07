@@ -68,9 +68,8 @@ export async function SiteFooter() {
               </span>
             </div>
             <p className="text-sm leading-6 text-muted-foreground">
-              Uma lista de ideias de presentes, escrita à mão e mantida
-              atualizada. Não é uma loja: não há contas, carrinho nem
-              pagamentos.
+              Ideias de presentes para o Pedro, com preços indicativos e links
+              para as lojas.
             </p>
           </div>
 
@@ -106,8 +105,7 @@ export async function SiteFooter() {
         </div>
 
         <p className="mt-10 border-t border-border/70 pt-6 text-sm leading-6 text-muted-foreground">
-          Os preços são os que registei quando adicionei cada ideia — confirma
-          sempre na loja antes de comprar.
+          Os preços podem mudar. Confirma o valor na loja antes de comprar.
         </p>
       </div>
     </footer>

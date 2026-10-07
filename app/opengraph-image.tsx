@@ -45,7 +45,7 @@ export default async function Image() {
               maxWidth: 880,
             }}
           >
-            Ideias de presentes, num só sítio.
+            Ideias para oferecer ao Pedro.
           </div>
           <div
             style={{

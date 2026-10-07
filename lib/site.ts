@@ -26,7 +26,7 @@ export const SITE_URL = resolveSiteUrl();
 export const SITE_NAME = "Wishlist do Pedro";
 
 export const SITE_DESCRIPTION =
-  "Ideias de presentes organizadas por categoria, com preço e link para a loja. Sempre atualizada.";
+  "Ideias para oferecer ao Pedro, por categoria ou orçamento, com links para as lojas.";
 
 export function absoluteUrl(path = "/") {
   return new URL(path, SITE_URL).toString();

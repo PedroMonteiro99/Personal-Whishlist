@@ -501,16 +501,15 @@ pílula. Se isso contém coisas, é um seixo de 24px. Um elemento embutido dentr
   A marcação é `aria-current="page"` por correspondência exata do caminho — numa página de produto
   ou de categoria não se mente a dizer que se está na raiz.
   A partir de `sm` fica em linha, entre a marca e os controlos. No telemóvel não cabe: a marca e os
-  três controlos deixam 32px livres a 390px, por isso a navegação passa para a sua própria linha
-  por baixo, e o cabeçalho cresce de 77px para 121px.
+  dois controlos, por isso a navegação passa para a sua própria linha por baixo.
 - **Pesquisa no cabeçalho:** um campo real, não um botão que finge sê-lo. A partir de `sm` é uma
   pílula de 2.5rem com lupa à esquerda que alarga de 10rem para 14rem (13rem → 18rem em `lg`) ao
   receber foco, em 300ms; escreve-se e submete-se ali. Abaixo de `sm` não há largura para o campo,
   por isso fica um botão-ícone que leva a `/pesquisa`, onde o campo abre já em foco. Na própria
   `/pesquisa` desaparece, para não haver dois campos de pesquisa no mesmo ecrã.
 - **Rodapé:** fundo translúcido sem blur, fio de borda superior. Não é uma linha de créditos: é a
-  segunda porta do site. À esquerda a marca em 2.25rem e uma frase que diz o que isto é e o que não
-  é; à direita três grupos de ligações — "Navegar" (Wishlist, Recebidos, Pesquisar), "Categorias" e
+  segunda porta do site. À esquerda a marca em 2.25rem e uma frase sobre as ideias de presentes;
+  à direita três grupos de ligações — "Navegar" (Wishlist, Recebidos, Pesquisar), "Categorias" e
   "Lojas". As duas últimas listam só o que tem produtos, pela mesma regra da grelha da homepage. As
   lojas ligam para `/pesquisa?loja=<slug>`: o filtro já existia, faltava-lhe a porta de entrada —
   serve quem tem cartão-presente de uma loja ou quer juntar tudo numa encomenda. Em nome, nunca em
@@ -644,32 +643,23 @@ cima do título.
 A funcionalidade que evita presentes repetidos. Aparece na página de produto, entre os detalhes e
 o "Onde comprar" — decidir que se vai oferecer vem antes de decidir onde comprar.
 
-- **Livre:** seixo com "Vais oferecer este?", uma linha a explicar que o dono não vê, campo para o
-  primeiro nome e o botão "Vou oferecer" com ícone de presente.
+- **Livre:** seixo com "Vais oferecer este presente?", uma linha a explicar que o nome ajuda os
+  outros a não repetir o presente, campo para o nome e botão "Vou oferecer" com ícone de presente.
 - **Tratado por outro:** o mesmo seixo, mais silencioso (`bg-card/60`), com o nome em destaque e
   um convite a escolher outro. Sem ação — não há nada a fazer aqui.
 - **Tratado por mim:** borda e fundo de Azul de Vitrine a 5%, marca de confirmação, e o botão de
   desfazer em texto humano ("Afinal já não vou").
 - **A carregar:** uma linha discreta com spinner. Nunca um salto de layout.
-- **Serviço em baixo ou por configurar:** desaparece por completo, incluindo o interruptor de dono.
+- **Serviço em baixo ou por configurar:** a ação de oferecer desaparece por completo; o catálogo
+  e o arquivo de recebidos continuam disponíveis.
 
 **Marcador na grelha.** Os cartões ganham uma pílula "Já tratado" (ou "Vais oferecer") em vidro
 sobre a borda, para não se abrir um produto que já está resolvido. Só aparece depois de os dados
 chegarem — nunca faz piscar a grelha.
 
-**O interruptor do dono.** Vive no cabeçalho, ao lado do tema, como botão de ícone (um olho
-riscado). É a mesma categoria de coisa que o tema — uma preferência de como *este* aparelho mostra
-o site, não conteúdo —, e por isso mora ao lado dele. Em rodapé era uma frase pública dirigida a
-uma pessoa pelo nome, que não dizia nada a quem visita.
-
-Não é uma barreira de segurança (`SEC-016`): é a aplicação a proteger o Pedro de si próprio, e ele
-é a única pessoa interessada em não ver. Quando está ativo ganha a tinta azul a 10% e fica
-visivelmente ligado — caso contrário a ausência de reservas pareceria uma avaria.
-
-O que ele **não** resolve: a primeira visita num aparelho novo. As reservas aparecem nos cartões
-antes de haver oportunidade de carregar no botão, e nenhuma posição no ecrã corrige isso — só um
-`default` diferente corrigiria, ao custo de os convidados perderem a proteção contra presentes
-repetidos, que é a razão de a funcionalidade existir.
+**Sem interruptor de dono.** As reservas são públicas para quem tem o link (`SEC-009`), incluindo
+o Pedro. O cabeçalho não sugere que há alguém a observar as escolhas e o formulário não promete
+que as reservas são invisíveis a uma pessoa específica.
 
 ### Ocasiões
 
@@ -678,13 +668,12 @@ aparece no cabeçalho, por baixo da marca, no lugar de um subtítulo genérico: 
 chega e denuncia uma ocasião que ficou por fechar.
 
 **Presente recebido.** A página mantém-se — o slug pode ter sido partilhado — mas troca a ação de
-oferecer por uma nota discreta: "Já recebi este presente no Natal 2026." Sem cor de acento, sem
+oferecer por uma nota discreta: "O Pedro já recebeu este presente no Natal 2026." Sem cor de acento, sem
 apelo à ação: é informação, não convite.
 
-**`/recebidos`.** As ocasiões fechadas e o que se recebeu em cada uma, da mais recente para a mais
-antiga. Cada linha é um seixo embutido que leva à página do produto. Com o modo dono ativo, cada
-linha ganha o nome de quem ofereceu — é aqui que as reservas deixam de ser segredo e passam a ser
-a lista de agradecimentos.
+**`/recebidos`.** As ocasiões com presentes recebidos, da mais recente para a mais antiga. Cada
+linha é um seixo embutido que leva à página do produto. Se houver uma reserva, o nome de quem
+ofereceu aparece para todos; sem reservas, a lista de presentes mantém-se disponível.
 
 ## Do's and Don'ts
 

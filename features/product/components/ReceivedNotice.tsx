@@ -13,7 +13,7 @@ export function ReceivedNotice({ occasionName }: { occasionName: string }) {
       <CardContent className="flex items-center gap-3 p-5 text-sm text-muted-foreground">
         <Gift aria-hidden className="size-4 shrink-0" />
         <span>
-          Já recebi este presente no{" "}
+          O Pedro já recebeu este presente no{" "}
           <span className="font-medium text-foreground">{occasionName}</span>.
         </span>
       </CardContent>

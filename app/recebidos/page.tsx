@@ -40,15 +40,14 @@ export default async function ReceivedPage() {
             Recebidos
           </h1>
           <p className="max-w-2xl text-sm leading-7 text-muted-foreground sm:text-base">
-            O que já foi oferecido, por ocasião. Estes continuam a ter página,
-            mas saíram da lista.
+            Presentes que o Pedro já recebeu, organizados por ocasião.
           </p>
         </div>
 
         {archives.length === 0 ? (
           <EmptyState
-            title="Ainda nada recebido"
-            description="Quando um presente for oferecido e marcado como recebido, aparece aqui."
+            title="Ainda não há presentes recebidos"
+            description="Quando os presentes forem recebidos, aparecem aqui por ocasião."
             action={
               <Button asChild variant="outline">
                 <Link href="/">Voltar à wishlist</Link>

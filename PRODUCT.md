@@ -94,8 +94,9 @@ existe mas está vazia, e o blueprint marca-as como opcionais.
 
 - **Nome visível aos visitantes:** "Wishlist do Pedro". "Wishlist Premium" é o nome interno do
   projeto/repositório, não o rótulo da interface.
-- **Voz:** português europeu, direta e pessoal; as notas de produto são escritas na primeira
-  pessoa pelo dono.
+- **Voz:** português europeu, direta e pessoal. A interface pública refere o Pedro na terceira
+  pessoa, sem sugerir quem criou a lista nem prometer que as reservas lhe são invisíveis; as
+  notas de produto continuam na primeira pessoa.
 - **Restrições visuais já fixadas pelo dono** em `PROJECT_BLUEPRINT.md` §11–12 (`UI-001`–`UI-004`,
   `DESIGN-001`–`DESIGN-005`): shadcn/ui como base de componentes, Dark Mode como modo primário, e
   a exclusão explícita de Bootstrap, Material UI e estética "dashboard gaming". Registado tal como
