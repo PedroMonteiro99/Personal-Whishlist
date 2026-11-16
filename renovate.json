@@ -8,8 +8,10 @@
   "reviewers": ["PedroMonteiro99"],
   "rebaseWhen": "conflicted",
   "semanticCommits": "enabled",
-  "dependencyDashboard": true,
-  "dependencyDashboardTitle": "📦 Dependency Dashboard",
+  "dependencyDashboard": {
+    "enabled": true,
+    "title": "📦 Dependency Dashboard"
+  },
   "packageRules": [
     {
       "description": "ESLint fixo em v9: o eslint-config-next 16 declara eslint >=9, mas os plugins que traz (eslint-plugin-react, -import, -jsx-a11y) só suportam até v9 e o v10 removeu context.getFilename(). Rever quando esses plugins publicarem suporte a v10.",
